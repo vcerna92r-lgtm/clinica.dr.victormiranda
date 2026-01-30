@@ -1,44 +1,148 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
+const {
+  title = "Clínica Dr. Víctor Miranda",
+  description = "Medicina estética con enfoque en seguridad y resultados naturales.",
+} = Astro.props;
+
+const year = new Date().getFullYear();
+const whatsappLink = "https://wa.me/50587355501";
 ---
 
-<BaseLayout
-  title="Servicios | Clínica Dr. Víctor Miranda"
-  description="Servicios de medicina estética con enfoque médico."
->
-  <h1>Servicios</h1>
-  <p>Tratamientos personalizados con enfoque en seguridad y naturalidad.</p>
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
 
-  <div class="grid">
-    <div class="card">
-      <h2>Armonización facial</h2>
-      <p>Planificación facial, balance y resultados naturales.</p>
-    </div>
+    <style>
+      :root { --max: 980px; }
 
-    <div class="card">
-      <h2>Toxina botulínica</h2>
-      <p>Enfoque de dosis conservadora y armonización.</p>
-    </div>
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        line-height: 1.6;
+        color: #111;
+        background: #fff;
+      }
 
-    <div class="card">
-      <h2>Ácido hialurónico</h2>
-      <p>Corrección y soporte estructural según necesidades.</p>
-    </div>
+      header, main, footer {
+        max-width: var(--max);
+        margin: 0 auto;
+        padding: 18px;
+      }
 
-    <div class="card">
-      <h2>Bioestimuladores</h2>
-      <p>Estimulación de colágeno para calidad de piel y soporte.</p>
-    </div>
+      nav {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
 
-    <div class="card">
-      <h2>Piel / Microneedling</h2>
-      <p>Textura, manchas, cicatrices y calidad de piel.</p>
-    </div>
+      nav a {
+        text-decoration: none;
+        color: #111;
+      }
 
-    <div class="card">
-      <h2>Evaluación personalizada</h2>
-      <p>Valoración médica para definir plan y expectativas.</p>
-      <p><a href="/contacto/">Reservar valoración</a></p>
-    </div>
-  </div>
-</BaseLayout>
+      .cta {
+        padding: 10px 14px;
+        border: 1px solid #111;
+        border-radius: 12px;
+        text-decoration: none;
+        color: #111;
+        background: white;
+        display: inline-block;
+      }
+
+      /* Empuja el botón a la derecha */
+      .cta-right { margin-left: auto; }
+
+      .hero { padding: 26px 0 10px; }
+
+      .grid {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      }
+
+      .card {
+        border: 1px solid #eee;
+        border-radius: 14px;
+        padding: 16px;
+        background: white;
+      }
+
+      footer {
+        border-top: 1px solid #eee;
+        color: #555;
+        margin-top: 28px;
+      }
+
+      h1 { margin: 0 0 10px; font-size: 34px; }
+      h2 { margin-top: 18px; }
+      ul { padding-left: 18px; }
+
+      /* BOTÓN FLOTANTE WHATSAPP (muy visible) */
+      .whatsapp-fab {
+        position: fixed;
+        right: max(18px, env(safe-area-inset-right));
+        bottom: max(18px, env(safe-area-inset-bottom));
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        padding: 12px 14px;
+        border-radius: 999px;
+        border: none;
+
+        background: #25D366; /* WhatsApp green */
+        color: #fff;
+        font-weight: 700;
+        text-decoration: none;
+
+        z-index: 2147483647;
+        box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+      }
+
+      .whatsapp-fab svg {
+        width: 18px;
+        height: 18px;
+        display: block;
+        fill: currentColor;
+      }
+
+      .whatsapp-fab:hover { filter: brightness(0.95); }
+      .whatsapp-fab:active { transform: translateY(1px); }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <a href="/">Inicio</a>
+        <a href="/servicios/">Servicios</a>
+        <a href="/complicaciones/">Complicaciones</a>
+        <a href="/contacto/" class="cta cta-right">Reservar / Contacto</a>
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer>
+      <small>© {year} · Clínica Dr. Víctor Miranda</small>
+    </footer>
+
+    <!-- WhatsApp flotante (todas las páginas) -->
+    <a
+      class="whatsapp-fab"
+      href={whatsappLink}
+      target="_blank"
+      rel="noreferrer"
+      aria-label="Escríbeme por WhatsApp"
+      title="Escríbeme por WhatsApp"
+    >
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M19.11 17.46c-.23-.12-1.36-.67-1.57-.75-.21-.08-.36-.12-.52.12-.15.23-.6.75-.74.9-.14.15-.27.17-.5.06-.23-.12-.97-.36-1.85-1.16-.69-
