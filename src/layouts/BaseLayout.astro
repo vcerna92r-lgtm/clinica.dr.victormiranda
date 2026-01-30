@@ -5,6 +5,7 @@ const {
 } = Astro.props;
 
 const year = new Date().getFullYear();
+const whatsappLink = "https://wa.me/50587355501";
 ---
 
 <!doctype html>
@@ -14,17 +15,69 @@ const year = new Date().getFullYear();
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+
     <style>
       :root { --max: 980px; }
-      body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; line-height:1.6; color:#111; }
-      header, main, footer { max-width: var(--max); margin: 0 auto; padding: 18px; }
-      nav { display:flex; gap:14px; align-items:center; flex-wrap:wrap; }
-      nav a { text-decoration:none; color:#111; }
-      .cta { margin-left:auto; padding:10px 14px; border:1px solid #111; border-radius:12px; }
+
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        line-height: 1.6;
+        color: #111;
+        background: #fff;
+      }
+
+      header, main, footer {
+        max-width: var(--max);
+        margin: 0 auto;
+        padding: 18px;
+      }
+
+      nav {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      nav a {
+        text-decoration: none;
+        color: #111;
+      }
+
+      .cta {
+        padding: 10px 14px;
+        border: 1px solid #111;
+        border-radius: 12px;
+        text-decoration: none;
+        color: #111;
+        background: white;
+        display: inline-block;
+      }
+
+      .cta-right { margin-left: auto; }
+
       .hero { padding: 26px 0 10px; }
-      .grid { display:grid; gap:12px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-      .card { border:1px solid #eee; border-radius:14px; padding:16px; }
-      footer { border-top:1px solid #eee; color:#555; margin-top: 28px; }
+
+      .grid {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      }
+
+      .card {
+        border: 1px solid #eee;
+        border-radius: 14px;
+        padding: 16px;
+        background: white;
+      }
+
+      footer {
+        border-top: 1px solid #eee;
+        color: #555;
+        margin-top: 28px;
+      }
+
       h1 { margin: 0 0 10px; font-size: 34px; }
       h2 { margin-top: 18px; }
       ul { padding-left: 18px; }
@@ -37,7 +90,7 @@ const year = new Date().getFullYear();
         <a href="/">Inicio</a>
         <a href="/servicios/">Servicios</a>
         <a href="/complicaciones/">Complicaciones</a>
-        <a href="/contacto/" class="cta">Reservar / Contacto</a>
+        <a href="/contacto/" class="cta cta-right">Reservar / Contacto</a>
       </nav>
     </header>
 
@@ -48,5 +101,44 @@ const year = new Date().getFullYear();
     <footer>
       <small>© {year} · Clínica Dr. Víctor Miranda</small>
     </footer>
+
+    <!-- BOTÓN FLOTANTE WHATSAPP (ULTRA BLINDADO CONTRA CSS) -->
+    <a
+      href={whatsappLink}
+      target="_blank"
+      rel="noreferrer"
+      aria-label="WhatsApp"
+      title="WhatsApp"
+      style="
+        all: initial !important;
+        position: fixed !important;
+        right: max(18px, env(safe-area-inset-right)) !important;
+        bottom: max(18px, env(safe-area-inset-bottom)) !important;
+        z-index: 2147483647 !important;
+
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 8px !important;
+
+        padding: 12px 14px !important;
+        border-radius: 999px !important;
+        background: #25D366 !important;
+        color: #ffffff !important;
+
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif !important;
+        font-size: 14px !important;
+        font-weight: 800 !important;
+        line-height: 1 !important;
+
+        text-decoration: none !important;
+        cursor: pointer !important;
+        pointer-events: auto !important;
+
+        box-shadow: 0 10px 24px rgba(0,0,0,0.18) !important;
+      "
+    >
+      💬 WhatsApp
+    </a>
   </body>
 </html>
