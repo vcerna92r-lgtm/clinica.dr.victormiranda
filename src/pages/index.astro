@@ -1,17 +1,40 @@
 ---
+import BaseLayout from "../layouts/BaseLayout.astro";
 
+const whatsapp = "https://wa.me/50587355501";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout
+  title="Clínica Dr. Víctor Miranda"
+  description="Medicina estética con enfoque en seguridad y resultados naturales."
+>
+  <section class="hero">
+    <h1>Medicina estética con enfoque en seguridad</h1>
+    <p>Tratamientos personalizados, resultados naturales y seguimiento clínico.</p>
+
+    <p style="margin-top:16px;">
+      <a href="/contacto/" class="cta">Reservar valoración</a>
+      <a href={whatsapp} target="_blank" rel="noreferrer" class="cta">WhatsApp</a>
+    </p>
+  </section>
+
+  <section class="grid">
+    <div class="card">
+      <h2>Servicios</h2>
+      <ul>
+        <li>Armonización facial</li>
+        <li>Toxina botulínica</li>
+        <li>Ácido hialurónico</li>
+        <li>Bioestimuladores</li>
+        <li>Microneedling / piel</li>
+      </ul>
+      <p><a href="/servicios/">Ver todos</a></p>
+    </div>
+
+    <div class="card">
+      <h2>Manejo de complicaciones</h2>
+      <p>Evaluación médica + plan + seguimiento para casos complejos.</p>
+      <p><a href="/complicaciones/">Ver más</a></p>
+    </div>
+  </section>
+</BaseLayout>

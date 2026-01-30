@@ -1,0 +1,33 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const whatsapp = "https://wa.me/50587355501";
+const email = "vcerna92r@gmail.com";
+const ciudad = "Managua, Nicaragua";
+---
+
+<BaseLayout title="Contacto | Clínica Dr. Víctor Miranda" description="Agenda tu valoración o contáctanos por WhatsApp.">
+  <h1>Contacto</h1>
+
+  <div class="grid">
+    <div class="card">
+      <h2>WhatsApp</h2>
+      <p><a href={whatsapp} target="_blank" rel="noreferrer">Escríbeme por WhatsApp</a></p>
+    </div>
+
+    <div class="card">
+      <h2>Email</h2>
+      <p><a href={`mailto:${email}`}>{email}</a></p>
+    </div>
+
+    <div class="card">
+      <h2>Ciudad</h2>
+      <p>{ciudad}</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:12px;">
+    <h2>Reserva</h2>
+    <p>Pronto integraremos agenda online y/o formulario.</p>
+  </div>
+</BaseLayout>
