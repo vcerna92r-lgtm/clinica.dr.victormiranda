@@ -1,36 +1,70 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+const whatsapp = "https://wa.me/50587355501";
 ---
 
-<BaseLayout title="Manejo de complicaciones | Clínica Dr. Víctor Miranda" description="Evaluación y manejo médico de complicaciones en medicina estética.">
-  <h1>Manejo de complicaciones</h1>
+<BaseLayout
+  title="Manejo de complicaciones | Clínica Dr. Víctor Miranda"
+  description="Evaluación y manejo médico de complicaciones en medicina estética."
+>
+  <section class="hero" style="padding-top:18px;">
+    <div class="kicker">🛡️ Evaluación médica · Plan · Seguimiento</div>
+    <h1>Manejo de complicaciones</h1>
+    <p class="lead">
+      Si presentas un resultado no esperado o complicación, realizamos valoración y plan
+      individualizado con seguimiento clínico.
+    </p>
 
-  <p><strong>Evaluación médica + plan + seguimiento.</strong></p>
+    <div class="row">
+      <a class="btn btn-primary" href="/contacto/">Solicitar evaluación</a>
+      <a class="btn" href={whatsapp} target="_blank" rel="noreferrer">💬 WhatsApp</a>
+    </div>
 
-  <div class="card">
-    <h2>Motivos frecuentes de consulta</h2>
-    <ul>
-      <li>Sobre-relleno / edema persistente</li>
-      <li>Nódulos / granulomas</li>
-      <li>Hipersensibilidad</li>
-      <li>Asimetrías complejas</li>
-    </ul>
-  </div>
+    <div class="stats">
+      <span class="pill">✔️ Documentación clínica</span>
+      <span class="pill">✔️ Protocolos de seguridad</span>
+      <span class="pill">✔️ Seguimiento</span>
+    </div>
+  </section>
 
-  <div class="card" style="margin-top:12px;">
-    <h2>Cómo trabajamos</h2>
-    <ol>
-      <li>Valoración y documentación clínica</li>
-      <li>Plan individualizado según el caso</li>
-      <li>Controles y seguimiento</li>
-    </ol>
-  </div>
+  <section class="section">
+    <div class="grid">
+      <div class="card soft col-6">
+        <h3>Motivos frecuentes</h3>
+        <ul>
+          <li>Sobre-relleno / edema persistente</li>
+          <li>Nódulos / granulomas</li>
+          <li>Hipersensibilidad</li>
+          <li>Asimetrías complejas</li>
+        </ul>
+      </div>
 
-  <p style="margin-top:16px;">
-    Nota: ante signos de alarma, se indicará atención urgente según criterio médico.
-  </p>
+      <div class="card soft col-6">
+        <h3>Cómo trabajamos</h3>
+        <ol style="margin:10px 0 0; padding-left:18px; color: var(--muted);">
+          <li>Valoración y diagnóstico</li>
+          <li>Plan individualizado</li>
+          <li>Controles y seguimiento</li>
+        </ol>
+      </div>
 
-  <p style="margin-top:16px;">
-    <a href="/contacto/" class="cta">Solicitar evaluación</a>
-  </p>
+      <div class="card col-12">
+        <h3>Importante</h3>
+        <p>
+          Si existen signos de alarma, se indicará atención urgente según criterio médico.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="card soft">
+      <h2 style="margin:0 0 8px;">¿Necesitas ayuda hoy?</h2>
+      <p class="sub">Escríbenos por WhatsApp y coordinamos tu evaluación.</p>
+      <div class="row" style="margin-top:12px;">
+        <a class="btn btn-primary" href="/contacto/">Solicitar evaluación</a>
+        <a class="btn" href={whatsapp} target="_blank" rel="noreferrer">💬 WhatsApp</a>
+      </div>
+    </div>
+  </section>
 </BaseLayout>

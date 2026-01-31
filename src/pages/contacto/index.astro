@@ -6,28 +6,46 @@ const email = "vcerna92r@gmail.com";
 const ciudad = "Managua, Nicaragua";
 ---
 
-<BaseLayout title="Contacto | Clínica Dr. Víctor Miranda" description="Agenda tu valoración o contáctanos por WhatsApp.">
-  <h1>Contacto</h1>
+<BaseLayout
+  title="Contacto | Clínica Dr. Víctor Miranda"
+  description="Agenda tu valoración o contáctanos por WhatsApp."
+>
+  <section class="hero" style="padding-top:18px;">
+    <div class="kicker">📍 {ciudad} · Respuesta rápida</div>
+    <h1>Contacto</h1>
+    <p class="lead">
+      Agenda tu valoración o escríbenos por WhatsApp. Te orientamos según tu objetivo.
+    </p>
 
-  <div class="grid">
-    <div class="card">
-      <h2>WhatsApp</h2>
-      <p><a href={whatsapp} target="_blank" rel="noreferrer">Escríbeme por WhatsApp</a></p>
+    <div class="row">
+      <a class="btn btn-primary" href={whatsapp} target="_blank" rel="noreferrer">💬 WhatsApp</a>
+      <a class="btn" href={`mailto:${email}`}>✉️ Email</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="grid">
+      <div class="card soft col-4">
+        <h3>WhatsApp</h3>
+        <p><a class="link" href={whatsapp} target="_blank" rel="noreferrer">Escríbeme por WhatsApp</a></p>
+      </div>
+
+      <div class="card soft col-4">
+        <h3>Email</h3>
+        <p><a class="link" href={`mailto:${email}`}>{email}</a></p>
+      </div>
+
+      <div class="card soft col-4">
+        <h3>Ciudad</h3>
+        <p>{ciudad}</p>
+      </div>
     </div>
 
-    <div class="card">
-      <h2>Email</h2>
-      <p><a href={`mailto:${email}`}>{email}</a></p>
+    <div class="card" style="margin-top:12px;">
+      <h3>Reserva</h3>
+      <p class="sub">
+        Próximo paso: integraremos agenda online y/o formulario para reservas directas.
+      </p>
     </div>
-
-    <div class="card">
-      <h2>Ciudad</h2>
-      <p>{ciudad}</p>
-    </div>
-  </div>
-
-  <div class="card" style="margin-top:12px;">
-    <h2>Reserva</h2>
-    <p>Pronto integraremos agenda online y/o formulario.</p>
-  </div>
+  </section>
 </BaseLayout>

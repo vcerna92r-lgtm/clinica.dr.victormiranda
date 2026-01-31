@@ -1,134 +1,63 @@
 ---
-const {
-  title = "Clínica Dr. Víctor Miranda",
-  description = "Medicina estética con enfoque en seguridad y resultados naturales.",
-} = Astro.props;
-
-const year = new Date().getFullYear();
-const whatsappLink = "https://wa.me/50587355501";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+const whatsapp = "https://wa.me/50587355501";
 ---
 
-<!doctype html>
-<html lang="es">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
+<BaseLayout
+  title="Servicios | Clínica Dr. Víctor Miranda"
+  description="Servicios de medicina estética con enfoque médico, naturalidad y seguridad."
+>
+  <section class="hero" style="padding-top:18px;">
+    <div class="kicker">✨ Servicios · Plan personalizado · Seguimiento</div>
+    <h1>Servicios</h1>
+    <p class="lead">
+      Seleccionamos el tratamiento adecuado según tu objetivo, anatomía y seguridad.
+      Agenda tu valoración o escríbenos por WhatsApp.
+    </p>
 
-    <style>
-      :root { --max: 980px; }
+    <div class="row">
+      <a class="btn btn-primary" href="/contacto/">Reservar valoración</a>
+      <a class="btn" href={whatsapp} target="_blank" rel="noreferrer">💬 WhatsApp</a>
+    </div>
+  </section>
 
-      body {
-        margin: 0;
-        font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-        line-height: 1.6;
-        color: #111;
-        background: #fff;
-      }
+  <section class="section">
+    <div class="section-title">
+      <div>
+        <h2>Tratamientos</h2>
+        <p class="sub">Descripción breve y clara. (Luego lo hacemos editable desde /admin).</p>
+      </div>
+    </div>
 
-      header, main, footer {
-        max-width: var(--max);
-        margin: 0 auto;
-        padding: 18px;
-      }
+    <div class="grid">
+      <div class="card soft col-4">
+        <h3>✨ Armonización facial</h3>
+        <p>Balance facial con resultados naturales.</p>
+        <ul>
+          <li>Plan por proporciones</li>
+          <li>Enfoque conservador</li>
+          <li>Seguimiento</li>
+        </ul>
+      </div>
 
-      nav {
-        display: flex;
-        gap: 14px;
-        align-items: center;
-        flex-wrap: wrap;
-      }
+      <div class="card soft col-4">
+        <h3>🧊 Toxina botulínica</h3>
+        <p>Prevención y armonización sin “congelar” la expresión.</p>
+        <ul>
+          <li>Mapa muscular</li>
+          <li>Revisión a 10–14 días</li>
+        </ul>
+      </div>
 
-      nav a {
-        text-decoration: none;
-        color: #111;
-      }
+      <div class="card soft col-4">
+        <h3>💧 Ácido hialurónico</h3>
+        <p>Soporte estructural y corrección según indicación.</p>
+        <ul>
+          <li>Plan por zonas</li>
+          <li>Seguridad prioritaria</li>
+        </ul>
+      </div>
 
-      .cta {
-        padding: 10px 14px;
-        border: 1px solid #111;
-        border-radius: 12px;
-        text-decoration: none;
-        color: #111;
-        background: white;
-        display: inline-block;
-      }
-
-      /* Empuja el botón a la derecha */
-      .cta-right { margin-left: auto; }
-
-      .hero { padding: 26px 0 10px; }
-
-      .grid {
-        display: grid;
-        gap: 12px;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      }
-
-      .card {
-        border: 1px solid #eee;
-        border-radius: 14px;
-        padding: 16px;
-        background: white;
-      }
-
-      footer {
-        border-top: 1px solid #eee;
-        color: #555;
-        margin-top: 28px;
-      }
-
-      h1 { margin: 0 0 10px; font-size: 34px; }
-      h2 { margin-top: 18px; }
-      ul { padding-left: 18px; }
-    </style>
-  </head>
-
-  <body>
-    <header>
-      <nav>
-        <a href="/">Inicio</a>
-        <a href="/servicios/">Servicios</a>
-        <a href="/complicaciones/">Complicaciones</a>
-        <a href="/contacto/" class="cta cta-right">Reservar / Contacto</a>
-      </nav>
-    </header>
-
-    <main>
-      <slot />
-    </main>
-
-    <footer>
-      <small>© {year} · Clínica Dr. Víctor Miranda</small>
-    </footer>
-
-    <!-- BOTÓN FLOTANTE WHATSAPP (INLINE STYLE: imposible que no se vea) -->
-    <a
-      href={whatsappLink}
-      target="_blank"
-      rel="noreferrer"
-      aria-label="Escríbeme por WhatsApp"
-      title="Escríbeme por WhatsApp"
-      style="
-        position: fixed;
-        right: 18px;
-        bottom: 18px;
-        z-index: 999999;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 12px 14px;
-        border-radius: 999px;
-        background: #25D366;
-        color: #ffffff;
-        font-weight: 700;
-        text-decoration: none;
-        box-shadow: 0 10px 24px rgba(0,0,0,0.18);
-      "
-    >
-      <span style="font-size:18px; line-height:1;">💬</span>
-      WhatsApp
-    </a>
-  </body>
-</html>
+      <div class="card col-6">
+        <h3>🧬 Bioestimuladores</h3>
+        <p>Estimulación de colágeno para soporte y calidad de pie
