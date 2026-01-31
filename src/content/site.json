@@ -1,7 +1,9 @@
 {
+  "clinic_name": "Clínica Dr. Víctor Miranda",
   "name": "Clínica Dr. Víctor Miranda",
   "initials": "VM",
   "city": "Managua, Nicaragua",
   "email": "vcerna92r@gmail.com",
-  "whatsapp": "50587355501"
+  "whatsapp": "50587355501",
+  "whatsapp_message": "Hola Dr. Víctor, quiero agendar una valoración en Clínica Dr. Víctor Miranda.\n\nMi nombre: ________\nServicio de interés (ej. armonización facial / botox / ácido hialurónico / bioestimuladores / microneedling / manejo de complicaciones): ________\nMotivo / objetivo: ________\nFecha y hora preferida: ________\n\nGracias."
 }

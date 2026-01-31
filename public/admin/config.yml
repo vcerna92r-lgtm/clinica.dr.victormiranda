@@ -17,18 +17,30 @@ collections:
         file: "src/content/site.json"
         format: "json"
         fields:
+          - label: "Nombre de la clínica"
+            name: "clinic_name"
+            widget: "string"
+
           - label: "Nombre del sitio"
             name: "name"
             widget: "string"
+
           - label: "Iniciales (logo corto)"
             name: "initials"
             widget: "string"
+
           - label: "Ciudad"
             name: "city"
             widget: "string"
+
           - label: "Email"
             name: "email"
             widget: "string"
+
           - label: "WhatsApp (solo números)"
             name: "whatsapp"
             widget: "string"
+
+          - label: "Mensaje WhatsApp"
+            name: "whatsapp_message"
+            widget: "text"
