@@ -44,3 +44,6 @@ collections:
           - label: "Mensaje WhatsApp"
             name: "whatsapp_message"
             widget: "text"
+          - label: "Link de reservas (Google Calendar)"
+            name: "https://calendar.app.google/bmpjN2TAMFchpHd99"
+            widget: "string"

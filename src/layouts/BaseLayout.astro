@@ -7,8 +7,13 @@ const {
 } = Astro.props;
 
 const year = new Date().getFullYear();
+
+// WhatsApp
 const whatsappNumber = String(site.whatsapp || "").replace(/\D/g, "");
 const whatsappLink = `https://wa.me/${whatsappNumber}`;
+
+// Booking (Google Calendar)
+const bookingUrl = String(site.booking_url || "").trim() || "/contacto/";
 ---
 
 <!doctype html>
@@ -166,7 +171,7 @@ const whatsappLink = `https://wa.me/${whatsappNumber}`;
 
           <div class="nav-cta">
             <a class="btn" href={whatsappLink} target="_blank" rel="noreferrer">💬 WhatsApp</a>
-            <a class="btn btn-primary" href="/contacto/">Reservar</a>
+            <a class="btn btn-primary" href={bookingUrl} target="_blank" rel="noreferrer">Reservar</a>
           </div>
         </nav>
       </div>
