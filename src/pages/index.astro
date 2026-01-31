@@ -5,36 +5,129 @@ const whatsapp = "https://wa.me/50587355501";
 ---
 
 <BaseLayout
-  title="Clínica Dr. Víctor Miranda"
-  description="Medicina estética con enfoque en seguridad y resultados naturales."
+  title="Clínica Dr. Víctor Miranda | Medicina estética"
+  description="Tratamientos personalizados con enfoque en seguridad, naturalidad y seguimiento clínico."
 >
   <section class="hero">
+    <div class="kicker">🛡️ Enfoque médico · Seguridad · Naturalidad</div>
     <h1>Medicina estética con enfoque en seguridad</h1>
-    <p>Tratamientos personalizados, resultados naturales y seguimiento clínico.</p>
-
-    <p style="margin-top:16px;">
-      <a href="/contacto/" class="cta">Reservar valoración</a>
-      <a href={whatsapp} target="_blank" rel="noreferrer" class="cta">WhatsApp</a>
+    <p class="lead">
+      Tratamientos personalizados, resultados naturales y seguimiento clínico.
+      Agenda tu valoración o escríbenos por WhatsApp.
     </p>
-  </section>
 
-  <section class="grid">
-    <div class="card">
-      <h2>Servicios</h2>
-      <ul>
-        <li>Armonización facial</li>
-        <li>Toxina botulínica</li>
-        <li>Ácido hialurónico</li>
-        <li>Bioestimuladores</li>
-        <li>Microneedling / piel</li>
-      </ul>
-      <p><a href="/servicios/">Ver todos</a></p>
+    <div class="row">
+      <a class="btn btn-primary" href="/contacto/">Reservar valoración</a>
+      <a class="btn" href={whatsapp} target="_blank" rel="noreferrer">💬 WhatsApp</a>
+      <a class="btn" href="/servicios/">Ver servicios</a>
     </div>
 
-    <div class="card">
-      <h2>Manejo de complicaciones</h2>
-      <p>Evaluación médica + plan + seguimiento para casos complejos.</p>
-      <p><a href="/complicaciones/">Ver más</a></p>
+    <div class="stats">
+      <span class="pill">✔️ Evaluación personalizada</span>
+      <span class="pill">✔️ Protocolos de seguridad</span>
+      <span class="pill">✔️ Seguimiento clínico</span>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-title">
+      <div>
+        <h2>Servicios principales</h2>
+        <p class="sub">Selección de tratamientos frecuentes. Personalizamos según tu caso.</p>
+      </div>
+      <a class="link" href="/servicios/">Ver todos →</a>
+    </div>
+
+    <div class="grid">
+      <div class="card soft col-4">
+        <h3>✨ Armonización facial</h3>
+        <p>Balance y proporción con enfoque natural.</p>
+        <ul>
+          <li>Plan facial personalizado</li>
+          <li>Objetivos realistas</li>
+          <li>Seguimiento</li>
+        </ul>
+      </div>
+
+      <div class="card soft col-4">
+        <h3>🧊 Toxina botulínica</h3>
+        <p>Prevención y armonización con dosis conservadora.</p>
+        <ul>
+          <li>Expresión natural</li>
+          <li>Revisión a 10–14 días</li>
+        </ul>
+      </div>
+
+      <div class="card soft col-4">
+        <h3>💧 Ácido hialurónico</h3>
+        <p>Soporte estructural y corrección según necesidad.</p>
+        <ul>
+          <li>Plan por zonas</li>
+          <li>Seguridad prioritaria</li>
+        </ul>
+      </div>
+
+      <div class="card col-6">
+        <h3>🧬 Bioestimuladores</h3>
+        <p>Enfoque en calidad de piel, soporte y textura.</p>
+      </div>
+
+      <div class="card col-6">
+        <h3>🪡 Microneedling / piel</h3>
+        <p>Textura, poros, cicatrices y calidad de piel.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="callout">
+      <span class="dot" aria-hidden="true"></span>
+      <div>
+        <strong>Manejo de complicaciones</strong>
+        <p class="sub">
+          Evaluación médica + plan + seguimiento para casos complejos.
+          Si algo no salió como esperabas, podemos ayudarte a encaminarlo de forma segura.
+        </p>
+        <div class="row" style="margin-top:12px;">
+          <a class="btn btn-primary" href="/complicaciones/">Ver manejo</a>
+          <a class="btn" href="/contacto/">Solicitar evaluación</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-title">
+      <div>
+        <h2>Testimonios</h2>
+        <p class="sub">Puedes reemplazar esto luego por testimonios reales.</p>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card col-4">
+        <h3>“Resultados naturales”</h3>
+        <p>Me encantó que se viera sutil y armonioso.</p>
+      </div>
+      <div class="card col-4">
+        <h3>“Atención y seguimiento”</h3>
+        <p>Me explicaron todo con claridad y me sentí segura/o.</p>
+      </div>
+      <div class="card col-4">
+        <h3>“Profesional y cuidadoso”</h3>
+        <p>Se nota el enfoque médico y la seguridad.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="card soft">
+      <h2 style="margin:0 0 8px;">¿Listo para tu valoración?</h2>
+      <p class="sub">Agenda o escríbenos por WhatsApp. Respuesta rápida.</p>
+      <div class="row" style="margin-top:12px;">
+        <a class="btn btn-primary" href="/contacto/">Reservar</a>
+        <a class="btn" href={whatsapp} target="_blank" rel="noreferrer">💬 WhatsApp</a>
+      </div>
     </div>
   </section>
 </BaseLayout>
