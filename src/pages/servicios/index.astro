@@ -1,44 +1,42 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import site from "../../content/site.json";
+import services from "../../content/services.json";
 
-const siteName = "Clínica Dr. Víctor Miranda";
-const bookingUrl = "/thttps://tusitio.com/agenda/"; //
+const siteName = site.clinic_name || site.name || "Clínica Dr. Víctor Miranda";
+const bookingUrl = String(site.booking_url || "").trim() || "/contacto/";
 
-const sectionTitle = "Servicios";
-const sectionSubtitle = "Medicina estética con enfoque en seguridad y resultados naturales.";
+// helper: si está vacío, usa bookingUrl
+function resolveButtonUrl(url) {
+  const u = String(url || "").trim();
+  return u ? u : bookingUrl;
+}
 
-const items = [
-  {
-    name: "Toxina botulínica",
-    price: "Evaluación + plan",
-    description: "Armonización facial con enfoque natural y control de dosis según tu anatomía."
-  },
-  {
-    name: "Ácido hialurónico",
-    price: "Según valoración",
-    description: "Relleno y soporte estructural para mejorar proporciones, hidratación y contorno."
-  },
-  {
-    name: "Bioestimuladores de colágeno",
-    price: "Plan por sesiones",
-    description: "Mejora progresiva de calidad de piel, firmeza y textura con resultados acumulativos."
-  },
-  {
-    name: "Microneedling",
-    price: "Protocolo seguro",
-    description: "Tratamiento para textura, poros, marcas y luminosidad con activos seleccionados."
-  },
-  {
-    name: "Limpieza facial avanzada",
-    price: "Sesión completa",
-    description: "Rutina por pasos: limpieza profunda, extracción controlada y mascarilla calmante."
-  },
-  {
-    name: "Evaluación médico-estética",
-    price: "Primera consulta",
-    description: "Historia, objetivos, análisis facial y plan personalizado con prioridades y tiempos."
-  }
-];
+// helper: forma de imagen
+function shapeClass(shape) {
+  const s = String(shape || "rounded").toLowerCase();
+  if (s === "circle") return "shape-circle";
+  if (s === "square") return "shape-square";
+  return "shape-rounded";
+}
+
+// helper: arregla rutas guardadas por el admin
+// acepta: "uploads/x.jpg" | "/uploads/x.jpg" | "public/uploads/x.jpg" | "images/uploads/x.jpg" | URL completa
+function resolveImageSrc(src) {
+  let s = String(src || "").trim();
+  if (!s) return "";
+
+  // si es URL completa, la dejamos
+  if (s.startsWith("http://") || s.startsWith("https://")) return s;
+
+  // si viene como "public/...." lo quitamos
+  if (s.startsWith("public/")) s = s.replace(/^public\//, "");
+
+  // aseguramos slash inicial
+  if (!s.startsWith("/")) s = `/${s}`;
+
+  return s;
+}
 ---
 
 <BaseLayout
@@ -47,27 +45,46 @@ const items = [
 >
   <section class="hero" style="padding-top:18px;">
     <div class="kicker">✨ Servicios · Plan personalizado · Resultados naturales</div>
-    <h1>{sectionTitle}</h1>
-    <p class="lead">{sectionSubtitle}</p>
+    <h1>{services.section_title || "Servicios"}</h1>
+    {services.section_subtitle && <p class="lead">{services.section_subtitle}</p>}
   </section>
 
   <section class="section">
     <div class="services-grid">
-      {items.map((item) => (
-        <article class="service-card">
-          <div class="service-media">
-            <div class="media-placeholder" aria-hidden="true"></div>
+      {services.items?.map((item) => (
+        <article class="service-card" style={`background:${item.card_bg || "#F5F5F2"}`}>
+          <div class={`service-media ${shapeClass(item.image_shape)}`}>
+            {item.image ? (
+              <img src={resolveImageSrc(item.image)} alt={item.name || "Servicio"} loading="lazy" />
+            ) : (
+              <div class="media-placeholder" aria-hidden="true"></div>
+            )}
           </div>
 
           <div class="service-body">
-            <h3>{item.name}</h3>
+            <h3 style={`color:${item.title_color || "#0F172A"}`}>{item.name}</h3>
 
-            {item.price && <div class="price-pill">{item.price}</div>}
+            {item.price && (
+              <div
+                class="price-pill"
+                style={`background:${item.price_bg || "#FFFFFF"};color:${item.price_color || "#0F172A"}`}
+              >
+                {item.price}
+              </div>
+            )}
 
-            {item.description && <p>{item.description}</p>}
+            {item.description && (
+              <p style={`color:${item.text_color || "#334155"}`}>{item.description}</p>
+            )}
 
-            <a class="service-btn" href={bookingUrl} target="_blank" rel="noreferrer">
-              RESERVAR
+            <a
+              class="service-btn"
+              href={resolveButtonUrl(item.button_url)}
+              target="_blank"
+              rel="noreferrer"
+              style={`background:${item.button_bg || "#16A34A"};color:${item.button_text_color || "#FFFFFF"}`}
+            >
+              {item.button_text || "RESERVAR"}
             </a>
           </div>
         </article>
@@ -76,16 +93,6 @@ const items = [
   </section>
 
   <style>
-    :root{
-      --card-bg: #F5F5F2;
-      --title: #0F172A;
-      --text: #334155;
-      --pill-bg: #FFFFFF;
-      --pill-text: #0F172A;
-      --btn-bg: #16A34A;
-      --btn-text: #FFFFFF;
-    }
-
     .services-grid{
       display: grid;
       gap: 18px;
@@ -101,29 +108,48 @@ const items = [
       display: flex;
       flex-direction: column;
       min-height: 100%;
-      background: var(--card-bg);
     }
 
     .service-media{
       width: 100%;
       aspect-ratio: 16 / 10;
       overflow: hidden;
+      background: rgba(255,255,255,0.35);
       padding: 14px;
       display:flex;
       align-items:center;
       justify-content:center;
-      background: rgba(255,255,255,0.35);
+    }
+
+    .service-media img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
     .media-placeholder{
       width: 100%;
       height: 100%;
-      border-radius: 16px;
+      border-radius: 14px;
       background:
         radial-gradient(400px 180px at 20% 20%, rgba(255,255,255,0.7), rgba(255,255,255,0)),
         linear-gradient(135deg, rgba(255,255,255,0.55), rgba(0,0,0,0.03));
       border: 1px dashed rgba(0,0,0,0.12);
     }
+
+    .shape-square img,
+    .shape-square .media-placeholder { border-radius: 0; }
+
+    .shape-rounded img,
+    .shape-rounded .media-placeholder { border-radius: 16px; }
+
+    .shape-circle{
+      aspect-ratio: 1 / 1;
+      padding: 18px;
+    }
+    .shape-circle img,
+    .shape-circle .media-placeholder { border-radius: 999px; }
 
     .service-body{
       padding: 16px 16px 18px;
@@ -136,7 +162,6 @@ const items = [
       margin: 0;
       font-size: 18px;
       letter-spacing: -0.2px;
-      color: var(--title);
     }
 
     .price-pill{
@@ -146,14 +171,11 @@ const items = [
       border-radius: 999px;
       font-weight: 800;
       border: 1px solid rgba(0,0,0,0.08);
-      background: var(--pill-bg);
-      color: var(--pill-text);
     }
 
     .service-body p{
       margin: 0;
       line-height: 1.5;
-      color: var(--text);
     }
 
     .service-btn{
@@ -166,10 +188,7 @@ const items = [
       font-weight: 900;
       text-decoration: none;
       box-shadow: 0 10px 24px rgba(0,0,0,0.12);
-      background: var(--btn-bg);
-      color: var(--btn-text);
     }
-
     .service-btn:hover{ filter: brightness(.97); }
 
     @media (max-width: 980px){

@@ -5,8 +5,11 @@ backend:
   base_url: https://decap-proxy.vcerna92r.workers.dev
   auth_endpoint: /auth
 
-media_folder: "public/uploads"
-public_folder: "/uploads"
+# ✅ Donde Decap guardará las imágenes que subas desde /admin
+# Se guardan en el repo: public/images/uploads/...
+# Y se usan en la web como: /images/uploads/...
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
 
 collections:
   - name: "site"
@@ -84,8 +87,8 @@ collections:
               - { label: "Nombre", name: "name", widget: "string" }
               - { label: "Precio (texto)", name: "price", widget: "string", required: false }
               - { label: "Descripción", name: "description", widget: "text", required: false }
-              - { label: "Texto del botón", name: "button_text", widget: "string", default: "RESERVAR" }
-              - { label: "URL del botón (opcional)", name: "button_url", widget: "string", required: false }
+
+              # ✅ Imagen por servicio (subida desde el admin)
               - { label: "Imagen", name: "image", widget: "image", required: false }
 
               - label: "Forma de imagen"
@@ -95,6 +98,9 @@ collections:
                   - { label: "Cuadrada", value: "square" }
                   - { label: "Redondeada", value: "rounded" }
                   - { label: "Redonda", value: "circle" }
+
+              - { label: "Texto del botón", name: "button_text", widget: "string", default: "RESERVAR" }
+              - { label: "URL del botón (opcional)", name: "button_url", widget: "string", required: false }
 
               - { label: "Color fondo tarjeta (hex)", name: "card_bg", widget: "string", default: "#F5F5F2" }
               - { label: "Color título (hex)", name: "title_color", widget: "string", default: "#0F172A" }
