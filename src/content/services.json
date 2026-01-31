@@ -20,17 +20,17 @@
     },
     {
       "button_url": "BOOKING_URL",
-      "price": "USD 199.00",
-      "name": "Advanced Service",
+      "price": "Según Valoración",
+      "name": "Ácido Hialurónico",
       "price_color": "#0F172A",
       "text_color": "#334155",
       "button_bg": "#16A34A",
       "card_bg": "#F5F5F2",
       "button_text": "RESERVAR",
-      "image": "/uploads/placeholder-3.jpg",
+      "image": "/uploads/korea-soft-balance-intense-volume-dermal-filler-hyaluronic-acid-anti-wrinkle.avif",
       "price_bg": "#FFFFFF",
       "title_color": "#0F172A",
-      "description": "Ideal para quien busca algo más avanzado. Añade una nota clínica si aplica.",
+      "description": "Relleno y soporte estructural para mejorar proporciones, hidratación y contorno.",
       "image_shape": "rounded",
       "button_text_color": "#FFFFFF"
     }
