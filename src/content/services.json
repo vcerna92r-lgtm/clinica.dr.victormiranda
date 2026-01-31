@@ -4,38 +4,6 @@
   "items": [
     {
       "button_url": "BOOKING_URL",
-      "price": "USD 250.00",
-      "name": "Toxina botulínica",
-      "price_color": "#0F172A",
-      "text_color": "#334155",
-      "button_bg": "#16A34A",
-      "card_bg": "#F5F5F2",
-      "button_text": "RESERVAR",
-      "image": "/uploads/toxina-botulinica-tipo-a-xeomin.jpg.webp",
-      "price_bg": "#FFFFFF",
-      "title_color": "#0F172A",
-      "description": "Armonización facial con enfoque natural y control de dosis según tu anatomía.",
-      "image_shape": "rounded",
-      "button_text_color": "#FFFFFF"
-    },
-    {
-      "button_url": "BOOKING_URL",
-      "price": "Según Valoración",
-      "name": "Ácido Hialurónico",
-      "price_color": "#0F172A",
-      "text_color": "#334155",
-      "button_bg": "#16A34A",
-      "card_bg": "#F5F5F2",
-      "button_text": "RESERVAR",
-      "image": "/uploads/diseño-sin-título-2-.png",
-      "price_bg": "#FFFFFF",
-      "title_color": "#0F172A",
-      "description": "Relleno y soporte estructural para mejorar proporciones, hidratación y contorno.",
-      "image_shape": "rounded",
-      "button_text_color": "#FFFFFF"
-    },
-    {
-      "button_url": "BOOKING_URL",
       "price": "Plan por sesión ",
       "name": "Bioestimuladores de Colágeno",
       "price_color": "#0F172A",
