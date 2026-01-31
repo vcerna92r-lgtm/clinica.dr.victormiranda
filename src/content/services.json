@@ -35,6 +35,7 @@
       "button_text_color": "#FFFFFF"
     },
     {
+      "button_url": "BOOKING_URL",
       "price": "Plan por sesión ",
       "name": "Bioestimuladores de Colágeno",
       "price_color": "#0F172A",
