@@ -1,0 +1,21 @@
+{
+  "hero_title": "Dr. Victor Miranda Cerna",
+  "hero_bullets": [
+    { "text": "Médico y Cirujano" },
+    { "text": "Máster en Medicina Estética, nutrición y Antienvejecimiento" },
+    { "text": "Especialista en Rejuvenecimiento Facial" },
+    { "text": "Experto en Manejo de Complicaciones Médico Estéticas" }
+  ],
+  "hero_paragraphs": [
+    {
+      "text": "Soy médico estético especializado en armonización facial. Mi enfoque combina estética, seguridad y resultados naturales: evaluaciones detalladas, planificación personalizada y técnicas basadas en evidencia para realzar tu rostro sin perder tu esencia."
+    },
+    {
+      "text": "Mi objetivo es que te mires al espejo y te reconozcas: más fresco/a, más armónico/a, más tú. Trabajo con un enfoque médico que prioriza la seguridad, la naturalidad y el balance facial, con un plan diseñado para tus rasgos y tus metas."
+    }
+  ],
+  "hero_image": "",
+  "hero_font_family": "system",
+  "hero_title_size": "xl",
+  "hero_text_size": "md"
+}

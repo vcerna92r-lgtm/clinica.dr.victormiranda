@@ -109,3 +109,51 @@ collections:
               - { label: "Color precio (hex)", name: "price_color", widget: "string", default: "#0F172A" }
               - { label: "Color botón (hex)", name: "button_bg", widget: "string", default: "#16A34A" }
               - { label: "Color texto botón (hex)", name: "button_text_color", widget: "string", default: "#FFFFFF" }
+
+  # ✅ NUEVO: Inicio (Portada editable desde /admin)
+  - name: "home"
+    label: "Inicio"
+    files:
+      - label: "Portada (Inicio)"
+        name: "home_cover"
+        file: "src/content/home.json"
+        format: "json"
+        fields:
+          - { label: "Título (tu nombre)", name: "hero_title", widget: "string" }
+
+          - label: "Lista (viñetas)"
+            name: "hero_bullets"
+            widget: "list"
+            fields:
+              - { label: "Texto", name: "text", widget: "string" }
+
+          - label: "Párrafos"
+            name: "hero_paragraphs"
+            widget: "list"
+            fields:
+              - { label: "Texto", name: "text", widget: "text" }
+
+          - { label: "Foto de portada (subir imagen)", name: "hero_image", widget: "image", required: false }
+
+          - label: "Tipo de letra"
+            name: "hero_font_family"
+            widget: "select"
+            options:
+              - { label: "Moderna (recomendada)", value: "system" }
+              - { label: "Elegante (serif)", value: "serif" }
+
+          - label: "Tamaño del título"
+            name: "hero_title_size"
+            widget: "select"
+            options:
+              - { label: "Grande", value: "xl" }
+              - { label: "Mediano", value: "lg" }
+              - { label: "Pequeño", value: "md" }
+
+          - label: "Tamaño del texto"
+            name: "hero_text_size"
+            widget: "select"
+            options:
+              - { label: "Grande", value: "lg" }
+              - { label: "Mediano (recomendado)", value: "md" }
+              - { label: "Pequeño", value: "sm" }

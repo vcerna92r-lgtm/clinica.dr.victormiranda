@@ -1,34 +1,71 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import site from "../content/site.json";
+import home from "../content/home.json";
 
-const whatsapp = "https://wa.me/50587355501";
+const siteName = site.clinic_name || site.name || "Clínica Dr. Víctor Miranda";
+const bookingUrl = String(site.booking_url || "").trim() || "/contacto/";
+
+const whatsappNum = String(site.whatsapp || "").trim();
+const whatsappMessage = encodeURIComponent(String(site.whatsapp_message || "").trim() || "Hola, quiero agendar una valoración.");
+const whatsappUrl = whatsappNum ? `https://wa.me/${whatsappNum}?text=${whatsappMessage}` : "https://wa.me/50587355501";
+
+function resolveImageSrc(src) {
+  let s = String(src || "").trim();
+  if (!s) return "";
+  if (s.startsWith("http://") || s.startsWith("https://")) return s;
+  if (s.startsWith("public/")) s = s.replace(/^public\//, "");
+  if (!s.startsWith("/")) s = `/${s}`;
+  return s;
+}
+
+function fontClass(v) {
+  return String(v || "system") === "serif" ? "font-serif" : "font-system";
+}
+function titleSizeClass(v) {
+  const s = String(v || "xl");
+  if (s === "md") return "title-md";
+  if (s === "lg") return "title-lg";
+  return "title-xl";
+}
+function textSizeClass(v) {
+  const s = String(v || "md");
+  if (s === "sm") return "text-sm";
+  if (s === "lg") return "text-lg";
+  return "text-md";
+}
 ---
 
 <BaseLayout
-  title="Clínica Dr. Víctor Miranda | Medicina estética"
+  title={`${siteName} | Medicina estética`}
   description="Tratamientos personalizados con enfoque en seguridad, naturalidad y seguimiento clínico."
 >
-  <section class="hero">
-    <div class="kicker">🛡️ Enfoque médico · Seguridad · Naturalidad</div>
-    <h1>Medicina estética con enfoque en seguridad</h1>
-    <p class="lead">
-      Tratamientos personalizados, resultados naturales y seguimiento clínico.
-      Agenda tu valoración o escríbenos por WhatsApp.
-    </p>
+  <!-- ✅ PORTADA (como la imagen): foto + quién soy -->
+  <section class="cover">
+    <div class="cover-grid">
+      <div class="cover-photo">
+        {home.hero_image ? (
+          <img src={resolveImageSrc(home.hero_image)} alt={home.hero_title || siteName} loading="lazy" />
+        ) : (
+          <div class="photo-placeholder" aria-hidden="true"></div>
+        )}
+      </div>
 
-    <div class="row">
-      <a class="btn btn-primary" href="/contacto/">Reservar valoración</a>
-      <a class="btn" href={whatsapp} target="_blank" rel="noreferrer">💬 WhatsApp</a>
-      <a class="btn" href="/servicios/">Ver servicios</a>
-    </div>
+      <div class={`cover-copy ${fontClass(home.hero_font_family)} ${textSizeClass(home.hero_text_size)}`}>
+        <h1 class={titleSizeClass(home.hero_title_size)}>{home.hero_title || "Tu nombre"}</h1>
 
-    <div class="stats">
-      <span class="pill">✔️ Evaluación personalizada</span>
-      <span class="pill">✔️ Protocolos de seguridad</span>
-      <span class="pill">✔️ Seguimiento clínico</span>
+        {home.hero_bullets?.length ? (
+          <ul class="bullets">
+            {home.hero_bullets.map((b) => <li>{b.text}</li>)}
+          </ul>
+        ) : null}
+
+        {home.hero_paragraphs?.map((p) => <p class="para">{p.text}</p>)}
+      </div>
     </div>
   </section>
 
+  <!-- ⬇️ Todo lo de abajo lo dejamos igual POR AHORA -->
   <section class="section">
     <div class="section-title">
       <div>
@@ -90,7 +127,7 @@ const whatsapp = "https://wa.me/50587355501";
         </p>
         <div class="row" style="margin-top:12px;">
           <a class="btn btn-primary" href="/complicaciones/">Ver manejo</a>
-          <a class="btn" href="/contacto/">Solicitar evaluación</a>
+          <a class="btn" href={bookingUrl}>Solicitar evaluación</a>
         </div>
       </div>
     </div>
@@ -125,9 +162,69 @@ const whatsapp = "https://wa.me/50587355501";
       <h2 style="margin:0 0 8px;">¿Listo para tu valoración?</h2>
       <p class="sub">Agenda o escríbenos por WhatsApp. Respuesta rápida.</p>
       <div class="row" style="margin-top:12px;">
-        <a class="btn btn-primary" href="/contacto/">Reservar</a>
-        <a class="btn" href={whatsapp} target="_blank" rel="noreferrer">💬 WhatsApp</a>
+        <a class="btn btn-primary" href={bookingUrl}>Reservar</a>
+        <a class="btn" href={whatsappUrl} target="_blank" rel="noreferrer">💬 WhatsApp</a>
       </div>
     </div>
   </section>
+
+  <style>
+    /* ✅ Estilos solo para la PORTADA */
+    .cover{ padding-top: 26px; padding-bottom: 10px; }
+
+    .cover-grid{
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 22px;
+      align-items: center;
+    }
+
+    .cover-photo{
+      width: min(560px, 78vw);
+      aspect-ratio: 1 / 1;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.35);
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 16px 40px rgba(15,23,42,0.08);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .cover-photo img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display:block;
+    }
+
+    .photo-placeholder{
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(500px 240px at 20% 20%, rgba(255,255,255,0.70), rgba(255,255,255,0)),
+        linear-gradient(135deg, rgba(255,255,255,0.55), rgba(0,0,0,0.05));
+      border: 1px dashed rgba(0,0,0,0.12);
+    }
+
+    .font-system{ font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    .font-serif{ font-family: ui-serif, Georgia, "Times New Roman", Times, serif; }
+
+    .title-xl{ font-size: 44px; letter-spacing: -0.6px; margin: 0 0 10px; line-height: 1.05; }
+    .title-lg{ font-size: 38px; letter-spacing: -0.5px; margin: 0 0 10px; line-height: 1.1; }
+    .title-md{ font-size: 32px; letter-spacing: -0.4px; margin: 0 0 10px; line-height: 1.15; }
+
+    .text-lg{ font-size: 18px; }
+    .text-md{ font-size: 16px; }
+    .text-sm{ font-size: 14px; }
+
+    .bullets{ margin: 0 0 12px; padding-left: 18px; line-height: 1.6; }
+    .para{ margin: 10px 0 0; line-height: 1.65; opacity: 0.92; }
+
+    @media (max-width: 980px){
+      .cover-grid{ grid-template-columns: 1fr; }
+      .cover-photo{ width: min(520px, 85vw); margin: 0 auto; }
+    }
+  </style>
 </BaseLayout>
