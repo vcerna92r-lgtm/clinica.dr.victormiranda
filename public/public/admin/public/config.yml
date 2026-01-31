@@ -2,7 +2,7 @@ backend:
   name: github
   repo: vcerna92r-lgtm/clinica.dr.victormiranda
   branch: main
-  base_url: https://TU_PROXY_AQUI.workers.dev
+  base_url: https://decap-proxy.vcerna92r.workers.dev
   auth_endpoint: /auth
 
 media_folder: "public/uploads"
