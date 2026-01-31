@@ -32,6 +32,21 @@
       "description": "Armonización facial con enfoque natural y control de dosis según tu anatomía y objetivos de tratamiento.",
       "image_shape": "circle",
       "button_text_color": "#FFFFFF"
+    },
+    {
+      "price": "Según valoración",
+      "name": "Ácido Hialurónico",
+      "price_color": "#0F172A",
+      "text_color": "#334155",
+      "button_bg": "#16A34A",
+      "card_bg": "#F5F5F2",
+      "button_text": "RESERVAR",
+      "image": "/uploads/diseño-sin-título-2-.png",
+      "price_bg": "#FFFFFF",
+      "title_color": "#0F172A",
+      "description": "Relleno y soporte estructural para mejorar proporciones, hidratación y contorno.",
+      "image_shape": "circle",
+      "button_text_color": "#FFFFFF"
     }
   ]
 }
