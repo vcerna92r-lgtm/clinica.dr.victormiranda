@@ -62,6 +62,21 @@
       "description": "Tratamiento para textura, poros, marcas y luminosidad sin/con activos seleccionados.",
       "image_shape": "circle",
       "button_text_color": "#FFFFFF"
+    },
+    {
+      "price": "Sesión completa",
+      "name": "Limpieza Facial Avanzada",
+      "price_color": "#0F172A",
+      "text_color": "#334155",
+      "button_bg": "#16A34A",
+      "card_bg": "#F5F5F2",
+      "button_text": "RESERVAR",
+      "image": "/uploads/imagenesdeservicios_limpiezafacialprofunda_1200x1200.webp",
+      "price_bg": "#FFFFFF",
+      "title_color": "#0F172A",
+      "description": "Rutina por pasos: limpieza profunda, extracción controlada según características de la piel y mascarilla calmante.",
+      "image_shape": "circle",
+      "button_text_color": "#FFFFFF"
     }
   ]
 }
