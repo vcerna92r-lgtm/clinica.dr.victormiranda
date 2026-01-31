@@ -17,6 +17,21 @@
       "description": "Mejora progresiva de calidad de piel, firmeza y textura con resultados acumulativos.",
       "image_shape": "circle",
       "button_text_color": "#FFFFFF"
+    },
+    {
+      "price": "Precio según objetivo",
+      "name": "Toxina Botulínica",
+      "price_color": "#0F172A",
+      "text_color": "#334155",
+      "button_bg": "#16A34A",
+      "card_bg": "#F5F5F2",
+      "button_text": "RESERVAR",
+      "image": "/uploads/toxina-botulinica-tipo-a-xeomin.jpg.webp",
+      "price_bg": "#FFFFFF",
+      "title_color": "#0F172A",
+      "description": "Armonización facial con enfoque natural y control de dosis según tu anatomía.",
+      "image_shape": "rounded",
+      "button_text_color": "#FFFFFF"
     }
   ]
 }
