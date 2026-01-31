@@ -3,22 +3,6 @@
   "section_subtitle": "Elige un tratamiento. Personalizamos según tu objetivo.",
   "items": [
     {
-      "button_url": "BOOKING_URL",
-      "price": "Plan por sesión ",
-      "name": "Bioestimuladores de Colágeno",
-      "price_color": "#0F172A",
-      "text_color": "#334155",
-      "button_bg": "#16A34A",
-      "card_bg": "#F5F5F2",
-      "button_text": "RESERVAR",
-      "image": "/uploads/radiesse-bioestimulador-rejuvenecimiento-facial.jpg",
-      "price_bg": "#FFFFFF",
-      "title_color": "#0F172A",
-      "description": "Mejora progresiva de calidad de piel, firmeza y textura con resultados acumulativos.",
-      "image_shape": "circle",
-      "button_text_color": "#FFFFFF"
-    },
-    {
       "price": "Precio según objetivo",
       "name": "Toxina Botulínica",
       "price_color": "#0F172A",
@@ -45,6 +29,22 @@
       "price_bg": "#FFFFFF",
       "title_color": "#0F172A",
       "description": "Relleno y soporte estructural para mejorar proporciones, mejorar la hidratación y contorno. ",
+      "image_shape": "circle",
+      "button_text_color": "#FFFFFF"
+    },
+    {
+      "button_url": "BOOKING_URL",
+      "price": "Plan por sesión ",
+      "name": "Bioestimuladores de Colágeno",
+      "price_color": "#0F172A",
+      "text_color": "#334155",
+      "button_bg": "#16A34A",
+      "card_bg": "#F5F5F2",
+      "button_text": "RESERVAR",
+      "image": "/uploads/radiesse-bioestimulador-rejuvenecimiento-facial.jpg",
+      "price_bg": "#FFFFFF",
+      "title_color": "#0F172A",
+      "description": "Mejora progresiva de calidad de piel, firmeza y textura con resultados acumulativos.",
       "image_shape": "circle",
       "button_text_color": "#FFFFFF"
     }
