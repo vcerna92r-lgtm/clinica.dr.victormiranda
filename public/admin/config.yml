@@ -44,6 +44,62 @@ collections:
           - label: "Mensaje WhatsApp"
             name: "whatsapp_message"
             widget: "text"
+
           - label: "Link de reservas (Google Calendar)"
-            name: "https://calendar.app.google/bmpjN2TAMFchpHd99"
+            name: "booking_url"
             widget: "string"
+
+          - label: "Color principal (hex)"
+            name: "accent_color"
+            widget: "string"
+
+          - label: "Color secundario (hex)"
+            name: "accent_color_2"
+            widget: "string"
+
+          - label: "Logo (subir imagen)"
+            name: "logo_image"
+            widget: "image"
+            required: false
+
+          - label: "Imagen principal / Hero (subir imagen)"
+            name: "hero_image"
+            widget: "image"
+            required: false
+
+  - name: "services"
+    label: "Servicios"
+    files:
+      - label: "Página de Servicios"
+        name: "services_page"
+        file: "src/content/services.json"
+        format: "json"
+        fields:
+          - { label: "Título de sección", name: "section_title", widget: "string" }
+          - { label: "Subtítulo", name: "section_subtitle", widget: "string", required: false }
+          - label: "Servicios"
+            name: "items"
+            widget: "list"
+            fields:
+              - { label: "Nombre", name: "name", widget: "string" }
+              - { label: "Precio (texto)", name: "price", widget: "string", required: false }
+              - { label: "Descripción", name: "description", widget: "text", required: false }
+              - { label: "Texto del botón", name: "button_text", widget: "string", default: "RESERVAR" }
+              - { label: "URL del botón (opcional)", name: "button_url", widget: "string", required: false }
+              - { label: "Imagen", name: "image", widget: "image", required: false }
+
+              - label: "Forma de imagen"
+                name: "image_shape"
+                widget: "select"
+                options:
+                  - { label: "Cuadrada", value: "square" }
+                  - { label: "Redondeada", value: "rounded" }
+                  - { label: "Redonda", value: "circle" }
+
+              - { label: "Color fondo tarjeta (hex)", name: "card_bg", widget: "string", default: "#F5F5F2" }
+              - { label: "Color título (hex)", name: "title_color", widget: "string", default: "#0F172A" }
+              - { label: "Color texto (hex)", name: "text_color", widget: "string", default: "#334155" }
+              - { label: "Fondo precio (hex)", name: "price_bg", widget: "string", default: "#FFFFFF" }
+              - { label: "Color precio (hex)", name: "price_color", widget: "string", default: "#0F172A" }
+              - { label: "Color botón (hex)", name: "button_bg", widget: "string", default: "#16A34A" }
+              - { label: "Color texto botón (hex)", name: "button_text_color", widget: "string", default: "#FFFFFF" }

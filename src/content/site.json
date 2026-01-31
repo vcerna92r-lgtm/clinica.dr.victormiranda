@@ -4,8 +4,11 @@
   "city": "Managua, Nicaragua",
   "name": "Clínica Dr. Víctor Miranda",
   "initials": "VM",
-  "https://calendar.app.google/bmpjN2TAMFchpHd99": "https://calendar.app.google/bmpjN2TAMFchpHd99",
   "whatsapp": "50587355501",
   "whatsapp_message": "Hola Dr. Víctor, quiero agendar una valoración en Clínica Dr. Víctor Miranda.\n\nMi nombre: ________\nServicio de interés: ________\nFecha y hora preferida: ________\n\nGracias.",
-  "email": "vcerna92r@gmail.com"
+  "email": "vcerna92r@gmail.com",
+  "accent_color": "#0F766E",
+  "accent_color_2": "#06B6D4",
+  "logo_image": "/images/logo.png",
+  "hero_image": "/images/hero.jpg"
 }

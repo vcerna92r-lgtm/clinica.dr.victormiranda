@@ -1,63 +1,182 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-const whatsapp = "https://wa.me/50587355501";
+
+const siteName = "Clínica Dr. Víctor Miranda";
+const bookingUrl = "/thttps://tusitio.com/agenda/"; //
+
+const sectionTitle = "Servicios";
+const sectionSubtitle = "Medicina estética con enfoque en seguridad y resultados naturales.";
+
+const items = [
+  {
+    name: "Toxina botulínica",
+    price: "Evaluación + plan",
+    description: "Armonización facial con enfoque natural y control de dosis según tu anatomía."
+  },
+  {
+    name: "Ácido hialurónico",
+    price: "Según valoración",
+    description: "Relleno y soporte estructural para mejorar proporciones, hidratación y contorno."
+  },
+  {
+    name: "Bioestimuladores de colágeno",
+    price: "Plan por sesiones",
+    description: "Mejora progresiva de calidad de piel, firmeza y textura con resultados acumulativos."
+  },
+  {
+    name: "Microneedling",
+    price: "Protocolo seguro",
+    description: "Tratamiento para textura, poros, marcas y luminosidad con activos seleccionados."
+  },
+  {
+    name: "Limpieza facial avanzada",
+    price: "Sesión completa",
+    description: "Rutina por pasos: limpieza profunda, extracción controlada y mascarilla calmante."
+  },
+  {
+    name: "Evaluación médico-estética",
+    price: "Primera consulta",
+    description: "Historia, objetivos, análisis facial y plan personalizado con prioridades y tiempos."
+  }
+];
 ---
 
 <BaseLayout
-  title="Servicios | Clínica Dr. Víctor Miranda"
-  description="Servicios de medicina estética con enfoque médico, naturalidad y seguridad."
+  title={`Servicios | ${siteName}`}
+  description="Servicios de medicina estética con enfoque en seguridad y resultados naturales."
 >
   <section class="hero" style="padding-top:18px;">
-    <div class="kicker">✨ Servicios · Plan personalizado · Seguimiento</div>
-    <h1>Servicios</h1>
-    <p class="lead">
-      Seleccionamos el tratamiento adecuado según tu objetivo, anatomía y seguridad.
-      Agenda tu valoración o escríbenos por WhatsApp.
-    </p>
-
-    <div class="row">
-      <a class="btn btn-primary" href="/contacto/">Reservar valoración</a>
-      <a class="btn" href={whatsapp} target="_blank" rel="noreferrer">💬 WhatsApp</a>
-    </div>
+    <div class="kicker">✨ Servicios · Plan personalizado · Resultados naturales</div>
+    <h1>{sectionTitle}</h1>
+    <p class="lead">{sectionSubtitle}</p>
   </section>
 
   <section class="section">
-    <div class="section-title">
-      <div>
-        <h2>Tratamientos</h2>
-        <p class="sub">Descripción breve y clara. (Luego lo hacemos editable desde /admin).</p>
-      </div>
+    <div class="services-grid">
+      {items.map((item) => (
+        <article class="service-card">
+          <div class="service-media">
+            <div class="media-placeholder" aria-hidden="true"></div>
+          </div>
+
+          <div class="service-body">
+            <h3>{item.name}</h3>
+
+            {item.price && <div class="price-pill">{item.price}</div>}
+
+            {item.description && <p>{item.description}</p>}
+
+            <a class="service-btn" href={bookingUrl} target="_blank" rel="noreferrer">
+              RESERVAR
+            </a>
+          </div>
+        </article>
+      ))}
     </div>
+  </section>
 
-    <div class="grid">
-      <div class="card soft col-4">
-        <h3>✨ Armonización facial</h3>
-        <p>Balance facial con resultados naturales.</p>
-        <ul>
-          <li>Plan por proporciones</li>
-          <li>Enfoque conservador</li>
-          <li>Seguimiento</li>
-        </ul>
-      </div>
+  <style>
+    :root{
+      --card-bg: #F5F5F2;
+      --title: #0F172A;
+      --text: #334155;
+      --pill-bg: #FFFFFF;
+      --pill-text: #0F172A;
+      --btn-bg: #16A34A;
+      --btn-text: #FFFFFF;
+    }
 
-      <div class="card soft col-4">
-        <h3>🧊 Toxina botulínica</h3>
-        <p>Prevención y armonización sin “congelar” la expresión.</p>
-        <ul>
-          <li>Mapa muscular</li>
-          <li>Revisión a 10–14 días</li>
-        </ul>
-      </div>
+    .services-grid{
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(12, 1fr);
+    }
 
-      <div class="card soft col-4">
-        <h3>💧 Ácido hialurónico</h3>
-        <p>Soporte estructural y corrección según indicación.</p>
-        <ul>
-          <li>Plan por zonas</li>
-          <li>Seguridad prioritaria</li>
-        </ul>
-      </div>
+    .service-card{
+      grid-column: span 4;
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(15,23,42,0.06);
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+      background: var(--card-bg);
+    }
 
-      <div class="card col-6">
-        <h3>🧬 Bioestimuladores</h3>
-        <p>Estimulación de colágeno para soporte y calidad de pie
+    .service-media{
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      padding: 14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: rgba(255,255,255,0.35);
+    }
+
+    .media-placeholder{
+      width: 100%;
+      height: 100%;
+      border-radius: 16px;
+      background:
+        radial-gradient(400px 180px at 20% 20%, rgba(255,255,255,0.7), rgba(255,255,255,0)),
+        linear-gradient(135deg, rgba(255,255,255,0.55), rgba(0,0,0,0.03));
+      border: 1px dashed rgba(0,0,0,0.12);
+    }
+
+    .service-body{
+      padding: 16px 16px 18px;
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .service-body h3{
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: -0.2px;
+      color: var(--title);
+    }
+
+    .price-pill{
+      display: inline-flex;
+      align-self: flex-start;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-weight: 800;
+      border: 1px solid rgba(0,0,0,0.08);
+      background: var(--pill-bg);
+      color: var(--pill-text);
+    }
+
+    .service-body p{
+      margin: 0;
+      line-height: 1.5;
+      color: var(--text);
+    }
+
+    .service-btn{
+      margin-top: 6px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      height: 44px;
+      border-radius: 999px;
+      font-weight: 900;
+      text-decoration: none;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+      background: var(--btn-bg);
+      color: var(--btn-text);
+    }
+
+    .service-btn:hover{ filter: brightness(.97); }
+
+    @media (max-width: 980px){
+      .service-card{ grid-column: span 6; }
+    }
+    @media (max-width: 640px){
+      .service-card{ grid-column: span 12; }
+    }
+  </style>
+</BaseLayout>

@@ -1,0 +1,54 @@
+{
+  "section_title": "Servicios",
+  "section_subtitle": "Elige un tratamiento. Personalizamos según tu objetivo.",
+  "items": [
+    {
+      "name": "Basic Service",
+      "price": "USD 99.00",
+      "description": "Describe detalles importantes como duración, beneficios y por qué es ideal para ti.",
+      "button_text": "RESERVAR",
+      "button_url": "BOOKING_URL",
+      "image": "/uploads/placeholder-1.jpg",
+      "image_shape": "rounded",
+      "card_bg": "#F5F5F2",
+      "title_color": "#0F172A",
+      "text_color": "#334155",
+      "price_bg": "#FFFFFF",
+      "price_color": "#0F172A",
+      "button_bg": "#16A34A",
+      "button_text_color": "#FFFFFF"
+    },
+    {
+      "name": "Intermediate Service",
+      "price": "USD 149.00",
+      "description": "Explica el valor del tratamiento, tiempo estimado y resultados esperados.",
+      "button_text": "RESERVAR",
+      "button_url": "BOOKING_URL",
+      "image": "/uploads/placeholder-2.jpg",
+      "image_shape": "rounded",
+      "card_bg": "#F5F5F2",
+      "title_color": "#0F172A",
+      "text_color": "#334155",
+      "price_bg": "#FFFFFF",
+      "price_color": "#0F172A",
+      "button_bg": "#16A34A",
+      "button_text_color": "#FFFFFF"
+    },
+    {
+      "name": "Advanced Service",
+      "price": "USD 199.00",
+      "description": "Ideal para quien busca algo más avanzado. Añade una nota clínica si aplica.",
+      "button_text": "RESERVAR",
+      "button_url": "BOOKING_URL",
+      "image": "/uploads/placeholder-3.jpg",
+      "image_shape": "rounded",
+      "card_bg": "#F5F5F2",
+      "title_color": "#0F172A",
+      "text_color": "#334155",
+      "price_bg": "#FFFFFF",
+      "price_color": "#0F172A",
+      "button_bg": "#16A34A",
+      "button_text_color": "#FFFFFF"
+    }
+  ]
+}
