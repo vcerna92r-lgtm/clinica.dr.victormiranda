@@ -1,8 +1,10 @@
 ---
 import site from "../content/site.json";
 
+const siteName = site.clinic_name || site.name || "Clínica Dr. Víctor Miranda";
+
 const {
-  title = site.name,
+  title = siteName,
   description = "Medicina estética con enfoque en seguridad y resultados naturales.",
 } = Astro.props;
 
@@ -158,8 +160,8 @@ const bookingUrl = String(site.booking_url || "").trim() || "/contacto/";
       <div class="container">
         <nav class="nav">
           <a class="brand" href="/">
-            <span class="brand-badge">{site.initials}</span>
-            <span>{site.name}</span>
+            <span class="brand-badge">{site.initials || "VM"}</span>
+            <span>{siteName}</span>
           </a>
 
           <div class="navlinks">
@@ -185,7 +187,10 @@ const bookingUrl = String(site.booking_url || "").trim() || "/contacto/";
 
     <footer>
       <div class="container">
-        <small>© {year} · {site.name} · {site.city} · {site.email}</small>
+        <small>
+          © {year} · {siteName} · {site.city} · {site.email} ·
+          <a class="link" href="/politicas/">Políticas</a>
+        </small>
       </div>
     </footer>
 

@@ -1,0 +1,115 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import site from "../../content/site.json";
+
+const bookingUrl = String(site.booking_url || "").trim() || "/contacto/";
+const whatsappNumber = String(site.whatsapp || "").replace(/\D/g, "");
+const whatsappLink = `https://wa.me/${whatsappNumber}`;
+const email = String(site.email || "").trim();
+
+const fecha = "31 de enero de 2026"; // puedes cambiarla cuando quieras
+---
+
+<BaseLayout title="Políticas | Clínica Dr. Víctor Miranda" description="Políticas de reserva, cancelación, privacidad y condiciones de atención.">
+  <section class="hero" style="padding-top:18px;">
+    <div class="kicker">📄 Información importante</div>
+    <h1>Políticas</h1>
+    <p class="lead">
+      Estas políticas ayudan a organizar tu experiencia, tiempos de atención y comunicación.
+      Última actualización: <strong>{fecha}</strong>.
+    </p>
+    <div class="row">
+      <a class="btn btn-primary" href={bookingUrl} target="_blank" rel="noreferrer">Reservar</a>
+      <a class="btn" href={whatsappLink} target="_blank" rel="noreferrer">💬 WhatsApp</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="grid">
+      <div class="card soft col-12">
+        <h3>1) Reservas</h3>
+        <p>
+          Las citas se reservan mediante el enlace de agenda. Te recomendamos agendar con anticipación para asegurar disponibilidad.
+        </p>
+      </div>
+
+      <div class="card soft col-6">
+        <h3>2) Reprogramación y cancelación</h3>
+        <ul>
+          <li>Si necesitas reprogramar, hazlo con la mayor anticipación posible.</li>
+          <li>Las cancelaciones tardías o inasistencias afectan la disponibilidad de otros pacientes.</li>
+          <li>La clínica puede reasignar espacios si no se confirma o si se incumple el horario acordado.</li>
+        </ul>
+        <p style="margin-top:10px;">
+          <em>(Si manejas depósitos o anticipos, aquí agregamos el detalle exacto.)</em>
+        </p>
+      </div>
+
+      <div class="card soft col-6">
+        <h3>3) Puntualidad</h3>
+        <ul>
+          <li>Llega con 10 minutos de anticipación si es tu primera visita.</li>
+          <li>En caso de retraso, la consulta puede acortarse para respetar el horario de los siguientes pacientes.</li>
+          <li>Si el retraso es considerable, podríamos requerir reprogramación.</li>
+        </ul>
+      </div>
+
+      <div class="card col-12">
+        <h3>4) Seguridad clínica</h3>
+        <p>
+          Algunos procedimientos requieren evaluación previa, consentimiento informado y/o seguimiento. Se explicarán indicaciones,
+          cuidados posteriores, contraindicaciones y posibles efectos adversos durante la valoración.
+        </p>
+        <p style="margin-top:10px;">
+          <strong>Resultados variables:</strong> los resultados pueden variar entre personas según anatomía, biología y cuidados posteriores.
+        </p>
+      </div>
+
+      <div class="card col-12">
+        <h3>5) Comunicación (WhatsApp, email)</h3>
+        <ul>
+          <li>WhatsApp es un canal para coordinación y orientación general.</li>
+          <li><strong>No envíes información médica sensible</strong> (diagnósticos, exámenes, datos muy privados) por WhatsApp.</li>
+          <li>En situaciones urgentes o signos de alarma, busca atención de emergencia o el servicio indicado por criterio médico.</li>
+        </ul>
+        <p style="margin-top:10px;">
+          Contacto: {email ? <a class="link" href={`mailto:${email}`}>{email}</a> : "Email disponible en la sección Contacto"}.
+        </p>
+      </div>
+
+      <div class="card soft col-12">
+        <h3>6) Privacidad y datos</h3>
+        <p>
+          La información compartida por el paciente se utiliza para gestionar citas, comunicación y atención clínica. Se procura manejarla
+          con confidencialidad. Si se requiere documentación clínica formal, se realizará en consulta según normas aplicables.
+        </p>
+      </div>
+
+      <div class="card soft col-12">
+        <h3>7) Fotografías y material clínico</h3>
+        <p>
+          Cualquier fotografía (antes/después) o material clínico se utiliza únicamente con consentimiento del paciente, cuando aplique.
+        </p>
+      </div>
+
+      <div class="card col-12">
+        <h3>8) Contenido informativo</h3>
+        <p>
+          El contenido del sitio es informativo y no reemplaza una valoración médica. Para diagnósticos y planes de tratamiento
+          se requiere consulta presencial o evaluación médica formal.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="card soft">
+      <h2 style="margin:0 0 8px;">¿Listo para reservar?</h2>
+      <p class="sub">Puedes agendar en el calendario o escribirnos por WhatsApp.</p>
+      <div class="row" style="margin-top:12px;">
+        <a class="btn btn-primary" href={bookingUrl} target="_blank" rel="noreferrer">Reservar</a>
+        <a class="btn" href={whatsappLink} target="_blank" rel="noreferrer">💬 WhatsApp</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
