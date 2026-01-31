@@ -1,11 +1,14 @@
 ---
+import site from "../content/site.json";
+
 const {
-  title = "Clínica Dr. Víctor Miranda",
+  title = site.name,
   description = "Medicina estética con enfoque en seguridad y resultados naturales.",
 } = Astro.props;
 
 const year = new Date().getFullYear();
-const whatsappLink = "https://wa.me/50587355501";
+const whatsappNumber = String(site.whatsapp || "").replace(/\D/g, "");
+const whatsappLink = `https://wa.me/${whatsappNumber}`;
 ---
 
 <!doctype html>
@@ -20,17 +23,16 @@ const whatsappLink = "https://wa.me/50587355501";
       :root{
         --max: 1120px;
         --bg: #ffffff;
-        --text: #0f172a;      /* slate-900 */
-        --muted: #475569;     /* slate-600 */
-        --line: #e2e8f0;      /* slate-200 */
-        --soft: #f8fafc;      /* slate-50 */
-        --soft2:#f1f5f9;      /* slate-100 */
-        --primary:#0f172a;    /* dark */
+        --text: #0f172a;
+        --muted: #475569;
+        --line: #e2e8f0;
+        --soft: #f8fafc;
+        --soft2:#f1f5f9;
+        --primary:#0f172a;
         --radius: 18px;
       }
 
       *{ box-sizing:border-box; }
-      html,body{ height:100%; }
       body{
         margin:0;
         font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -38,14 +40,11 @@ const whatsappLink = "https://wa.me/50587355501";
         background: var(--bg);
         line-height:1.55;
       }
-
       a{ color: inherit; text-decoration: none; }
       a.link{ text-decoration: underline; text-underline-offset: 3px; }
-      a.link:hover{ opacity:.85; }
 
       .container{ max-width: var(--max); margin:0 auto; padding: 18px; }
 
-      /* Header */
       .header{
         position: sticky;
         top: 0;
@@ -99,7 +98,6 @@ const whatsappLink = "https://wa.me/50587355501";
         flex-wrap: wrap;
       }
 
-      /* Buttons */
       .btn{
         display:inline-flex;
         align-items:center;
@@ -111,144 +109,12 @@ const whatsappLink = "https://wa.me/50587355501";
         background: #fff;
         color: var(--text);
         font-weight: 700;
-        cursor:pointer;
       }
       .btn:hover{ background: var(--soft); }
       .btn-primary{
         background: var(--primary);
         color: #fff;
         border-color: var(--primary);
-      }
-      .btn-primary:hover{ filter: brightness(.95); }
-
-      /* Page sections */
-      .hero{
-        position: relative;
-        padding: 34px 0 18px;
-      }
-      .hero::before{
-        content:"";
-        position:absolute;
-        inset: -40px -40px auto -40px;
-        height: 280px;
-        background: radial-gradient(600px 240px at 20% 30%, #e2e8f0 0%, rgba(226,232,240,0) 70%),
-                    radial-gradient(500px 260px at 85% 15%, #f1f5f9 0%, rgba(241,245,249,0) 70%);
-        z-index: -1;
-      }
-      .kicker{
-        display:inline-flex;
-        gap:8px;
-        align-items:center;
-        padding: 8px 12px;
-        border-radius: 999px;
-        border:1px solid var(--line);
-        background: rgba(255,255,255,.7);
-        color: var(--muted);
-        font-weight: 700;
-        font-size: 13px;
-      }
-      h1{
-        margin: 14px 0 10px;
-        font-size: 42px;
-        line-height: 1.08;
-        letter-spacing: -0.6px;
-      }
-      .lead{
-        color: var(--muted);
-        font-size: 17px;
-        max-width: 60ch;
-      }
-
-      .row{
-        display:flex;
-        gap:12px;
-        flex-wrap: wrap;
-        margin-top: 16px;
-      }
-      .stats{
-        display:flex;
-        gap:10px;
-        flex-wrap: wrap;
-        margin-top: 14px;
-      }
-      .pill{
-        padding: 8px 12px;
-        border-radius: 999px;
-        background: var(--soft);
-        border: 1px solid var(--line);
-        color: var(--muted);
-        font-weight: 700;
-        font-size: 13px;
-      }
-
-      .section{ padding: 22px 0; }
-      .section-title{
-        display:flex;
-        align-items:end;
-        justify-content:space-between;
-        gap: 12px;
-        margin-bottom: 12px;
-      }
-      h2{
-        margin:0;
-        font-size: 24px;
-        letter-spacing: -0.2px;
-      }
-      .sub{
-        color: var(--muted);
-        margin: 0;
-      }
-
-      .grid{
-        display:grid;
-        gap: 12px;
-        grid-template-columns: repeat(12, 1fr);
-      }
-      .col-4{ grid-column: span 4; }
-      .col-6{ grid-column: span 6; }
-      .col-12{ grid-column: span 12; }
-
-      .card{
-        border: 1px solid var(--line);
-        background: #fff;
-        border-radius: var(--radius);
-        padding: 16px;
-        box-shadow: 0 10px 24px rgba(15,23,42,0.05);
-      }
-      .card.soft{
-        background: linear-gradient(180deg, var(--soft) 0%, #fff 60%);
-      }
-      .card h3{
-        margin: 0 0 6px;
-        font-size: 16px;
-        letter-spacing: -0.1px;
-      }
-      .card p{
-        margin: 0;
-        color: var(--muted);
-      }
-      .card ul{
-        margin: 10px 0 0;
-        padding-left: 18px;
-        color: var(--muted);
-      }
-
-      .callout{
-        border: 1px solid var(--line);
-        background: linear-gradient(135deg, var(--soft2), #fff);
-        border-radius: var(--radius);
-        padding: 18px;
-        display:flex;
-        gap: 14px;
-        align-items:flex-start;
-      }
-      .callout strong{ display:block; margin-bottom:6px; }
-      .callout .dot{
-        width: 12px; height:12px; border-radius: 999px;
-        background: #25D366;
-        border: 2px solid #fff;
-        box-shadow: 0 0 0 1px var(--line);
-        margin-top: 6px;
       }
 
       footer{
@@ -258,34 +124,26 @@ const whatsappLink = "https://wa.me/50587355501";
         margin-top: 18px;
       }
 
-      /* Floating WhatsApp - inline style en páginas ya funciona,
-         pero lo dejamos también aquí por estética general */
+      /* FAB WhatsApp (blindado) */
       .wa-fab{
-        position: fixed;
-        right: 18px;
-        bottom: 18px;
-        z-index: 2147483647;
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        padding: 12px 14px;
-        border-radius: 999px;
-        background: #25D366;
-        color: #fff;
-        font-weight: 900;
-        border: none;
-        box-shadow: 0 14px 30px rgba(0,0,0,0.18);
+        position: fixed !important;
+        right: 18px !important;
+        bottom: 18px !important;
+        z-index: 2147483647 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        padding: 12px 14px !important;
+        border-radius: 999px !important;
+        background: #25D366 !important;
+        color: #fff !important;
+        font-weight: 900 !important;
+        box-shadow: 0 14px 30px rgba(0,0,0,0.18) !important;
       }
-      .wa-fab:hover{ filter: brightness(.96); }
-      .wa-fab span{ font-size: 18px; line-height: 1; }
 
-      /* Responsive */
       @media (max-width: 860px){
-        h1{ font-size: 34px; }
         .nav-cta{ width:100%; margin-left:0; }
         .nav-cta .btn{ flex:1; }
-        .col-4{ grid-column: span 12; }
-        .col-6{ grid-column: span 12; }
       }
     </style>
   </head>
@@ -295,11 +153,11 @@ const whatsappLink = "https://wa.me/50587355501";
       <div class="container">
         <nav class="nav">
           <a class="brand" href="/">
-            <span class="brand-badge">VM</span>
-            <span>Clínica Dr. Víctor Miranda</span>
+            <span class="brand-badge">{site.initials}</span>
+            <span>{site.name}</span>
           </a>
 
-          <div class="navlinks" aria-label="Navegación">
+          <div class="navlinks">
             <a href="/">Inicio</a>
             <a href="/servicios/">Servicios</a>
             <a href="/complicaciones/">Complicaciones</a>
@@ -322,12 +180,12 @@ const whatsappLink = "https://wa.me/50587355501";
 
     <footer>
       <div class="container">
-        <small>© {year} · Clínica Dr. Víctor Miranda · Managua, Nicaragua</small>
+        <small>© {year} · {site.name} · {site.city} · {site.email}</small>
       </div>
     </footer>
 
-    <a class="wa-fab" href={whatsappLink} target="_blank" rel="noreferrer" aria-label="Escríbeme por WhatsApp" title="WhatsApp">
-      <span>💬</span> WhatsApp
+    <a class="wa-fab" href={whatsappLink} target="_blank" rel="noreferrer" aria-label="WhatsApp">
+      💬 WhatsApp
     </a>
   </body>
 </html>

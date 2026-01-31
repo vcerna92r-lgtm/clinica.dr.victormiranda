@@ -1,0 +1,34 @@
+backend:
+  name: github
+  repo: vcerna92r-lgtm/clinica.dr.victormiranda
+  branch: main
+  base_url: https://TU_PROXY_AQUI.workers.dev
+  auth_endpoint: /auth
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+collections:
+  - name: "site"
+    label: "Configuración del sitio"
+    files:
+      - label: "Datos generales"
+        name: "datos"
+        file: "src/content/site.json"
+        format: "json"
+        fields:
+          - label: "Nombre del sitio"
+            name: "name"
+            widget: "string"
+          - label: "Iniciales (logo corto)"
+            name: "initials"
+            widget: "string"
+          - label: "Ciudad"
+            name: "city"
+            widget: "string"
+          - label: "Email"
+            name: "email"
+            widget: "string"
+          - label: "WhatsApp (solo números)"
+            name: "whatsapp"
+            widget: "string"
