@@ -47,6 +47,21 @@
       "description": "Mejora progresiva de calidad de piel, firmeza y textura con resultados acumulativos.",
       "image_shape": "circle",
       "button_text_color": "#FFFFFF"
+    },
+    {
+      "price": "Según protocolo",
+      "name": "Microneedling (microagujas)",
+      "price_color": "#0F172A",
+      "text_color": "#334155",
+      "button_bg": "#16A34A",
+      "card_bg": "#F5F5F2",
+      "button_text": "RESERVAR",
+      "image": "/uploads/microneedling.webp",
+      "price_bg": "#FFFFFF",
+      "title_color": "#0F172A",
+      "description": "Tratamiento para textura, poros, marcas y luminosidad sin/con activos seleccionados.",
+      "image_shape": "circle",
+      "button_text_color": "#FFFFFF"
     }
   ]
 }
