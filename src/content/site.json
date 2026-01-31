@@ -1,10 +1,11 @@
 {
   "clinic_name": "Clínica Dr. Víctor Miranda",
+  "booking_url": "https://calendar.app.google/bmpjN2TAMFchpHd99",
+  "city": "Managua, Nicaragua",
   "name": "Clínica Dr. Víctor Miranda",
   "initials": "VM",
-  "city": "Managua, Nicaragua",
-  "email": "vcerna92r@gmail.com",
+  "https://calendar.app.google/bmpjN2TAMFchpHd99": "https://calendar.app.google/bmpjN2TAMFchpHd99",
   "whatsapp": "50587355501",
   "whatsapp_message": "Hola Dr. Víctor, quiero agendar una valoración en Clínica Dr. Víctor Miranda.\n\nMi nombre: ________\nServicio de interés: ________\nFecha y hora preferida: ________\n\nGracias.",
-  "booking_url": "https://calendar.app.google/bmpjN2TAMFchpHd99"
+  "email": "vcerna92r@gmail.com"
 }
