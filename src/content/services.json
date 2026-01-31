@@ -77,6 +77,21 @@
       "description": "Rutina por pasos: limpieza profunda, extracción controlada según características de la piel y mascarilla calmante.",
       "image_shape": "circle",
       "button_text_color": "#FFFFFF"
+    },
+    {
+      "price": "Primera consulta",
+      "name": "Evaluación Médico-Estética",
+      "price_color": "#0F172A",
+      "text_color": "#334155",
+      "button_bg": "#16A34A",
+      "card_bg": "#F5F5F2",
+      "button_text": "RESERVAR",
+      "image": "/uploads/5d25e729-f6cd-4163-9ba9-e217def0e303.jpg",
+      "price_bg": "#FFFFFF",
+      "title_color": "#0F172A",
+      "description": "Historia, objetivos, análisis facial y plan personalizado de tratamiento por 1 año con prioridades.",
+      "image_shape": "circle",
+      "button_text_color": "#FFFFFF"
     }
   ]
 }
