@@ -1,0 +1,21 @@
+{
+  "section_title": "Servicios principales",
+  "section_subtitle": "Selección de tratamientos frecuentes. Personalizamos según tu caso.",
+  "items": [
+    {
+      "name": "Toxina botulínica",
+      "description": "Prevención y armonización con dosis conservadora y enfoque natural.",
+      "image": ""
+    },
+    {
+      "name": "Ácido hialurónico",
+      "description": "Soporte estructural e hidratación según valoración clínica.",
+      "image": ""
+    },
+    {
+      "name": "Bioestimuladores",
+      "description": "Enfoque en calidad de piel, firmeza y textura con resultados progresivos.",
+      "image": ""
+    }
+  ]
+}

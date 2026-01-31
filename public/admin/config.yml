@@ -157,3 +157,21 @@ collections:
               - { label: "Grande", value: "lg" }
               - { label: "Mediano (recomendado)", value: "md" }
               - { label: "Pequeño", value: "sm" }
+  - name: "home_services"
+    label: "Inicio · Servicios principales"
+    files:
+      - label: "Servicios principales (Inicio)"
+        name: "home_services_file"
+        file: "src/content/home_services.json"
+        format: "json"
+        fields:
+          - { label: "Título de sección", name: "section_title", widget: "string" }
+          - { label: "Subtítulo (opcional)", name: "section_subtitle", widget: "string", required: false }
+
+          - label: "Servicios"
+            name: "items"
+            widget: "list"
+            fields:
+              - { label: "Nombre", name: "name", widget: "string" }
+              - { label: "Descripción", name: "description", widget: "text", required: false }
+              - { label: "Imagen", name: "image", widget: "image", required: false }
