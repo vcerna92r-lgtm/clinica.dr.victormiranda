@@ -57,16 +57,6 @@
   "subtitle": "En medicina estética, la seguridad es lo primero. Si presentas síntomas inesperados tras un procedimiento como dolor intenso, cambios de color, inflamación persistente, nódulos o asimetría marcada, realizó una evaluación médica integral para definir la severidad, iniciar el manejo adecuado y dar seguimiento clínico. También ofrezco segunda opinión e interconsulta para profesionales..",
   "title": "Manejo de complicaciones",
   "image": "/images/uploads/chatgpt-image-27-ene-2026-10_30_38.png",
-  "box_bullets": [
-    {
-      "text": "Historia clínica + revisión del caso"
-    },
-    {
-      "text": "Propuesta terapéutica segura"
-    },
-    {
-      "text": "Indicaciones y monitoreo"
-    }
-  ],
+  "box_bullets": [],
   "image_shape": "square"
 }
