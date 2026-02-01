@@ -187,3 +187,45 @@ collections:
                   - { label: "Cuadrada", value: "square" }
                   - { label: "Redondeada", value: "rounded" }
                   - { label: "Redonda", value: "circle" }
+  - name: "home_complications"
+    label: "Inicio · Manejo de complicaciones"
+    files:
+      - label: "Sección (Inicio) — Manejo de complicaciones"
+        name: "home_complications_file"
+        file: "src/content/home_complications.json"
+        format: "json"
+        fields:
+          - { label: "Texto pequeño arriba (opcional)", name: "eyebrow", widget: "string", required: false }
+          - { label: "Título", name: "title", widget: "string" }
+          - { label: "Descripción", name: "subtitle", widget: "text", required: false }
+
+          - { label: "Imagen (subir)", name: "image", widget: "image", required: false }
+          - label: "Forma de imagen"
+            name: "image_shape"
+            widget: "select"
+            required: false
+            default: "rounded"
+            options:
+              - { label: "Cuadrada", value: "square" }
+              - { label: "Redondeada", value: "rounded" }
+              - { label: "Redonda", value: "circle" }
+
+          - label: "Tarjeta de precio"
+            name: "plan"
+            widget: "object"
+            fields:
+              - { label: "Nombre del plan", name: "name", widget: "string" }
+              - { label: "Precio", name: "price", widget: "string" }
+              - { label: "Periodo (ej. por sesión)", name: "period", widget: "string", required: false }
+              - { label: "Texto botón", name: "cta_text", widget: "string", default: "Solicitar evaluación" }
+              - { label: "URL botón (opcional)", name: "cta_url", widget: "string", required: false }
+
+          - { label: "Título lista (Incluye)", name: "includes_title", widget: "string", required: false }
+          - label: "Lista de incluye"
+            name: "includes"
+            widget: "list"
+            fields:
+              - { label: "Item", name: "text", widget: "string" }
+
+          - { label: "Título del cuadro inferior", name: "box_title", widget: "string", required: false }
+          - { label: "Texto del cuadro inferior", name: "box_text", widget: "text", required: false }

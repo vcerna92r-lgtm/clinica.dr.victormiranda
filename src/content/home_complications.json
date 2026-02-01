@@ -1,0 +1,25 @@
+{
+  "eyebrow": "Manejo de complicaciones",
+  "title": "Manejo de complicaciones",
+  "subtitle": "Evaluación médica + plan + seguimiento para casos complejos. Si algo no salió como esperabas, podemos ayudarte a encaminarlo de forma segura.",
+  "image": "",
+  "image_shape": "rounded",
+
+  "plan": {
+    "name": "Evaluación de complicaciones",
+    "price": "$100.00",
+    "period": "Por sesión / valoración",
+    "cta_text": "Solicitar evaluación",
+    "cta_url": ""
+  },
+
+  "includes_title": "Incluye",
+  "includes": [
+    { "text": "Evaluación clínica detallada" },
+    { "text": "Plan de manejo y seguimiento" },
+    { "text": "Indicaciones claras y seguras" }
+  ],
+
+  "box_title": "¿Qué incluye el servicio?",
+  "box_text": "Acceso a evaluación médica, plan personalizado según tu caso y seguimiento. Ideal si presentaste un evento adverso o un resultado no esperado y necesitas orientación segura."
+}
