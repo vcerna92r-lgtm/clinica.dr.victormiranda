@@ -110,7 +110,7 @@ collections:
               - { label: "Color botón (hex)", name: "button_bg", widget: "string", default: "#16A34A" }
               - { label: "Color texto botón (hex)", name: "button_text_color", widget: "string", default: "#FFFFFF" }
 
-  # ✅ NUEVO: Inicio (Portada editable desde /admin)
+  # ✅ Inicio (Portada editable desde /admin)
   - name: "home"
     label: "Inicio"
     files:
@@ -157,6 +157,7 @@ collections:
               - { label: "Grande", value: "lg" }
               - { label: "Mediano (recomendado)", value: "md" }
               - { label: "Pequeño", value: "sm" }
+
   - name: "home_services"
     label: "Inicio · Servicios principales"
     files:
@@ -175,3 +176,14 @@ collections:
               - { label: "Nombre", name: "name", widget: "string" }
               - { label: "Descripción", name: "description", widget: "text", required: false }
               - { label: "Imagen", name: "image", widget: "image", required: false }
+
+              # ✅ NUEVO: Forma de imagen (cuadrada / redondeada / redonda)
+              - label: "Forma de imagen"
+                name: "image_shape"
+                widget: "select"
+                required: false
+                default: "rounded"
+                options:
+                  - { label: "Cuadrada", value: "square" }
+                  - { label: "Redondeada", value: "rounded" }
+                  - { label: "Redonda", value: "circle" }
