@@ -42,7 +42,7 @@ function textSizeClass(v) {
   return "text-md";
 }
 
-/* ✅ forma de imagen para Servicios principales */
+/* Servicios principales */
 function shapeClass(shape) {
   const s = String(shape || "rounded").toLowerCase();
   if (s === "circle") return "hs-shape-circle";
@@ -50,20 +50,36 @@ function shapeClass(shape) {
   return "hs-shape-rounded";
 }
 
-/* ✅ forma de imagen para Manejo de complicaciones */
+/* Complicaciones */
 function compShapeClass(shape) {
   const s = String(shape || "rounded").toLowerCase();
   if (s === "circle") return "comp-shape-circle";
   if (s === "square") return "comp-shape-square";
   return "comp-shape-rounded";
 }
+function compRatioClass(ratio) {
+  const r = String(ratio || "landscape").toLowerCase();
+  if (r === "portrait") return "comp-ratio-portrait";
+  if (r === "square") return "comp-ratio-square";
+  return "comp-ratio-landscape";
+}
+
+const marqueeOn = complications.marquee_enabled !== false;
+const marqueeBase = String(complications.marquee_text || complications.title || "Manejo de complicaciones").trim();
+const marqueeRepeat = Array(8).fill(marqueeBase).join(" ✶ ") + " ✶ ";
+const marqueeSpeed = String(complications.marquee_speed || "normal");
+const marqueeDuration = marqueeSpeed === "fast" ? 12 : marqueeSpeed === "slow" ? 28 : 18;
+
+const compAlign = String(complications.text_align || "left");
+const compBold = !!complications.text_bold;
+const compItalic = !!complications.text_italic;
 ---
 
 <BaseLayout
   title={`${siteName} | Medicina estética`}
   description="Tratamientos personalizados con enfoque en seguridad, naturalidad y seguimiento clínico."
 >
-  <!-- ✅ PORTADA -->
+  <!-- PORTADA -->
   <section class="cover">
     <div class="cover-grid">
       <div class="cover-photo">
@@ -88,7 +104,7 @@ function compShapeClass(shape) {
     </div>
   </section>
 
-  <!-- ✅ Servicios principales -->
+  <!-- Servicios principales -->
   <section class="section">
     <div class="section-title">
       <div>
@@ -118,13 +134,34 @@ function compShapeClass(shape) {
     </div>
   </section>
 
-  <!-- ✅ Manejo de complicaciones (estilo como tu imagen, imagen a la derecha) -->
+  <!-- Manejo de complicaciones: estilo video + imagen derecha -->
   <section class="section">
+    {marqueeOn ? (
+      <div class="comp-marquee" style={`--marqueeDuration:${marqueeDuration}s`}>
+        <div class="comp-marquee-track" aria-hidden="true">
+          <div class="comp-marquee-seq">{marqueeRepeat}</div>
+          <div class="comp-marquee-seq" aria-hidden="true">{marqueeRepeat}</div>
+        </div>
+      </div>
+    ) : null}
+
     <div class="comp-grid">
-      <div class="comp-left">
+      <div
+        class={`comp-left ${fontClass(complications.font_family)} ${textSizeClass(complications.text_size)} ${compBold ? "comp-bold" : ""} ${compItalic ? "comp-italic" : ""}`}
+        style={`text-align:${compAlign};`}
+      >
         {complications.eyebrow && <div class="comp-eyebrow">{complications.eyebrow}</div>}
         <h2 class="comp-title">{complications.title || "Manejo de complicaciones"}</h2>
         {complications.subtitle && <p class="comp-sub">{complications.subtitle}</p>}
+
+        {complications.bullets?.length ? (
+          <div class="comp-bullets">
+            {complications.bullets_title && <div class="comp-bullets-title">{complications.bullets_title}</div>}
+            <ul class="comp-bullets-list">
+              {complications.bullets.map((it) => <li>{it.text}</li>)}
+            </ul>
+          </div>
+        ) : null}
 
         <div class="price-card">
           <div class="price-head">
@@ -134,12 +171,7 @@ function compShapeClass(shape) {
               {complications.plan?.period && <div class="plan-period">{complications.plan.period}</div>}
             </div>
 
-            <a
-              class="plan-btn"
-              href={resolveUrl(complications.plan?.cta_url, bookingUrl)}
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a class="plan-btn" href={resolveUrl(complications.plan?.cta_url, bookingUrl)} target="_blank" rel="noreferrer">
               {complications.plan?.cta_text || "Solicitar evaluación"}
             </a>
           </div>
@@ -157,16 +189,18 @@ function compShapeClass(shape) {
         <div class="comp-box">
           {complications.box_title && <strong>{complications.box_title}</strong>}
           {complications.box_text && <p>{complications.box_text}</p>}
+
+          {complications.box_bullets?.length ? (
+            <ul class="comp-box-bullets">
+              {complications.box_bullets.map((it) => <li>{it.text}</li>)}
+            </ul>
+          ) : null}
         </div>
       </div>
 
-      <div class={`comp-right ${compShapeClass(complications.image_shape)}`}>
+      <div class={`comp-right ${compShapeClass(complications.image_shape)} ${compRatioClass(complications.image_ratio)}`}>
         {complications.image ? (
-          <img
-            src={resolveImageSrc(complications.image)}
-            alt={complications.title || "Manejo de complicaciones"}
-            loading="lazy"
-          />
+          <img src={resolveImageSrc(complications.image)} alt={complications.title || "Manejo de complicaciones"} loading="lazy" />
         ) : (
           <div class="comp-placeholder" aria-hidden="true"></div>
         )}
@@ -212,16 +246,9 @@ function compShapeClass(shape) {
   </section>
 
   <style>
-    /* ✅ PORTADA */
+    /* PORTADA */
     .cover{ padding-top: 26px; padding-bottom: 10px; }
-
-    .cover-grid{
-      display: grid;
-      grid-template-columns: 0.95fr 1.05fr;
-      gap: 22px;
-      align-items: center;
-    }
-
+    .cover-grid{ display: grid; grid-template-columns: 0.95fr 1.05fr; gap: 22px; align-items: center; }
     .cover-photo{
       width: min(560px, 78vw);
       aspect-ratio: 1 / 1;
@@ -234,14 +261,7 @@ function compShapeClass(shape) {
       align-items:center;
       justify-content:center;
     }
-
-    .cover-photo img{
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display:block;
-    }
-
+    .cover-photo img{ width: 100%; height: 100%; object-fit: cover; display:block; }
     .photo-placeholder{
       width: 100%;
       height: 100%;
@@ -250,33 +270,23 @@ function compShapeClass(shape) {
         linear-gradient(135deg, rgba(255,255,255,0.55), rgba(0,0,0,0.05));
       border: 1px dashed rgba(0,0,0,0.12);
     }
-
     .font-system{ font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
     .font-serif{ font-family: ui-serif, Georgia, "Times New Roman", Times, serif; }
-
     .title-xl{ font-size: 44px; letter-spacing: -0.6px; margin: 0 0 10px; line-height: 1.05; }
     .title-lg{ font-size: 38px; letter-spacing: -0.5px; margin: 0 0 10px; line-height: 1.1; }
     .title-md{ font-size: 32px; letter-spacing: -0.4px; margin: 0 0 10px; line-height: 1.15; }
-
     .text-lg{ font-size: 18px; }
     .text-md{ font-size: 16px; }
     .text-sm{ font-size: 14px; }
-
     .bullets{ margin: 0 0 12px; padding-left: 18px; line-height: 1.6; }
     .para{ margin: 10px 0 0; line-height: 1.65; opacity: 0.92; }
-
     @media (max-width: 980px){
       .cover-grid{ grid-template-columns: 1fr; }
       .cover-photo{ width: min(520px, 85vw); margin: 0 auto; }
     }
 
-    /* ✅ Servicios principales */
-    .home-services-grid{
-      display: grid;
-      gap: 18px;
-      grid-template-columns: repeat(12, 1fr);
-    }
-
+    /* Servicios principales */
+    .home-services-grid{ display: grid; gap: 18px; grid-template-columns: repeat(12, 1fr); }
     .home-service-card{
       grid-column: span 4;
       border: 1px solid rgba(0,0,0,0.06);
@@ -288,7 +298,6 @@ function compShapeClass(shape) {
       flex-direction: column;
       min-height: 100%;
     }
-
     .home-service-media{
       width: 100%;
       aspect-ratio: 16 / 10;
@@ -299,68 +308,41 @@ function compShapeClass(shape) {
       align-items:center;
       justify-content:center;
     }
+    .home-service-media img{ width: 100%; height: 100%; object-fit: cover; border-radius: 16px; display: block; }
+    .home-service-body{ padding: 14px 16px 16px; display:flex; flex-direction: column; gap: 8px; }
+    .home-service-body h3{ margin: 0; font-size: 18px; letter-spacing: -0.2px; }
+    .home-service-body p{ margin: 0; line-height: 1.5; opacity: 0.9; }
+    .home-service-media .media-placeholder{ width: 100%; height: 100%; border-radius: 16px; }
+    .home-service-media.hs-shape-square img, .home-service-media.hs-shape-square .media-placeholder{ border-radius: 0; }
+    .home-service-media.hs-shape-rounded img, .home-service-media.hs-shape-rounded .media-placeholder{ border-radius: 16px; }
+    .home-service-media.hs-shape-circle{ aspect-ratio: 1 / 1; padding: 18px; }
+    .home-service-media.hs-shape-circle img, .home-service-media.hs-shape-circle .media-placeholder{ border-radius: 999px; }
+    @media (max-width: 980px){ .home-service-card{ grid-column: span 6; } }
+    @media (max-width: 640px){ .home-service-card{ grid-column: span 12; } }
 
-    .home-service-media img{
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 16px;
-      display: block;
+    /* Complicaciones: marquee */
+    .comp-marquee{
+      overflow: hidden;
+      white-space: nowrap;
+      margin-bottom: 12px;
     }
-
-    .home-service-body{
-      padding: 14px 16px 16px;
-      display:flex;
-      flex-direction: column;
-      gap: 8px;
+    .comp-marquee-track{
+      display: flex;
+      width: max-content;
+      animation: compMarquee var(--marqueeDuration, 18s) linear infinite;
     }
-
-    .home-service-body h3{
-      margin: 0;
-      font-size: 18px;
+    .comp-marquee-seq{
+      font-size: 26px;
+      font-weight: 900;
       letter-spacing: -0.2px;
+      padding-right: 22px;
+    }
+    @keyframes compMarquee{
+      0%{ transform: translateX(0); }
+      100%{ transform: translateX(-50%); }
     }
 
-    .home-service-body p{
-      margin: 0;
-      line-height: 1.5;
-      opacity: 0.9;
-    }
-
-    /* Formas imagen Servicios principales */
-    .home-service-media .media-placeholder{
-      width: 100%;
-      height: 100%;
-      border-radius: 16px;
-    }
-
-    .home-service-media.hs-shape-square img,
-    .home-service-media.hs-shape-square .media-placeholder{
-      border-radius: 0;
-    }
-
-    .home-service-media.hs-shape-rounded img,
-    .home-service-media.hs-shape-rounded .media-placeholder{
-      border-radius: 16px;
-    }
-
-    .home-service-media.hs-shape-circle{
-      aspect-ratio: 1 / 1;
-      padding: 18px;
-    }
-    .home-service-media.hs-shape-circle img,
-    .home-service-media.hs-shape-circle .media-placeholder{
-      border-radius: 999px;
-    }
-
-    @media (max-width: 980px){
-      .home-service-card{ grid-column: span 6; }
-    }
-    @media (max-width: 640px){
-      .home-service-card{ grid-column: span 12; }
-    }
-
-    /* ✅ Manejo de complicaciones (imagen derecha + precio + incluye + caja inferior) */
+    /* Complicaciones: layout + estilos */
     .comp-grid{
       display:grid;
       grid-template-columns: 1.05fr 0.95fr;
@@ -368,23 +350,21 @@ function compShapeClass(shape) {
       align-items: start;
     }
 
-    .comp-eyebrow{
-      font-weight: 800;
-      opacity: 0.75;
-      margin-bottom: 8px;
-    }
+    .comp-eyebrow{ font-weight: 800; opacity: 0.75; margin-bottom: 8px; }
+    .comp-title{ margin: 0; font-size: 28px; letter-spacing: -0.2px; }
+    .comp-sub{ margin: 10px 0 0; line-height: 1.6; opacity: 0.9; }
 
-    .comp-title{
-      margin: 0;
-      font-size: 28px;
-      letter-spacing: -0.2px;
-    }
+    .comp-bold .comp-sub,
+    .comp-bold .comp-box p,
+    .comp-bold .comp-bullets-list,
+    .comp-bold .comp-box-bullets{ font-weight: 700; }
 
-    .comp-sub{
-      margin: 10px 0 0;
-      line-height: 1.6;
-      opacity: 0.9;
-    }
+    .comp-italic .comp-sub,
+    .comp-italic .comp-box p{ font-style: italic; }
+
+    .comp-bullets{ margin-top: 12px; }
+    .comp-bullets-title{ font-weight: 900; margin-bottom: 6px; }
+    .comp-bullets-list{ margin: 0; padding-left: 18px; line-height: 1.6; opacity: 0.92; }
 
     .price-card{
       margin-top: 16px;
@@ -394,50 +374,21 @@ function compShapeClass(shape) {
       box-shadow: 0 16px 40px rgba(15,23,42,0.06);
       overflow: hidden;
     }
-
-    .price-head{
-      padding: 14px 16px;
-      display:flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
+    .price-head{ padding: 14px 16px; display:flex; align-items: center; justify-content: space-between; gap: 12px; }
     .plan-name{ font-weight: 900; }
     .plan-price{ font-size: 22px; font-weight: 900; margin-top: 2px; }
     .plan-period{ font-size: 12px; opacity: 0.7; margin-top: 2px; }
-
     .plan-btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      height: 40px;
-      padding: 0 14px;
-      border-radius: 999px;
-      font-weight: 900;
-      text-decoration: none;
-      background: #16A34A;
-      color: #fff;
+      display:inline-flex; align-items:center; justify-content:center;
+      height: 40px; padding: 0 14px; border-radius: 999px;
+      font-weight: 900; text-decoration: none;
+      background: #16A34A; color: #fff;
       box-shadow: 0 10px 24px rgba(0,0,0,0.12);
       white-space: nowrap;
     }
-
-    .price-includes{
-      border-top: 1px solid rgba(0,0,0,0.08);
-      padding: 12px 16px 14px;
-    }
-
-    .includes-title{
-      font-weight: 900;
-      margin-bottom: 8px;
-    }
-
-    .includes-list{
-      margin: 0;
-      padding-left: 18px;
-      line-height: 1.6;
-      opacity: 0.9;
-    }
+    .price-includes{ border-top: 1px solid rgba(0,0,0,0.08); padding: 12px 16px 14px; }
+    .includes-title{ font-weight: 900; margin-bottom: 8px; }
+    .includes-list{ margin: 0; padding-left: 18px; line-height: 1.6; opacity: 0.9; }
 
     .comp-box{
       margin-top: 14px;
@@ -447,16 +398,11 @@ function compShapeClass(shape) {
       padding: 14px 16px;
       box-shadow: 0 16px 40px rgba(15,23,42,0.04);
     }
-
-    .comp-box p{
-      margin: 8px 0 0;
-      line-height: 1.6;
-      opacity: 0.9;
-    }
+    .comp-box p{ margin: 8px 0 0; line-height: 1.6; opacity: 0.9; }
+    .comp-box-bullets{ margin: 10px 0 0; padding-left: 18px; line-height: 1.6; opacity: 0.92; }
 
     .comp-right{
       width: 100%;
-      aspect-ratio: 4 / 3;
       border-radius: 18px;
       overflow: hidden;
       border: 1px solid rgba(0,0,0,0.06);
@@ -468,17 +414,13 @@ function compShapeClass(shape) {
       justify-content:center;
     }
 
-    .comp-right img{
-      width:100%;
-      height:100%;
-      object-fit: cover;
-      border-radius: 16px;
-      display:block;
-    }
+    .comp-right.comp-ratio-landscape{ aspect-ratio: 4 / 3; }
+    .comp-right.comp-ratio-square{ aspect-ratio: 1 / 1; }
+    .comp-right.comp-ratio-portrait{ aspect-ratio: 3 / 4; }
 
+    .comp-right img{ width:100%; height:100%; object-fit: cover; border-radius: 16px; display:block; }
     .comp-placeholder{
-      width:100%;
-      height:100%;
+      width:100%; height:100%;
       border-radius: 16px;
       background:
         radial-gradient(500px 240px at 20% 20%, rgba(255,255,255,0.70), rgba(255,255,255,0)),
@@ -486,7 +428,6 @@ function compShapeClass(shape) {
       border: 1px dashed rgba(0,0,0,0.12);
     }
 
-    /* Formas imagen (complicaciones) */
     .comp-right.comp-shape-square img,
     .comp-right.comp-shape-square .comp-placeholder{ border-radius: 0; }
 
@@ -502,6 +443,7 @@ function compShapeClass(shape) {
 
     @media (max-width: 980px){
       .comp-grid{ grid-template-columns: 1fr; }
+      .comp-marquee-seq{ font-size: 22px; }
     }
   </style>
 </BaseLayout>

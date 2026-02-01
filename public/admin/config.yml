@@ -187,7 +187,7 @@ collections:
                   - { label: "Cuadrada", value: "square" }
                   - { label: "Redondeada", value: "rounded" }
                   - { label: "Redonda", value: "circle" }
-  - name: "home_complications"
+                    - name: "home_complications"
     label: "Inicio · Manejo de complicaciones"
     files:
       - label: "Sección (Inicio) — Manejo de complicaciones"
@@ -195,11 +195,65 @@ collections:
         file: "src/content/home_complications.json"
         format: "json"
         fields:
+          - { label: "Marquee (título en movimiento)", name: "marquee_enabled", widget: "boolean", required: false, default: true }
+          - { label: "Texto del marquee (opcional)", name: "marquee_text", widget: "string", required: false }
+          - label: "Velocidad del marquee"
+            name: "marquee_speed"
+            widget: "select"
+            required: false
+            default: "normal"
+            options:
+              - { label: "Lento", value: "slow" }
+              - { label: "Normal", value: "normal" }
+              - { label: "Rápido", value: "fast" }
+
           - { label: "Texto pequeño arriba (opcional)", name: "eyebrow", widget: "string", required: false }
           - { label: "Título", name: "title", widget: "string" }
-          - { label: "Descripción", name: "subtitle", widget: "text", required: false }
+          - { label: "Descripción (opcional)", name: "subtitle", widget: "text", required: false }
+
+          - label: "Tipo de letra"
+            name: "font_family"
+            widget: "select"
+            required: false
+            default: "system"
+            options:
+              - { label: "Moderna (recomendada)", value: "system" }
+              - { label: "Elegante (serif)", value: "serif" }
+
+          - label: "Tamaño del texto"
+            name: "text_size"
+            widget: "select"
+            required: false
+            default: "md"
+            options:
+              - { label: "Grande", value: "lg" }
+              - { label: "Mediano", value: "md" }
+              - { label: "Pequeño", value: "sm" }
+
+          - label: "Alineación del texto"
+            name: "text_align"
+            widget: "select"
+            required: false
+            default: "left"
+            options:
+              - { label: "Izquierda", value: "left" }
+              - { label: "Centrado", value: "center" }
+              - { label: "Derecha", value: "right" }
+              - { label: "Justificado", value: "justify" }
+
+          - { label: "Negrita", name: "text_bold", widget: "boolean", required: false, default: false }
+          - { label: "Cursiva", name: "text_italic", widget: "boolean", required: false, default: false }
+
+          - { label: "Título de viñetas (opcional)", name: "bullets_title", widget: "string", required: false }
+          - label: "Viñetas"
+            name: "bullets"
+            widget: "list"
+            required: false
+            fields:
+              - { label: "Item", name: "text", widget: "string" }
 
           - { label: "Imagen (subir)", name: "image", widget: "image", required: false }
+
           - label: "Forma de imagen"
             name: "image_shape"
             widget: "select"
@@ -210,13 +264,23 @@ collections:
               - { label: "Redondeada", value: "rounded" }
               - { label: "Redonda", value: "circle" }
 
+          - label: "Formato de imagen"
+            name: "image_ratio"
+            widget: "select"
+            required: false
+            default: "landscape"
+            options:
+              - { label: "Horizontal (rectangular)", value: "landscape" }
+              - { label: "Cuadrada", value: "square" }
+              - { label: "Vertical (rectangular)", value: "portrait" }
+
           - label: "Tarjeta de precio"
             name: "plan"
             widget: "object"
             fields:
               - { label: "Nombre del plan", name: "name", widget: "string" }
               - { label: "Precio", name: "price", widget: "string" }
-              - { label: "Periodo (ej. por sesión)", name: "period", widget: "string", required: false }
+              - { label: "Periodo (opcional)", name: "period", widget: "string", required: false }
               - { label: "Texto botón", name: "cta_text", widget: "string", default: "Solicitar evaluación" }
               - { label: "URL botón (opcional)", name: "cta_url", widget: "string", required: false }
 
@@ -229,3 +293,10 @@ collections:
 
           - { label: "Título del cuadro inferior", name: "box_title", widget: "string", required: false }
           - { label: "Texto del cuadro inferior", name: "box_text", widget: "text", required: false }
+
+          - label: "Viñetas del cuadro inferior"
+            name: "box_bullets"
+            widget: "list"
+            required: false
+            fields:
+              - { label: "Item", name: "text", widget: "string" }
