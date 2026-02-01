@@ -35,6 +35,14 @@ function textSizeClass(v) {
   if (s === "lg") return "text-lg";
   return "text-md";
 }
+
+/* ✅ NUEVO: forma de imagen para Servicios principales */
+function shapeClass(shape) {
+  const s = String(shape || "rounded").toLowerCase();
+  if (s === "circle") return "hs-shape-circle";
+  if (s === "square") return "hs-shape-square";
+  return "hs-shape-rounded";
+}
 ---
 
 <BaseLayout
@@ -79,7 +87,7 @@ function textSizeClass(v) {
     <div class="home-services-grid">
       {homeServices.items?.map((item) => (
         <article class="home-service-card">
-          <div class="home-service-media">
+          <div class={`home-service-media ${shapeClass(item.image_shape)}`}>
             {item.image ? (
               <img src={resolveImageSrc(item.image)} alt={item.name || "Servicio"} loading="lazy" />
             ) : (
@@ -262,6 +270,32 @@ function textSizeClass(v) {
       margin: 0;
       line-height: 1.5;
       opacity: 0.9;
+    }
+
+    /* ✅ NUEVO: Formas de imagen */
+    .home-service-media .media-placeholder{
+      width: 100%;
+      height: 100%;
+      border-radius: 16px;
+    }
+
+    .home-service-media.hs-shape-square img,
+    .home-service-media.hs-shape-square .media-placeholder{
+      border-radius: 0;
+    }
+
+    .home-service-media.hs-shape-rounded img,
+    .home-service-media.hs-shape-rounded .media-placeholder{
+      border-radius: 16px;
+    }
+
+    .home-service-media.hs-shape-circle{
+      aspect-ratio: 1 / 1;
+      padding: 18px;
+    }
+    .home-service-media.hs-shape-circle img,
+    .home-service-media.hs-shape-circle .media-placeholder{
+      border-radius: 999px;
     }
 
     @media (max-width: 980px){
