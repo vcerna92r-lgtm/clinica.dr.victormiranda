@@ -1,29 +1,10 @@
 {
-  "marquee_enabled": true,
-  "marquee_text": "Manejo de complicaciones",
-  "marquee_speed": "normal",
-
-  "eyebrow": "Manejo de complicaciones",
-  "title": "Manejo de complicaciones",
-  "subtitle": "Evaluación médica + plan + seguimiento para casos complejos. Si algo no salió como esperabas, podemos ayudarte a encaminarlo de forma segura.",
-
-  "font_family": "system",
-  "text_size": "md",
-  "text_align": "left",
-  "text_bold": false,
+  "box_text": "Acceso a evaluación médica, plan personalizado según tu caso y seguimiento.",
   "text_italic": false,
-
-  "bullets_title": "Puntos clave",
-  "bullets": [
-    { "text": "Evaluación clínica detallada" },
-    { "text": "Plan de manejo y seguimiento" },
-    { "text": "Indicaciones claras y seguras" }
-  ],
-
-  "image": "",
-  "image_shape": "rounded",
+  "marquee_enabled": true,
+  "includes_title": "Incluye",
+  "box_title": "¿Qué incluye el servicio?",
   "image_ratio": "landscape",
-
   "plan": {
     "name": "Evaluación de complicaciones",
     "price": "$100.00",
@@ -31,19 +12,49 @@
     "cta_text": "Solicitar evaluación",
     "cta_url": ""
   },
-
-  "includes_title": "Incluye",
+  "eyebrow": "Manejo de complicaciones",
+  "bullets_title": "Puntos clave",
+  "marquee_speed": "slow",
+  "marquee_text": "Manejo de complicaciones",
   "includes": [
-    { "text": "Evaluación médica" },
-    { "text": "Plan personalizado" },
-    { "text": "Seguimiento" }
+    {
+      "text": "Evaluación médica"
+    },
+    {
+      "text": "Plan personalizado"
+    },
+    {
+      "text": "Seguimiento"
+    }
   ],
-
-  "box_title": "¿Qué incluye el servicio?",
-  "box_text": "Acceso a evaluación médica, plan personalizado según tu caso y seguimiento.",
+  "bullets": [
+    {
+      "text": "Evaluación clínica detallada"
+    },
+    {
+      "text": "Plan de manejo y seguimiento"
+    },
+    {
+      "text": "Indicaciones claras y seguras"
+    }
+  ],
+  "text_align": "justify",
+  "text_size": "md",
+  "font_family": "system",
+  "text_bold": false,
+  "subtitle": "En medicina estética, la seguridad es lo primero. Si presentas síntomas inesperados tras un procedimiento como dolor intenso, cambios de color, inflamación persistente, nódulos o asimetría marcada, realizó una evaluación médica integral para definir la severidad, iniciar el manejo adecuado y dar seguimiento clínico. También ofrezco segunda opinión e interconsulta para profesionales..",
+  "title": "Manejo de complicaciones",
+  "image": "",
   "box_bullets": [
-    { "text": "Historia clínica + revisión del caso" },
-    { "text": "Propuesta terapéutica segura" },
-    { "text": "Indicaciones y monitoreo" }
-  ]
+    {
+      "text": "Historia clínica + revisión del caso"
+    },
+    {
+      "text": "Propuesta terapéutica segura"
+    },
+    {
+      "text": "Indicaciones y monitoreo"
+    }
+  ],
+  "image_shape": "rounded"
 }
