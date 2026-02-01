@@ -1,14 +1,14 @@
 {
-  "box_text": "Acceso a evaluación médica, plan personalizado según tu caso y seguimiento.",
+  "box_text": "",
   "text_italic": false,
   "marquee_enabled": true,
   "includes_title": "Incluye",
-  "box_title": "¿Qué incluye el servicio?",
-  "image_ratio": "landscape",
+  "box_title": "",
+  "image_ratio": "portrait",
   "plan": {
     "name": "Evaluación de complicaciones",
-    "price": "$100.00",
-    "period": "Por sesión / valoración",
+    "price": "$250.00",
+    "period": "Por seguimiento de inicio a fin",
     "cta_text": "Solicitar evaluación",
     "cta_url": ""
   },
@@ -18,24 +18,36 @@
   "marquee_text": "Manejo de complicaciones",
   "includes": [
     {
-      "text": "Evaluación médica"
+      "text": "Historia clínica + revisión del procedimiento"
     },
     {
-      "text": "Plan personalizado"
+      "text": "Evaluación del riesgo y severidad"
     },
     {
-      "text": "Seguimiento"
+      "text": "Plan inmediato + plan de seguimiento"
+    },
+    {
+      "text": "Documentación y educación al paciente"
     }
   ],
   "bullets": [
     {
-      "text": "Evaluación clínica detallada"
+      "text": "Oclusión vascular / isquemia"
     },
     {
-      "text": "Plan de manejo y seguimiento"
+      "text": "Nódulos, granulomas, sobrecorrección (overfilling)"
     },
     {
-      "text": "Indicaciones claras y seguras"
+      "text": "Edema persistente, hipersensibilidad, infección"
+    },
+    {
+      "text": "Necrosis cutánea (signos de alarma)"
+    },
+    {
+      "text": "Asimetrías severas, ptosis o alteraciones funcionales"
+    },
+    {
+      "text": "Pigmentación postinflamatoria (PIH) y cicatrices tras procedimientos"
     }
   ],
   "text_align": "justify",
@@ -44,7 +56,7 @@
   "text_bold": false,
   "subtitle": "En medicina estética, la seguridad es lo primero. Si presentas síntomas inesperados tras un procedimiento como dolor intenso, cambios de color, inflamación persistente, nódulos o asimetría marcada, realizó una evaluación médica integral para definir la severidad, iniciar el manejo adecuado y dar seguimiento clínico. También ofrezco segunda opinión e interconsulta para profesionales..",
   "title": "Manejo de complicaciones",
-  "image": "",
+  "image": "/images/uploads/chatgpt-image-27-ene-2026-10_30_38.png",
   "box_bullets": [
     {
       "text": "Historia clínica + revisión del caso"
@@ -56,5 +68,5 @@
       "text": "Indicaciones y monitoreo"
     }
   ],
-  "image_shape": "rounded"
+  "image_shape": "square"
 }
