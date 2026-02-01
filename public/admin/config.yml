@@ -5,9 +5,6 @@ backend:
   base_url: https://decap-proxy.vcerna92r.workers.dev
   auth_endpoint: /auth
 
-# ✅ Donde Decap guardará las imágenes que subas desde /admin
-# Se guardan en el repo: public/images/uploads/...
-# Y se usan en la web como: /images/uploads/...
 media_folder: "public/images/uploads"
 public_folder: "/images/uploads"
 
@@ -20,55 +17,18 @@ collections:
         file: "src/content/site.json"
         format: "json"
         fields:
-          - label: "Nombre de la clínica"
-            name: "clinic_name"
-            widget: "string"
-
-          - label: "Nombre del sitio"
-            name: "name"
-            widget: "string"
-
-          - label: "Iniciales (logo corto)"
-            name: "initials"
-            widget: "string"
-
-          - label: "Ciudad"
-            name: "city"
-            widget: "string"
-
-          - label: "Email"
-            name: "email"
-            widget: "string"
-
-          - label: "WhatsApp (solo números)"
-            name: "whatsapp"
-            widget: "string"
-
-          - label: "Mensaje WhatsApp"
-            name: "whatsapp_message"
-            widget: "text"
-
-          - label: "Link de reservas (Google Calendar)"
-            name: "booking_url"
-            widget: "string"
-
-          - label: "Color principal (hex)"
-            name: "accent_color"
-            widget: "string"
-
-          - label: "Color secundario (hex)"
-            name: "accent_color_2"
-            widget: "string"
-
-          - label: "Logo (subir imagen)"
-            name: "logo_image"
-            widget: "image"
-            required: false
-
-          - label: "Imagen principal / Hero (subir imagen)"
-            name: "hero_image"
-            widget: "image"
-            required: false
+          - { label: "Nombre de la clínica", name: "clinic_name", widget: "string" }
+          - { label: "Nombre del sitio", name: "name", widget: "string" }
+          - { label: "Iniciales (logo corto)", name: "initials", widget: "string" }
+          - { label: "Ciudad", name: "city", widget: "string" }
+          - { label: "Email", name: "email", widget: "string" }
+          - { label: "WhatsApp (solo números)", name: "whatsapp", widget: "string" }
+          - { label: "Mensaje WhatsApp", name: "whatsapp_message", widget: "text" }
+          - { label: "Link de reservas (Google Calendar)", name: "booking_url", widget: "string" }
+          - { label: "Color principal (hex)", name: "accent_color", widget: "string" }
+          - { label: "Color secundario (hex)", name: "accent_color_2", widget: "string" }
+          - { label: "Logo (subir imagen)", name: "logo_image", widget: "image", required: false }
+          - { label: "Imagen principal / Hero (subir imagen)", name: "hero_image", widget: "image", required: false }
 
   - name: "services"
     label: "Servicios"
@@ -87,13 +47,13 @@ collections:
               - { label: "Nombre", name: "name", widget: "string" }
               - { label: "Precio (texto)", name: "price", widget: "string", required: false }
               - { label: "Descripción", name: "description", widget: "text", required: false }
-
-              # ✅ Imagen por servicio (subida desde el admin)
               - { label: "Imagen", name: "image", widget: "image", required: false }
 
               - label: "Forma de imagen"
                 name: "image_shape"
                 widget: "select"
+                required: false
+                default: "rounded"
                 options:
                   - { label: "Cuadrada", value: "square" }
                   - { label: "Redondeada", value: "rounded" }
@@ -110,7 +70,6 @@ collections:
               - { label: "Color botón (hex)", name: "button_bg", widget: "string", default: "#16A34A" }
               - { label: "Color texto botón (hex)", name: "button_text_color", widget: "string", default: "#FFFFFF" }
 
-  # ✅ Inicio (Portada editable desde /admin)
   - name: "home"
     label: "Inicio"
     files:
@@ -138,6 +97,8 @@ collections:
           - label: "Tipo de letra"
             name: "hero_font_family"
             widget: "select"
+            required: false
+            default: "system"
             options:
               - { label: "Moderna (recomendada)", value: "system" }
               - { label: "Elegante (serif)", value: "serif" }
@@ -145,6 +106,8 @@ collections:
           - label: "Tamaño del título"
             name: "hero_title_size"
             widget: "select"
+            required: false
+            default: "xl"
             options:
               - { label: "Grande", value: "xl" }
               - { label: "Mediano", value: "lg" }
@@ -153,6 +116,8 @@ collections:
           - label: "Tamaño del texto"
             name: "hero_text_size"
             widget: "select"
+            required: false
+            default: "md"
             options:
               - { label: "Grande", value: "lg" }
               - { label: "Mediano (recomendado)", value: "md" }
@@ -168,7 +133,6 @@ collections:
         fields:
           - { label: "Título de sección", name: "section_title", widget: "string" }
           - { label: "Subtítulo (opcional)", name: "section_subtitle", widget: "string", required: false }
-
           - label: "Servicios"
             name: "items"
             widget: "list"
@@ -177,7 +141,6 @@ collections:
               - { label: "Descripción", name: "description", widget: "text", required: false }
               - { label: "Imagen", name: "image", widget: "image", required: false }
 
-              # ✅ NUEVO: Forma de imagen (cuadrada / redondeada / redonda)
               - label: "Forma de imagen"
                 name: "image_shape"
                 widget: "select"
@@ -187,7 +150,8 @@ collections:
                   - { label: "Cuadrada", value: "square" }
                   - { label: "Redondeada", value: "rounded" }
                   - { label: "Redonda", value: "circle" }
-                    - name: "home_complications"
+
+  - name: "home_complications"
     label: "Inicio · Manejo de complicaciones"
     files:
       - label: "Sección (Inicio) — Manejo de complicaciones"
