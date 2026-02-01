@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import site from "../content/site.json";
 import home from "../content/home.json";
 import homeServices from "../content/home_services.json";
+import complications from "../content/home_complications.json";
 
 const siteName = site.clinic_name || site.name || "Clínica Dr. Víctor Miranda";
 const bookingUrl = String(site.booking_url || "").trim() || "/contacto/";
@@ -18,6 +19,11 @@ function resolveImageSrc(src) {
   if (s.startsWith("public/")) s = s.replace(/^public\//, "");
   if (!s.startsWith("/")) s = `/${s}`;
   return s;
+}
+
+function resolveUrl(url, fallback) {
+  const u = String(url || "").trim();
+  return u ? u : fallback;
 }
 
 function fontClass(v) {
@@ -36,12 +42,20 @@ function textSizeClass(v) {
   return "text-md";
 }
 
-/* ✅ NUEVO: forma de imagen para Servicios principales */
+/* ✅ forma de imagen para Servicios principales */
 function shapeClass(shape) {
   const s = String(shape || "rounded").toLowerCase();
   if (s === "circle") return "hs-shape-circle";
   if (s === "square") return "hs-shape-square";
   return "hs-shape-rounded";
+}
+
+/* ✅ forma de imagen para Manejo de complicaciones */
+function compShapeClass(shape) {
+  const s = String(shape || "rounded").toLowerCase();
+  if (s === "circle") return "comp-shape-circle";
+  if (s === "square") return "comp-shape-square";
+  return "comp-shape-rounded";
 }
 ---
 
@@ -49,7 +63,7 @@ function shapeClass(shape) {
   title={`${siteName} | Medicina estética`}
   description="Tratamientos personalizados con enfoque en seguridad, naturalidad y seguimiento clínico."
 >
-  <!-- ✅ PORTADA (como la imagen): foto + quién soy -->
+  <!-- ✅ PORTADA -->
   <section class="cover">
     <div class="cover-grid">
       <div class="cover-photo">
@@ -74,7 +88,7 @@ function shapeClass(shape) {
     </div>
   </section>
 
-  <!-- ✅ Servicios principales (desde admin / home_services.json) -->
+  <!-- ✅ Servicios principales -->
   <section class="section">
     <div class="section-title">
       <div>
@@ -104,23 +118,63 @@ function shapeClass(shape) {
     </div>
   </section>
 
+  <!-- ✅ Manejo de complicaciones (estilo como tu imagen, imagen a la derecha) -->
   <section class="section">
-    <div class="callout">
-      <span class="dot" aria-hidden="true"></span>
-      <div>
-        <strong>Manejo de complicaciones</strong>
-        <p class="sub">
-          Evaluación médica + plan + seguimiento para casos complejos.
-          Si algo no salió como esperabas, podemos ayudarte a encaminarlo de forma segura.
-        </p>
-        <div class="row" style="margin-top:12px;">
-          <a class="btn btn-primary" href="/complicaciones/">Ver manejo</a>
-          <a class="btn" href={bookingUrl}>Solicitar evaluación</a>
+    <div class="comp-grid">
+      <div class="comp-left">
+        {complications.eyebrow && <div class="comp-eyebrow">{complications.eyebrow}</div>}
+        <h2 class="comp-title">{complications.title || "Manejo de complicaciones"}</h2>
+        {complications.subtitle && <p class="comp-sub">{complications.subtitle}</p>}
+
+        <div class="price-card">
+          <div class="price-head">
+            <div>
+              <div class="plan-name">{complications.plan?.name || "Evaluación de complicaciones"}</div>
+              <div class="plan-price">{complications.plan?.price || "$0.00"}</div>
+              {complications.plan?.period && <div class="plan-period">{complications.plan.period}</div>}
+            </div>
+
+            <a
+              class="plan-btn"
+              href={resolveUrl(complications.plan?.cta_url, bookingUrl)}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {complications.plan?.cta_text || "Solicitar evaluación"}
+            </a>
+          </div>
+
+          {complications.includes?.length ? (
+            <div class="price-includes">
+              <div class="includes-title">{complications.includes_title || "Incluye"}</div>
+              <ul class="includes-list">
+                {complications.includes.map((it) => <li>{it.text}</li>)}
+              </ul>
+            </div>
+          ) : null}
         </div>
+
+        <div class="comp-box">
+          {complications.box_title && <strong>{complications.box_title}</strong>}
+          {complications.box_text && <p>{complications.box_text}</p>}
+        </div>
+      </div>
+
+      <div class={`comp-right ${compShapeClass(complications.image_shape)}`}>
+        {complications.image ? (
+          <img
+            src={resolveImageSrc(complications.image)}
+            alt={complications.title || "Manejo de complicaciones"}
+            loading="lazy"
+          />
+        ) : (
+          <div class="comp-placeholder" aria-hidden="true"></div>
+        )}
       </div>
     </div>
   </section>
 
+  <!-- Testimonios -->
   <section class="section">
     <div class="section-title">
       <div>
@@ -145,6 +199,7 @@ function shapeClass(shape) {
     </div>
   </section>
 
+  <!-- CTA final -->
   <section class="section">
     <div class="card soft">
       <h2 style="margin:0 0 8px;">¿Listo para tu valoración?</h2>
@@ -157,7 +212,7 @@ function shapeClass(shape) {
   </section>
 
   <style>
-    /* ✅ Estilos solo para la PORTADA */
+    /* ✅ PORTADA */
     .cover{ padding-top: 26px; padding-bottom: 10px; }
 
     .cover-grid{
@@ -215,7 +270,7 @@ function shapeClass(shape) {
       .cover-photo{ width: min(520px, 85vw); margin: 0 auto; }
     }
 
-    /* ✅ Servicios principales (tarjetas sin botón) */
+    /* ✅ Servicios principales */
     .home-services-grid{
       display: grid;
       gap: 18px;
@@ -272,7 +327,7 @@ function shapeClass(shape) {
       opacity: 0.9;
     }
 
-    /* ✅ NUEVO: Formas de imagen */
+    /* Formas imagen Servicios principales */
     .home-service-media .media-placeholder{
       width: 100%;
       height: 100%;
@@ -303,6 +358,150 @@ function shapeClass(shape) {
     }
     @media (max-width: 640px){
       .home-service-card{ grid-column: span 12; }
+    }
+
+    /* ✅ Manejo de complicaciones (imagen derecha + precio + incluye + caja inferior) */
+    .comp-grid{
+      display:grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .comp-eyebrow{
+      font-weight: 800;
+      opacity: 0.75;
+      margin-bottom: 8px;
+    }
+
+    .comp-title{
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: -0.2px;
+    }
+
+    .comp-sub{
+      margin: 10px 0 0;
+      line-height: 1.6;
+      opacity: 0.9;
+    }
+
+    .price-card{
+      margin-top: 16px;
+      border: 1px solid rgba(0,0,0,0.10);
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: 0 16px 40px rgba(15,23,42,0.06);
+      overflow: hidden;
+    }
+
+    .price-head{
+      padding: 14px 16px;
+      display:flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .plan-name{ font-weight: 900; }
+    .plan-price{ font-size: 22px; font-weight: 900; margin-top: 2px; }
+    .plan-period{ font-size: 12px; opacity: 0.7; margin-top: 2px; }
+
+    .plan-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      height: 40px;
+      padding: 0 14px;
+      border-radius: 999px;
+      font-weight: 900;
+      text-decoration: none;
+      background: #16A34A;
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+      white-space: nowrap;
+    }
+
+    .price-includes{
+      border-top: 1px solid rgba(0,0,0,0.08);
+      padding: 12px 16px 14px;
+    }
+
+    .includes-title{
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .includes-list{
+      margin: 0;
+      padding-left: 18px;
+      line-height: 1.6;
+      opacity: 0.9;
+    }
+
+    .comp-box{
+      margin-top: 14px;
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 18px;
+      background: #F5F5F2;
+      padding: 14px 16px;
+      box-shadow: 0 16px 40px rgba(15,23,42,0.04);
+    }
+
+    .comp-box p{
+      margin: 8px 0 0;
+      line-height: 1.6;
+      opacity: 0.9;
+    }
+
+    .comp-right{
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 16px 40px rgba(15,23,42,0.06);
+      background: rgba(255,255,255,0.35);
+      padding: 14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .comp-right img{
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      border-radius: 16px;
+      display:block;
+    }
+
+    .comp-placeholder{
+      width:100%;
+      height:100%;
+      border-radius: 16px;
+      background:
+        radial-gradient(500px 240px at 20% 20%, rgba(255,255,255,0.70), rgba(255,255,255,0)),
+        linear-gradient(135deg, rgba(255,255,255,0.55), rgba(0,0,0,0.05));
+      border: 1px dashed rgba(0,0,0,0.12);
+    }
+
+    /* Formas imagen (complicaciones) */
+    .comp-right.comp-shape-square img,
+    .comp-right.comp-shape-square .comp-placeholder{ border-radius: 0; }
+
+    .comp-right.comp-shape-rounded img,
+    .comp-right.comp-shape-rounded .comp-placeholder{ border-radius: 16px; }
+
+    .comp-right.comp-shape-circle{
+      aspect-ratio: 1 / 1;
+      padding: 18px;
+    }
+    .comp-right.comp-shape-circle img,
+    .comp-right.comp-shape-circle .comp-placeholder{ border-radius: 999px; }
+
+    @media (max-width: 980px){
+      .comp-grid{ grid-template-columns: 1fr; }
     }
   </style>
 </BaseLayout>
