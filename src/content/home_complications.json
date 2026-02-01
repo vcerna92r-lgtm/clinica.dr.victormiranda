@@ -1,9 +1,9 @@
 {
-  "box_text": "",
+  "box_text": "No sustituye emergencias. Si hay compromiso visual/neurológico o dolor severo progresivo: acudir a emergencia.",
   "text_italic": false,
   "marquee_enabled": true,
   "includes_title": "Incluye",
-  "box_title": "",
+  "box_title": "Qué NO es: (importante)",
   "image_ratio": "portrait",
   "plan": {
     "name": "Evaluación de complicaciones",
