@@ -5,7 +5,8 @@
     {
       "name": "Toxina botulínica",
       "description": "Prevención y armonización con dosis conservadora y enfoque natural.",
-      "image": "/images/uploads/botox.png"
+      "image": "/images/uploads/toxina-botulinica-tipo-a-xeomin.jpg.webp",
+      "image_shape": "circle"
     },
     {
       "name": "Ácido hialurónico",
