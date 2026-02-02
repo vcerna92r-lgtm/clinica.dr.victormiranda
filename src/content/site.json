@@ -1,17 +1,17 @@
 {
+  "accent_color_2": "#06B6D4",
   "clinic_name": "Clínica Dr. Víctor Miranda",
+  "logo_image": "/images/logo.png",
   "booking_url": "https://calendar.app.google/bmpjN2TAMFchpHd99",
+  "bg_color": "#f8fafc",
   "city": "Managua, Nicaragua",
   "name": "Clínica Dr. Víctor Miranda",
+  "max_width": "1040px",
+  "accent_color": "#0F766E",
   "initials": "VM",
   "whatsapp": "50587355501",
-  "whatsapp_message": "Hola Dr. Víctor, quiero agendar una valoración en Clínica Dr. Víctor Miranda.\n\nMi nombre: ________\nServicio de interés: ________\nFecha y hora preferida: ________\n\nGracias.",
-  "email": "vcerna92r@gmail.com",
-  "accent_color": "#0F766E",
-  "accent_color_2": "#06B6D4",
-  "logo_image": "/images/logo.png",
+  "nav_links_gap": "16px",
   "hero_image": "/images/hero.jpg",
-  "bg_color": "#ffffff",
-  "max_width": "1120px",
-  "nav_links_gap": "20px"
+  "whatsapp_message": "Hola Dr. Víctor, quiero agendar una valoración en Clínica Dr. Víctor Miranda.\n\nMi nombre: ________\nServicio de interés: ________\nFecha y hora preferida: ________\n\nGracias.",
+  "email": "vcerna92r@gmail.com"
 }
