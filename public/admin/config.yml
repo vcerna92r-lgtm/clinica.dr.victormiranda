@@ -211,6 +211,38 @@ collections:
                   - { label: "Redondeada", value: "rounded" }
                   - { label: "Redonda", value: "circle" }
 
+  - name: "home_social"
+    label: "Inicio · Redes sociales"
+    files:
+      - label: "Sección (Inicio) — Redes sociales"
+        name: "home_social_file"
+        file: "src/content/home_social.json"
+        format: "json"
+        fields:
+          - { label: "Título de sección", name: "section_title", widget: "string" }
+          - { label: "Subtítulo (opcional)", name: "section_subtitle", widget: "string", required: false }
+
+          - { label: "Texto del botón (opcional)", name: "button_text", widget: "string", required: false }
+          - { label: "URL del botón (opcional)", name: "button_url", widget: "string", required: false }
+
+          - label: "Redes"
+            name: "items"
+            widget: "list"
+            fields:
+              - { label: "Nombre", name: "name", widget: "string" }
+              - { label: "URL", name: "url", widget: "string", required: false }
+              - { label: "Imagen", name: "image", widget: "image", required: false }
+
+              - label: "Forma de imagen"
+                name: "image_shape"
+                widget: "select"
+                required: false
+                default: "rounded"
+                options:
+                  - { label: "Cuadrada", value: "square" }
+                  - { label: "Redondeada", value: "rounded" }
+                  - { label: "Redonda", value: "circle" }
+
   - name: "home_complications"
     label: "Inicio · Manejo de complicaciones"
     files:

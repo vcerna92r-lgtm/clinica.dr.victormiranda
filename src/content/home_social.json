@@ -1,0 +1,26 @@
+{
+  "section_title": "Síguenos en redes sociales",
+  "section_subtitle": "",
+  "button_text": "SOCIAL",
+  "button_url": "",
+  "items": [
+    {
+      "name": "Instagram",
+      "url": "https://instagram.com/",
+      "image": "/images/uploads/instagram.jpg",
+      "image_shape": "circle"
+    },
+    {
+      "name": "TikTok",
+      "url": "https://tiktok.com/",
+      "image": "/images/uploads/tiktok.jpg",
+      "image_shape": "rounded"
+    },
+    {
+      "name": "Facebook",
+      "url": "https://facebook.com/",
+      "image": "/images/uploads/facebook.jpg",
+      "image_shape": "square"
+    }
+  ]
+}
