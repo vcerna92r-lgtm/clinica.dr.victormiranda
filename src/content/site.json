@@ -13,5 +13,6 @@
   "nav_links_gap": "20px",
   "hero_image": "/images/hero.jpg",
   "whatsapp_message": "Hola Dr. Víctor, quiero agendar una valoración en Clínica Dr. Víctor Miranda.\n\nMi nombre: ________\nServicio de interés: ________\nFecha y hora preferida: ________\n\nGracias.",
-  "email": "vcerna92r@gmail.com"
+  "email": "vcerna92r@gmail.com",
+  "home_gap_services_complications": "40px"
 }
