@@ -11,14 +11,14 @@ const {
 
 const year = new Date().getFullYear();
 
-// Theme
+// Colores (del admin/site.json)
 const accent = String(site.accent_color || "#0F766E").trim();
 const accent2 = String(site.accent_color_2 || "#06B6D4").trim();
 
-// Global UI (configurable desde /admin si lo agregas)
-const bg = String(site.bg_color || "#ffffff").trim();            // ✅ fondo global
-const maxWidth = String(site.max_width || "1240px").trim();      // ✅ ancho máximo
-const navLinksGap = String(site.nav_links_gap || "16px").trim(); // ✅ separación links
+// ✅ Fondo + ancho + separación del menú (del admin/site.json)
+const bg = String(site.bg_color || "#ffffff").trim();
+const maxWidth = String(site.max_width || "1120px").trim();
+const navLinksGap = String(site.nav_links_gap || "16px").trim();
 
 // WhatsApp
 const whatsappNumber = String(site.whatsapp || "").replace(/\D/g, "");
@@ -32,7 +32,10 @@ const logoImage = String(site.logo_image || "").trim();
 ---
 
 <!doctype html>
-<html lang="es">
+<html
+  lang="es"
+  style={`--bg:${bg};--max:${maxWidth};--nav-gap:${navLinksGap};--accent:${accent};--accent2:${accent2};`}
+>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -41,15 +44,12 @@ const logoImage = String(site.logo_image || "").trim();
 
     <style>
       :root{
-        /* ✅ Layout */
-        --max: {maxWidth};
-
-        /* ✅ Padding responsive del contenedor */
-        --pad-x: clamp(16px, 3vw, 28px);
-        --pad-y: clamp(16px, 2.2vw, 22px);
-
-        /* ✅ Fondo global (todas las páginas) */
-        --bg: {bg};
+        /* Estos valores se sobreescriben con el style="" del <html> */
+        --bg: #ffffff;
+        --max: 1120px;
+        --nav-gap: 16px;
+        --accent: #0F766E;
+        --accent2: #06B6D4;
 
         --text: #0f172a;
         --muted: #475569;
@@ -57,18 +57,11 @@ const logoImage = String(site.logo_image || "").trim();
         --soft: #f8fafc;
         --soft2:#f1f5f9;
 
-        --accent: {accent};
-        --accent2: {accent2};
-
         --radius: 18px;
         --shadow: 0 16px 40px rgba(15,23,42,0.08);
-
-        /* ✅ Menú */
-        --nav-gap: {navLinksGap};
       }
 
       *{ box-sizing:border-box; }
-
       body{
         margin:0;
         font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -76,15 +69,10 @@ const logoImage = String(site.logo_image || "").trim();
         background: var(--bg);
         line-height:1.55;
       }
-
       a{ color: inherit; text-decoration: none; }
       a.link{ text-decoration: underline; text-underline-offset: 3px; }
 
-      .container{
-        max-width: var(--max);
-        margin: 0 auto;
-        padding: var(--pad-y) var(--pad-x);
-      }
+      .container{ max-width: var(--max); margin:0 auto; padding: 18px; }
 
       /* Header */
       .header{
@@ -98,7 +86,7 @@ const logoImage = String(site.logo_image || "").trim();
       .nav{
         display:flex;
         align-items:center;
-        gap: 18px; /* un poco más de aire general */
+        gap:14px;
         flex-wrap: wrap;
       }
 
@@ -133,11 +121,11 @@ const logoImage = String(site.logo_image || "").trim();
 
       .navlinks{
         display:flex;
-        gap: var(--nav-gap); /* ✅ separación entre Inicio/Servicios/... */
+        gap: var(--nav-gap); /* ✅ ahora sí sale del admin */
         flex-wrap: wrap;
       }
       .navlinks a{
-        padding: 10px 14px; /* un poco más cómodo */
+        padding: 10px 12px;
         border-radius: 12px;
         color: var(--muted);
         font-weight: 700;
