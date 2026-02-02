@@ -1,3 +1,4 @@
+cat > public/admin/config.yml <<'YAML'
 backend:
   name: github
   repo: vcerna92r-lgtm/clinica.dr.victormiranda
@@ -25,8 +26,46 @@ collections:
           - { label: "WhatsApp (solo números)", name: "whatsapp", widget: "string" }
           - { label: "Mensaje WhatsApp", name: "whatsapp_message", widget: "text" }
           - { label: "Link de reservas (Google Calendar)", name: "booking_url", widget: "string" }
+
           - { label: "Color principal (hex)", name: "accent_color", widget: "string" }
           - { label: "Color secundario (hex)", name: "accent_color_2", widget: "string" }
+
+          # ✅ NUEVO: Fondo global (todas las páginas)
+          - label: "Fondo global (todas las páginas)"
+            name: "bg_color"
+            widget: "select"
+            default: "#ffffff"
+            options:
+              - { label: "Blanco (clínico)", value: "#ffffff" }
+              - { label: "Gris muy suave", value: "#f8fafc" }
+              - { label: "Arena suave", value: "#fafaf9" }
+              - { label: "Marfil cálido", value: "#fff7ed" }
+              - { label: "Menta sutil", value: "#f0fdfa" }
+              - { label: "Azul hielo", value: "#eff6ff" }
+
+          # ✅ NUEVO: Ancho máximo del contenido
+          - label: "Ancho máximo del contenido"
+            name: "max_width"
+            widget: "select"
+            default: "1240px"
+            options:
+              - { label: "1080px (compacto)", value: "1080px" }
+              - { label: "1120px (estándar)", value: "1120px" }
+              - { label: "1240px (amplio)", value: "1240px" }
+              - { label: "1360px (muy amplio)", value: "1360px" }
+
+          # ✅ NUEVO: Separación entre links del menú
+          - label: "Separación links del menú (Inicio/Servicios/...)"
+            name: "nav_links_gap"
+            widget: "select"
+            default: "16px"
+            options:
+              - { label: "10px (muy junto)", value: "10px" }
+              - { label: "14px (normal)", value: "14px" }
+              - { label: "16px (recomendado)", value: "16px" }
+              - { label: "20px (aireado)", value: "20px" }
+              - { label: "24px (muy aireado)", value: "24px" }
+
           - { label: "Logo (subir imagen)", name: "logo_image", widget: "image", required: false }
           - { label: "Imagen principal / Hero (subir imagen)", name: "hero_image", widget: "image", required: false }
 
@@ -264,3 +303,4 @@ collections:
             required: false
             fields:
               - { label: "Item", name: "text", widget: "string" }
+YAML
