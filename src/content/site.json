@@ -10,5 +10,8 @@
   "accent_color": "#0F766E",
   "accent_color_2": "#06B6D4",
   "logo_image": "/images/logo.png",
-  "hero_image": "/images/hero.jpg"
+  "hero_image": "/images/hero.jpg",
+  "bg_color": "#ffffff",
+  "max_width": "1240px",
+  "nav_links_gap": "16px"
 }
