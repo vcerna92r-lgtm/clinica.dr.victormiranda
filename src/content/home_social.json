@@ -1,5 +1,5 @@
 {
-  "section_title": "Síguenos en redes sociales",
+  "section_title": "Síguenos en Redes Sociales",
   "section_subtitle": "",
   "button_text": "SOCIAL",
   "button_url": "",
@@ -11,9 +11,9 @@
       "image_shape": "circle"
     },
     {
-      "name": "TikTok",
-      "url": "https://tiktok.com/",
-      "image": "/images/uploads/tiktok.jpg",
+      "name": "Facebook",
+      "url": "https://www.facebook.com/share/1CBjJ2ss5A/?mibextid=wwXIfr",
+      "image": "/images/uploads/face.png",
       "image_shape": "rounded"
     },
     {
