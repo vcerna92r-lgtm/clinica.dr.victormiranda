@@ -19,6 +19,7 @@ const accent2 = String(site.accent_color_2 || "#06B6D4").trim();
 const bg = String(site.bg_color || "#ffffff").trim();
 const maxWidth = String(site.max_width || "1120px").trim();
 const navLinksGap = String(site.nav_links_gap || "16px").trim();
+const homeGapServicesComplications = String(site.home_gap_services_complications || "64px").trim();
 
 // WhatsApp
 const whatsappNumber = String(site.whatsapp || "").replace(/\D/g, "");
@@ -34,8 +35,7 @@ const logoImage = String(site.logo_image || "").trim();
 <!doctype html>
 <html
   lang="es"
-  style={`--bg:${bg};--max:${maxWidth};--nav-gap:${navLinksGap};--accent:${accent};--accent2:${accent2};`}
->
+    style={`--bg:${bg};--max:${maxWidth};--nav-gap:${navLinksGap};--home-gap-sc:${homeGapServicesComplications};--accent:${accent};--accent2:${accent2};`}>>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

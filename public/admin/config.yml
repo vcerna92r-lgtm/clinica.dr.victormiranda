@@ -65,8 +65,20 @@ collections:
               - { label: "20px (aireado)", value: "20px" }
               - { label: "24px (muy aireado)", value: "24px" }
 
+          - label: "Espacio entre Servicios principales y Manejo de complicaciones"
+            name: "home_gap_services_complications"
+            widget: "select"
+            default: "64px"
+            options:
+              - { label: "24px (pequeño)", value: "24px" }
+              - { label: "40px (medio)", value: "40px" }
+              - { label: "64px (grande recomendado)", value: "64px" }
+              - { label: "96px (muy grande)", value: "96px" }
+              - { label: "120px (extra)", value: "120px" }
+
           - { label: "Logo (subir imagen)", name: "logo_image", widget: "image", required: false }
           - { label: "Imagen principal / Hero (subir imagen)", name: "hero_image", widget: "image", required: false }
+
 
   - name: "services"
     label: "Servicios"

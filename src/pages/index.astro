@@ -134,6 +134,9 @@ const compItalic = !!complications.text_italic;
     </div>
   </section>
 
+  <!-- ✅ Espacio graduable desde /admin -->
+  <div class="gap-services-complications" aria-hidden="true"></div>
+
   <!-- Manejo de complicaciones: estilo video + imagen derecha -->
   <section class="section">
     {marqueeOn ? (
@@ -283,6 +286,11 @@ const compItalic = !!complications.text_italic;
     @media (max-width: 980px){
       .cover-grid{ grid-template-columns: 1fr; }
       .cover-photo{ width: min(520px, 85vw); margin: 0 auto; }
+    }
+
+    /* ✅ Espacio graduable entre "Servicios principales" y "Manejo de complicaciones" */
+    .gap-services-complications{
+      height: var(--home-gap-sc, 64px);
     }
 
     /* Servicios principales */
