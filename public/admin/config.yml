@@ -1,7 +1,7 @@
 cd "/Users/joker/Desktop/mi-sitio"
 
-cat > public/admin/config.yml <<'YAML'
-backend:
+python3 - <<'PY'
+content = """backend:
   name: github
   repo: vcerna92r-lgtm/clinica.dr.victormiranda
   branch: main
@@ -70,33 +70,7 @@ collections:
 
           - { label: "Logo (subir imagen)", name: "logo_image", widget: "image", required: false }
           - { label: "Imagen principal / Hero (subir imagen)", name: "hero_image", widget: "image", required: false }
-
-  - name: "services"
-    label: "Servicios"
-    files:
-      - label: "Página de Servicios"
-        name: "services_page"
-        file: "src/content/services.json"
-        format: "json"
-        fields:
-          - { label: "Título de sección", name: "section_title", widget: "string" }
-          - { label: "Subtítulo", name: "section_subtitle", widget: "string", required: false }
-          - label: "Servicios"
-            name: "items"
-            widget: "list"
-            fields:
-              - { label: "Nombre", name: "name", widget: "string" }
-              - { label: "Precio (texto)", name: "price", widget: "string", required: false }
-              - { label: "Descripción", name: "description", widget: "text", required: false }
-              - { label: "Imagen", name: "image", widget: "image", required: false }
-
-              - label: "Forma de imagen"
-                name: "image_shape"
-                widget: "select"
-                required: false
-                default: "rounded"
-                options:
-                  - { label: "Cuadrada", value: "square" }
-                  - { label: "Redondeada", value: "rounded" }
-                  - { label: "Redonda", value: "circle" }
-YAML
+"""
+open("public/admin/config.yml", "w", encoding="utf-8").write(content)
+print("✅ config.yml reescrito (sin líneas de terminal)")
+PY
