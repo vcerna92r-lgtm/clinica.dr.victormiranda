@@ -47,12 +47,16 @@ collections:
           - label: "Ancho máximo del contenido"
             name: "max_width"
             widget: "select"
-            default: "1240px"
+            default: "1120px"
             options:
-              - { label: "1080px (compacto)", value: "1080px" }
-              - { label: "1120px (estándar)", value: "1120px" }
-              - { label: "1240px (amplio)", value: "1240px" }
-              - { label: "1360px (muy amplio)", value: "1360px" }
+              - { label: "960px (muy compacto)", value: "960px" }
+              - { label: "1040px (compacto)", value: "1040px" }
+              - { label: "1120px (estándar recomendado)", value: "1120px" }
+              - { label: "1200px (amplio)", value: "1200px" }
+              - { label: "1240px (muy amplio)", value: "1240px" }
+              - { label: "1320px (extra)", value: "1320px" }
+              - { label: "1360px (máximo)", value: "1360px" }
+
 
           # ✅ NUEVO: Separación entre links del menú
           - label: "Separación links del menú (Inicio/Servicios/...)"
