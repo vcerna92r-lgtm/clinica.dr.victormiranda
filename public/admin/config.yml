@@ -1,4 +1,3 @@
-cat > public/admin/config.yml <<'YAML'
 backend:
   name: github
   repo: vcerna92r-lgtm/clinica.dr.victormiranda
@@ -30,7 +29,6 @@ collections:
           - { label: "Color principal (hex)", name: "accent_color", widget: "string" }
           - { label: "Color secundario (hex)", name: "accent_color_2", widget: "string" }
 
-          # ✅ NUEVO: Fondo global (todas las páginas)
           - label: "Fondo global (todas las páginas)"
             name: "bg_color"
             widget: "select"
@@ -43,22 +41,23 @@ collections:
               - { label: "Menta sutil", value: "#f0fdfa" }
               - { label: "Azul hielo", value: "#eff6ff" }
 
-          # ✅ NUEVO: Ancho máximo del contenido
           - label: "Ancho máximo del contenido"
             name: "max_width"
             widget: "select"
-            default: "1240px"
+            default: "1120px"
             options:
-              - { label: "1080px (compacto)", value: "1080px" }
-              - { label: "1120px (estándar)", value: "1120px" }
-              - { label: "1240px (amplio)", value: "1240px" }
-              - { label: "1360px (muy amplio)", value: "1360px" }
+              - { label: "960px (muy compacto)", value: "960px" }
+              - { label: "1040px (compacto)", value: "1040px" }
+              - { label: "1120px (recomendado)", value: "1120px" }
+              - { label: "1200px (amplio)", value: "1200px" }
+              - { label: "1240px (muy amplio)", value: "1240px" }
+              - { label: "1320px (extra)", value: "1320px" }
+              - { label: "1360px (máximo)", value: "1360px" }
 
-          # ✅ NUEVO: Separación entre links del menú
           - label: "Separación links del menú (Inicio/Servicios/...)"
             name: "nav_links_gap"
             widget: "select"
-            default: "16px"
+            default: "20px"
             options:
               - { label: "10px (muy junto)", value: "10px" }
               - { label: "14px (normal)", value: "14px" }
@@ -303,4 +302,3 @@ collections:
             required: false
             fields:
               - { label: "Item", name: "text", widget: "string" }
-YAML

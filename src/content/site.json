@@ -12,6 +12,6 @@
   "logo_image": "/images/logo.png",
   "hero_image": "/images/hero.jpg",
   "bg_color": "#ffffff",
-  "max_width": "1240px",
-  "nav_links_gap": "16px"
+  "max_width": "1120px",
+  "nav_links_gap": "20px"
 }
