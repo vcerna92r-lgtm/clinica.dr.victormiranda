@@ -76,9 +76,19 @@ collections:
               - { label: "96px (muy grande)", value: "96px" }
               - { label: "120px (extra)", value: "120px" }
 
+          - label: "Espacio entre Portada (Inicio) y Servicios principales"
+            name: "home_gap_cover_services"
+            widget: "select"
+            default: "48px"
+            options:
+              - { label: "16px (pequeño)", value: "16px" }
+              - { label: "24px (medio)", value: "24px" }
+              - { label: "48px (recomendado)", value: "48px" }
+              - { label: "72px (grande)", value: "72px" }
+              - { label: "96px (muy grande)", value: "96px" }
+
           - { label: "Logo (subir imagen)", name: "logo_image", widget: "image", required: false }
           - { label: "Imagen principal / Hero (subir imagen)", name: "hero_image", widget: "image", required: false }
-
 
   - name: "services"
     label: "Servicios"

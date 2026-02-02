@@ -19,7 +19,10 @@ const accent2 = String(site.accent_color_2 || "#06B6D4").trim();
 const bg = String(site.bg_color || "#ffffff").trim();
 const maxWidth = String(site.max_width || "1120px").trim();
 const navLinksGap = String(site.nav_links_gap || "16px").trim();
+
+// ✅ Espacios verticales graduables (del admin/site.json)
 const homeGapServicesComplications = String(site.home_gap_services_complications || "64px").trim();
+const homeGapCoverServices = String(site.home_gap_cover_services || "48px").trim();
 
 // WhatsApp
 const whatsappNumber = String(site.whatsapp || "").replace(/\D/g, "");
@@ -35,7 +38,8 @@ const logoImage = String(site.logo_image || "").trim();
 <!doctype html>
 <html
   lang="es"
-    style={`--bg:${bg};--max:${maxWidth};--nav-gap:${navLinksGap};--home-gap-sc:${homeGapServicesComplications};--accent:${accent};--accent2:${accent2};`}>>
+  style={`--bg:${bg};--max:${maxWidth};--nav-gap:${navLinksGap};--home-gap-sc:${homeGapServicesComplications};--home-gap-cs:${homeGapCoverServices};--accent:${accent};--accent2:${accent2};`}
+>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -50,6 +54,10 @@ const logoImage = String(site.logo_image || "").trim();
         --nav-gap: 16px;
         --accent: #0F766E;
         --accent2: #06B6D4;
+
+        /* Espacios verticales (defaults) */
+        --home-gap-sc: 64px; /* servicios -> complicaciones */
+        --home-gap-cs: 48px; /* portada -> servicios */
 
         --text: #0f172a;
         --muted: #475569;
@@ -121,7 +129,7 @@ const logoImage = String(site.logo_image || "").trim();
 
       .navlinks{
         display:flex;
-        gap: var(--nav-gap); /* ✅ ahora sí sale del admin */
+        gap: var(--nav-gap);
         flex-wrap: wrap;
       }
       .navlinks a{

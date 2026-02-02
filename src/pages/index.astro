@@ -104,6 +104,9 @@ const compItalic = !!complications.text_italic;
     </div>
   </section>
 
+  <!-- ✅ Espacio graduable desde /admin: Portada -> Servicios principales -->
+  <div class="gap-cover-services" aria-hidden="true"></div>
+
   <!-- Servicios principales -->
   <section class="section">
     <div class="section-title">
@@ -134,7 +137,7 @@ const compItalic = !!complications.text_italic;
     </div>
   </section>
 
-  <!-- ✅ Espacio graduable desde /admin -->
+  <!-- ✅ Espacio graduable desde /admin: Servicios principales -> Manejo de complicaciones -->
   <div class="gap-services-complications" aria-hidden="true"></div>
 
   <!-- Manejo de complicaciones: estilo video + imagen derecha -->
@@ -288,7 +291,12 @@ const compItalic = !!complications.text_italic;
       .cover-photo{ width: min(520px, 85vw); margin: 0 auto; }
     }
 
-    /* ✅ Espacio graduable entre "Servicios principales" y "Manejo de complicaciones" */
+    /* ✅ Espacio graduable: Portada -> Servicios */
+    .gap-cover-services{
+      height: var(--home-gap-cs, 48px);
+    }
+
+    /* ✅ Espacio graduable: Servicios -> Complicaciones */
     .gap-services-complications{
       height: var(--home-gap-sc, 64px);
     }
