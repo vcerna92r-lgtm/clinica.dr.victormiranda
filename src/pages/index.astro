@@ -76,9 +76,7 @@ function compRatioClass(ratio) {
 
 const marqueeOn = complications.marquee_enabled !== false;
 const marqueeBase = String(complications.marquee_text || complications.title || "Manejo de complicaciones").trim();
-const marqueeRepeat = Array(8).fill(marqueeBase).join(" ✶ ") + " ✶ ";
 const marqueeSpeed = String(complications.marquee_speed || "normal");
-const marqueeDuration = marqueeSpeed === "fast" ? 12 : marqueeSpeed === "slow" ? 28 : 18;
 
 const compAlign = String(complications.text_align || "left");
 const compBold = !!complications.text_bold;
@@ -150,21 +148,10 @@ const compItalic = !!complications.text_italic;
   <!-- ✅ Espacio graduable desde /admin: Servicios principales -> Manejo de complicaciones -->
   <div class="gap-services-complications" aria-hidden="true"></div>
 
-  <!-- Manejo de complicaciones: estilo video + imagen derecha -->
+  <!-- Manejo de complicaciones: serpiente en móvil y desktop -->
   <section class="section">
     {marqueeOn ? (
-      <>
-        <!-- ✅ Móvil: serpiente -->
-        <WavyMarquee text={marqueeBase} speed={marqueeSpeed} />
-
-        <!-- ✅ Desktop: marquee original -->
-        <div class="comp-marquee comp-marquee--desktop" style={`--marqueeDuration:${marqueeDuration}s`}>
-          <div class="comp-marquee-track" aria-hidden="true">
-            <div class="comp-marquee-seq">{marqueeRepeat}</div>
-            <div class="comp-marquee-seq" aria-hidden="true">{marqueeRepeat}</div>
-          </div>
-        </div>
-      </>
+      <WavyMarquee text={marqueeBase} speed={marqueeSpeed} />
     ) : null}
 
     <div class="comp-grid">
@@ -266,7 +253,7 @@ const compItalic = !!complications.text_italic;
   </section>
 
   <style>
-    /* -------- Base helpers (por si no existen en otro lado) -------- */
+    /* -------- Base helpers -------- */
     .section{ padding: 18px 0; }
     .section-title{ display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin-bottom: 14px; flex-wrap: wrap; }
     .sub{ margin: 6px 0 0; opacity: .78; }
@@ -350,35 +337,6 @@ const compItalic = !!complications.text_italic;
     .home-service-media.hs-shape-circle img, .home-service-media.hs-shape-circle .media-placeholder{ border-radius: 999px; }
     @media (max-width: 980px){ .home-service-card{ grid-column: span 6; } }
     @media (max-width: 640px){ .home-service-card{ grid-column: span 12; } }
-
-    /* ✅ Complicaciones: marquee desktop */
-    .comp-marquee{
-      overflow: hidden;
-      white-space: nowrap;
-      margin-bottom: 12px;
-      border-radius: 18px;
-    }
-    .comp-marquee-track{
-      display: flex;
-      width: max-content;
-      animation: compMarquee var(--marqueeDuration, 18s) linear infinite;
-    }
-    .comp-marquee-seq{
-      font-size: 26px;
-      font-weight: 900;
-      letter-spacing: -0.2px;
-      padding-right: 22px;
-    }
-    @keyframes compMarquee{
-      0%{ transform: translateX(0); }
-      100%{ transform: translateX(-50%); }
-    }
-
-    /* Mostrar marquee lineal SOLO en desktop (móvil usa WavyMarquee) */
-    .comp-marquee--desktop{ display: none; }
-    @media (min-width: 769px){
-      .comp-marquee--desktop{ display: block; }
-    }
 
     /* Complicaciones: layout + estilos */
     .comp-grid{
@@ -481,11 +439,10 @@ const compItalic = !!complications.text_italic;
 
     @media (max-width: 980px){
       .comp-grid{ grid-template-columns: 1fr; }
-      .comp-marquee-seq{ font-size: 22px; }
     }
 
     /* Redes sociales */
-    .social{ margin-bottom: 0; } /* ✅ deja que el gap Redes→Footer lo controle el footer */
+    .social{ margin-bottom: 0; } /* deja que el gap Redes→Footer lo controle el footer */
     .social-grid{
       display:flex;
       gap: 18px;
