@@ -28,6 +28,30 @@ collections:
 
           - { label: "Color principal (hex)", name: "accent_color", widget: "string" }
           - { label: "Color secundario (hex)", name: "accent_color_2", widget: "string" }
+      - label: "Gap Redes → Footer"
+        name: "home_gap_social_footer"
+        widget: "select"
+        options:
+          - { label: "0", value: "0px" }
+          - { label: "16px", value: "16px" }
+          - { label: "24px", value: "24px" }
+          - { label: "32px", value: "32px" }
+          - { label: "48px", value: "48px" }
+          - { label: "56px (recomendado)", value: "56px" }
+          - { label: "64px", value: "64px" }
+          - { label: "80px", value: "80px" }
+          - { label: "96px", value: "96px" }
+        default: "56px"
+
+      - label: "Footer"
+        name: "footer"
+        widget: "object"
+        fields:
+          - { label: "Nombre de la clínica", name: "clinic_name", widget: "string" }
+          - { label: "Ubicación (ciudad)", name: "city", widget: "string" }
+          - { label: "Email de contacto", name: "email", widget: "string" }
+          - { label: "Texto link políticas", name: "policies_label", widget: "string", default: "Políticas" }
+          - { label: "URL políticas", name: "policies_url", widget: "string", default: "/politicas" }
 
           - label: "Fondo global (todas las páginas)"
             name: "bg_color"

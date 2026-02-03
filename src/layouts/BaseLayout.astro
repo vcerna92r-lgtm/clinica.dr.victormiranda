@@ -23,7 +23,8 @@ const navLinksGap = String(site.nav_links_gap || "16px").trim();
 // ✅ Espacios verticales graduables (del admin/site.json)
 const homeGapServicesComplications = String(site.home_gap_services_complications || "64px").trim(); // sc
 const homeGapCoverServices = String(site.home_gap_cover_services || "48px").trim(); // cs
-const homeGapComplicationsSocial = String(site.home_gap_complications_social || "64px").trim(); // ccs ✅ NUEVO
+const homeGapComplicationsSocial = String(site.home_gap_complications_social || "64px").trim(); // ccs
+const homeGapSocialFooter = String(site.home_gap_social_footer || "56px").trim(); // sf ✅ NUEVO
 
 // WhatsApp
 const whatsappNumber = String(site.whatsapp || "").replace(/\D/g, "");
@@ -34,12 +35,19 @@ const bookingUrl = String(site.booking_url || "").trim() || "/contacto/";
 
 // Logo
 const logoImage = String(site.logo_image || "").trim();
+
+// Footer (desde site.json.footer con fallback a campos existentes)
+const footerClinicName = site.footer?.clinic_name || site.clinic_name || site.name || siteName;
+const footerCity = site.footer?.city || site.city || "";
+const footerEmail = site.footer?.email || site.email || "";
+const footerPoliciesLabel = site.footer?.policies_label || "Políticas";
+const footerPoliciesUrl = site.footer?.policies_url || "/politicas";
 ---
 
 <!doctype html>
 <html
   lang="es"
-  style={`--bg:${bg};--max:${maxWidth};--nav-gap:${navLinksGap};--home-gap-sc:${homeGapServicesComplications};--home-gap-cs:${homeGapCoverServices};--home-gap-ccs:${homeGapComplicationsSocial};--accent:${accent};--accent2:${accent2};`}
+  style={`--bg:${bg};--max:${maxWidth};--nav-gap:${navLinksGap};--home-gap-sc:${homeGapServicesComplications};--home-gap-cs:${homeGapCoverServices};--home-gap-ccs:${homeGapComplicationsSocial};--home-gap-sf:${homeGapSocialFooter};--accent:${accent};--accent2:${accent2};`}
 >
   <head>
     <meta charset="utf-8" />
@@ -59,7 +67,8 @@ const logoImage = String(site.logo_image || "").trim();
         /* Espacios verticales (defaults) */
         --home-gap-sc: 64px;  /* servicios -> complicaciones */
         --home-gap-cs: 48px;  /* portada -> servicios */
-        --home-gap-ccs: 64px; /* complicaciones -> redes ✅ nuevo */
+        --home-gap-ccs: 64px; /* complicaciones -> redes */
+        --home-gap-sf: 56px;  /* redes -> footer ✅ nuevo */
 
         --text: #0f172a;
         --muted: #475569;
@@ -176,11 +185,55 @@ const logoImage = String(site.logo_image || "").trim();
       }
       .btn-primary:hover{ filter: brightness(.97); }
 
-      footer{
+      /* ✅ Footer minimalista */
+      .site-footer{
+        margin-top: var(--home-gap-sf);
         border-top: 1px solid var(--line);
+        padding: 26px 0;
+      }
+
+      .footer-inner{
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
         color: var(--muted);
-        padding: 18px 0;
-        margin-top: 18px;
+      }
+
+      .footer-brand{
+        color: var(--text);
+        font-weight: 800;
+        letter-spacing: .2px;
+      }
+
+      .footer-heading{
+        font-size: 12px;
+        opacity: .65;
+        margin-bottom: 6px;
+      }
+
+      .footer-text{
+        opacity: .9;
+      }
+
+      .footer-link{
+        display: inline-block;
+        opacity: .9;
+        text-decoration: none;
+      }
+      .footer-link:hover{
+        opacity: 1;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      @media (min-width: 768px){
+        .footer-inner{
+          grid-template-columns: 1fr 1fr 1fr;
+          gap: 24px;
+          align-items: start;
+        }
+        .footer-center{ text-align: center; }
+        .footer-right{ text-align: right; }
       }
 
       /* Floating WhatsApp */
@@ -239,12 +292,34 @@ const logoImage = String(site.logo_image || "").trim();
       </div>
     </main>
 
-    <footer>
+    <footer class="site-footer">
       <div class="container">
-        <small>
-          © {year} · {siteName} · {site.city} · {site.email} ·
-          <a class="link" href="/politicas/">Políticas</a>
-        </small>
+        <div class="footer-inner">
+          <div class="footer-col footer-left">
+            <div class="footer-brand">{footerClinicName}</div>
+          </div>
+
+          <div class="footer-col footer-center">
+            <div class="footer-heading">Ubicación</div>
+            <div class="footer-text">{footerCity}</div>
+          </div>
+
+          <div class="footer-col footer-right">
+            <div class="footer-heading">Contacto</div>
+
+            {footerEmail ? (
+              <a class="footer-link" href={`mailto:${footerEmail}`}>
+                {footerEmail}
+              </a>
+            ) : null}
+
+            <div style="height:6px;"></div>
+
+            <a class="footer-link" href={footerPoliciesUrl}>
+              {footerPoliciesLabel}
+            </a>
+          </div>
+        </div>
       </div>
     </footer>
 
