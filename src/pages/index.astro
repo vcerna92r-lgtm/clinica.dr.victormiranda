@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import WavyMarquee from "../components/WavyMarquee.astro";
 import site from "../content/site.json";
 import home from "../content/home.json";
 import homeServices from "../content/home_services.json";
@@ -152,12 +153,18 @@ const compItalic = !!complications.text_italic;
   <!-- Manejo de complicaciones: estilo video + imagen derecha -->
   <section class="section">
     {marqueeOn ? (
-      <div class="comp-marquee" style={`--marqueeDuration:${marqueeDuration}s`}>
-        <div class="comp-marquee-track" aria-hidden="true">
-          <div class="comp-marquee-seq">{marqueeRepeat}</div>
-          <div class="comp-marquee-seq" aria-hidden="true">{marqueeRepeat}</div>
+      <>
+        <!-- ✅ Móvil: serpiente -->
+        <WavyMarquee text={marqueeBase} speed={marqueeSpeed} />
+
+        <!-- ✅ Desktop: marquee original -->
+        <div class="comp-marquee comp-marquee--desktop" style={`--marqueeDuration:${marqueeDuration}s`}>
+          <div class="comp-marquee-track" aria-hidden="true">
+            <div class="comp-marquee-seq">{marqueeRepeat}</div>
+            <div class="comp-marquee-seq" aria-hidden="true">{marqueeRepeat}</div>
+          </div>
         </div>
-      </div>
+      </>
     ) : null}
 
     <div class="comp-grid">
@@ -344,7 +351,7 @@ const compItalic = !!complications.text_italic;
     @media (max-width: 980px){ .home-service-card{ grid-column: span 6; } }
     @media (max-width: 640px){ .home-service-card{ grid-column: span 12; } }
 
-    /* ✅ Complicaciones: marquee (esto es lo que te faltaba) */
+    /* ✅ Complicaciones: marquee desktop */
     .comp-marquee{
       overflow: hidden;
       white-space: nowrap;
@@ -367,7 +374,13 @@ const compItalic = !!complications.text_italic;
       100%{ transform: translateX(-50%); }
     }
 
-    /* Complicaciones: layout + estilos (restaurado) */
+    /* Mostrar marquee lineal SOLO en desktop (móvil usa WavyMarquee) */
+    .comp-marquee--desktop{ display: none; }
+    @media (min-width: 769px){
+      .comp-marquee--desktop{ display: block; }
+    }
+
+    /* Complicaciones: layout + estilos */
     .comp-grid{
       display:grid;
       grid-template-columns: 1.05fr 0.95fr;
@@ -472,7 +485,7 @@ const compItalic = !!complications.text_italic;
     }
 
     /* Redes sociales */
-    .social{ margin-bottom: 64px; }
+    .social{ margin-bottom: 0; } /* ✅ deja que el gap Redes→Footer lo controle el footer */
     .social-grid{
       display:flex;
       gap: 18px;

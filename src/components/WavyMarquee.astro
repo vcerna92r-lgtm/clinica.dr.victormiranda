@@ -1,0 +1,72 @@
+---
+const {
+  text = "Manejo de complicaciones",
+  speed = "normal", // "slow" | "normal" | "fast"
+} = Astro.props;
+
+const phrase = String(text || "").trim() || "Manejo de complicaciones";
+const repeated = Array.from({ length: 10 }, () => phrase).join("  •  ");
+
+const dur =
+  speed === "slow" ? "18s" :
+  speed === "fast" ? "9s"  :
+  "13s";
+---
+
+<div class="wavyMarquee" aria-label={phrase}>
+  <svg class="wavySvg" viewBox="0 0 1200 140" aria-hidden="true" focusable="false">
+    <defs>
+      <path
+        id="wavePath"
+        d="M-200 70
+           Q -100 10   0 70
+           T 200 70
+           T 400 70
+           T 600 70
+           T 800 70
+           T 1000 70
+           T 1200 70
+           T 1400 70"
+      />
+    </defs>
+
+    <text class="wavyText">
+      <textPath href="#wavePath" startOffset="0%">
+        <animate attributeName="startOffset" from="0%" to="-50%" dur={dur} repeatCount="indefinite" />
+        <tspan>{repeated}</tspan>
+      </textPath>
+    </text>
+
+    <text class="wavyText">
+      <textPath href="#wavePath" startOffset="50%">
+        <animate attributeName="startOffset" from="50%" to="0%" dur={dur} repeatCount="indefinite" />
+        <tspan>{repeated}</tspan>
+      </textPath>
+    </text>
+  </svg>
+</div>
+
+<style>
+  /* Solo móvil */
+  .wavyMarquee{
+    display: block;
+    overflow: hidden;
+    height: 90px;
+    margin: 0 0 10px 0;
+    transform: rotate(-2deg);
+  }
+  .wavySvg{
+    width: 140%;
+    height: 100%;
+  }
+  .wavyText{
+    font: 800 34px/1 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    letter-spacing: .4px;
+    fill: #0f172a;
+    opacity: .95;
+  }
+
+  @media (min-width: 769px){
+    .wavyMarquee{ display: none; }
+  }
+</style>
