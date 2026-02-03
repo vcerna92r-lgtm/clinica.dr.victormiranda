@@ -2,9 +2,25 @@
   "eyebrow": "DUDAS FRECUENTES",
   "title": "PREGUNTAS FRECUENTES",
   "items": [
-    { "question": "Pregunta 1", "answer": "Respuesta 1" },
-    { "question": "Pregunta 2", "answer": "Respuesta 2" },
-    { "question": "Pregunta 3", "answer": "Respuesta 3" },
-    { "question": "Pregunta 4", "answer": "Respuesta 4" }
+    {
+      "question": "¿La primera cita qué incluye?",
+      "answer": "Incluye una valoración médica completa, revisión de antecedentes, análisis facial (proporciones, simetría y estructura), fotografías clínicas (si aplica), y un plan personalizado por objetivos a corto, mediano y largo plazo. Al final, te explico opciones de tratamiento, tiempos y cuidados, para que decidas con claridad y seguridad."
+    },
+    {
+      "question": "¿Los resultados se ven naturales?",
+      "answer": "Sí. Mi enfoque es armonización facial con resultados naturales, respetando tus rasgos. Busco mejorar proporciones y balance facial, evitando “sobre-relleno”. El objetivo es que te veas mejor… sin que parezca que “te hiciste algo”."
+    },
+    {
+      "question": "¿Duele? ¿Necesito tiempo de recuperación?",
+      "answer": "La mayoría de procedimientos son mínimamente invasivos. Usamos anestesia tópica o local cuando se requiere. Puede haber leve inflamación, enrojecimiento o moretón que suele durar de 24 a 72 horas (a veces un poco más, según el caso). En general, puedes retomar actividades el mismo día con cuidados básicos."
+    },
+    {
+      "question": "¿Cuánto duran los resultados?",
+      "answer": "Depende del procedimiento, tu metabolismo y hábitos. En términos generales:\n+ Ácido hialurónico: suele durar entre 6 y 18 meses (según zona y producto).\n+ Otros tratamientos (bioestimulación, skincare médico, etc.) pueden requerir sesiones y mantenimiento.\n\nEn tu consulta te doy una estimación realista para tu caso."
+    },
+    {
+      "question": "¿Qué tan seguro es? ¿Qué pasa si hay una complicación?",
+      "answer": "La seguridad es prioridad: trabajo con evaluación médica, técnica adecuada y productos de calidad. Como en todo procedimiento, existen riesgos (aunque son poco frecuentes). Por eso, te doy indicaciones claras, seguimiento y un plan de manejo ante cualquier eventualidad. Si presentas un síntoma fuera de lo habitual, debes comunicarte de inmediato para orientarte."
+    }
   ]
 }
