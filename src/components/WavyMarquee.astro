@@ -5,68 +5,89 @@ const {
 } = Astro.props;
 
 const phrase = String(text || "").trim() || "Manejo de complicaciones";
-const repeated = Array.from({ length: 10 }, () => phrase).join("  •  ");
 
+// Repetimos bastante para que nunca “se acabe”
+const repeated = Array.from({ length: 14 }, () => phrase).join("  *  ");
+
+// Duración según velocidad
 const dur =
   speed === "slow" ? "18s" :
   speed === "fast" ? "9s"  :
   "13s";
 ---
 
-<div class="wavyMarquee" aria-label={phrase}>
-  <svg class="wavySvg" viewBox="0 0 1200 140" aria-hidden="true" focusable="false">
+<div class="wavyMarquee" style={`--dur:${dur};`} aria-label={phrase}>
+  <svg class="wavySvg" viewBox="0 0 1200 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
     <defs>
+      <!-- Onda más marcada (serpiente) -->
       <path
         id="wavePath"
-        d="M-200 70
-           Q -100 10   0 70
-           T 200 70
-           T 400 70
-           T 600 70
-           T 800 70
-           T 1000 70
-           T 1200 70
-           T 1400 70"
+        d="
+          M -200 70
+          C -80  0,   80 140,  200 70
+          S  480  0,  600 70
+          S  880 140, 1000 70
+          S 1280  0,  1400 70
+        "
       />
     </defs>
 
-    <text class="wavyText">
-      <textPath href="#wavePath" startOffset="0%">
-        <animate attributeName="startOffset" from="0%" to="-50%" dur={dur} repeatCount="indefinite" />
-        <tspan>{repeated}</tspan>
-      </textPath>
-    </text>
+    <!-- Movemos TODO el track con CSS (no dependemos de SMIL) -->
+    <g class="wavyTrack">
+      <text class="wavyText" dominant-baseline="middle">
+        <!-- Safari/iOS: mejor poner href + xlink:href -->
+        <textPath href="#wavePath" xlink:href="#wavePath" startOffset="0%">
+          <tspan>{repeated}</tspan>
+        </textPath>
+      </text>
 
-    <text class="wavyText">
-      <textPath href="#wavePath" startOffset="50%">
-        <animate attributeName="startOffset" from="50%" to="0%" dur={dur} repeatCount="indefinite" />
-        <tspan>{repeated}</tspan>
-      </textPath>
-    </text>
+      <text class="wavyText" dominant-baseline="middle">
+        <textPath href="#wavePath" xlink:href="#wavePath" startOffset="50%">
+          <tspan>{repeated}</tspan>
+        </textPath>
+      </text>
+    </g>
   </svg>
 </div>
 
 <style>
   /* Solo móvil */
   .wavyMarquee{
-    display: block;
-    overflow: hidden;
-    height: 90px;
-    margin: 0 0 10px 0;
-    transform: rotate(-2deg);
+    display:block;
+    overflow:hidden;
+    height: 92px;
+    margin: 0 0 12px 0;
+    transform: rotate(-3deg);
   }
+
   .wavySvg{
-    width: 140%;
+    width: 170%;
     height: 100%;
   }
+
   .wavyText{
-    font: 800 34px/1 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    letter-spacing: .4px;
+    font: 900 clamp(26px, 6vw, 40px)/1 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    letter-spacing: .3px;
     fill: #0f172a;
     opacity: .95;
   }
 
+  /* Movimiento horizontal infinito (en unidades del viewBox) */
+  .wavyTrack{
+    animation: wavyMove var(--dur, 13s) linear infinite;
+    transform: translateX(0);
+  }
+
+  @keyframes wavyMove{
+    from { transform: translateX(0); }
+    to   { transform: translateX(-600px); } /* ~50% del ancho del viewBox (1200) */
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .wavyTrack{ animation: none; }
+  }
+
   @media (min-width: 769px){
-    .wavyMarquee{ display: none; }
+    .wavyMarquee{ display:none; }
   }
 </style>
