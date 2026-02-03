@@ -223,6 +223,9 @@ const compItalic = !!complications.text_italic;
     </div>
   </section>
 
+  <!-- ✅ NUEVO: Espacio graduable desde /admin: Complicaciones -> Redes -->
+  <div class="gap-complications-social" aria-hidden="true"></div>
+
   <!-- Redes sociales (como la imagen) -->
   <section class="section social">
     <div class="section-title">
@@ -253,43 +256,6 @@ const compItalic = !!complications.text_italic;
         </a>
       </div>
     ) : null}
-  </section>
-
-  <!-- Testimonios -->
-  <section class="section">
-    <div class="section-title">
-      <div>
-        <h2>Testimonios</h2>
-        <p class="sub">Puedes reemplazar esto luego por testimonios reales.</p>
-      </div>
-    </div>
-
-    <div class="grid">
-      <div class="card col-4">
-        <h3>“Resultados naturales”</h3>
-        <p>Me encantó que se viera sutil y armonioso.</p>
-      </div>
-      <div class="card col-4">
-        <h3>“Atención y seguimiento”</h3>
-        <p>Me explicaron todo con claridad y me sentí segura/o.</p>
-      </div>
-      <div class="card col-4">
-        <h3>“Profesional y cuidadoso”</h3>
-        <p>Se nota el enfoque médico y la seguridad.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA final -->
-  <section class="section">
-    <div class="card soft">
-      <h2 style="margin:0 0 8px;">¿Listo para tu valoración?</h2>
-      <p class="sub">Agenda o escríbenos por WhatsApp. Respuesta rápida.</p>
-      <div class="row" style="margin-top:12px;">
-        <a class="btn btn-primary" href={bookingUrl}>Reservar</a>
-        <a class="btn" href={whatsappUrl} target="_blank" rel="noreferrer">💬 WhatsApp</a>
-      </div>
-    </div>
   </section>
 
   <style>
@@ -338,6 +304,9 @@ const compItalic = !!complications.text_italic;
     /* ✅ Espacio graduable: Servicios -> Complicaciones */
     .gap-services-complications{ height: var(--home-gap-sc, 64px); }
 
+    /* ✅ NUEVO: Espacio graduable: Complicaciones -> Redes */
+    .gap-complications-social{ height: var(--home-gap-ccs, 64px); }
+
     /* Servicios principales */
     .home-services-grid{ display: grid; gap: 18px; grid-template-columns: repeat(12, 1fr); }
     .home-service-card{
@@ -374,7 +343,7 @@ const compItalic = !!complications.text_italic;
     @media (max-width: 640px){ .home-service-card{ grid-column: span 12; } }
 
     /* Redes sociales */
-    .social{ margin-bottom: 64px; } /* ✅ espacio antes del footer */
+    .social{ margin-bottom: 64px; }
     .social-grid{
       display:flex;
       gap: 18px;
@@ -383,13 +352,10 @@ const compItalic = !!complications.text_italic;
       align-items: center;
       margin-top: 14px;
     }
-    .social-card{
-      display:block;
-      width: min(220px, 90vw);
-    }
+    .social-card{ display:block; width: min(220px, 90vw); }
     .social-media{
       width: 100%;
-      aspect-ratio: 4 / 3; /* rectangulares */
+      aspect-ratio: 4 / 3;
       overflow: hidden;
       border: 1px solid rgba(0,0,0,0.06);
       box-shadow: 0 16px 40px rgba(15,23,42,0.06);
@@ -399,13 +365,9 @@ const compItalic = !!complications.text_italic;
       justify-content:center;
     }
     .social-media img{ width: 100%; height: 100%; object-fit: cover; display:block; }
-    .social-media .media-placeholder{ width: 100%; height: 100%; }
     .social-media.ss-shape-rounded{ border-radius: 18px; }
     .social-media.ss-shape-square{ border-radius: 0; }
-    .social-media.ss-shape-circle{
-      aspect-ratio: 1 / 1;   /* redondas */
-      border-radius: 999px;
-    }
+    .social-media.ss-shape-circle{ aspect-ratio: 1 / 1; border-radius: 999px; }
 
     .social-cta{ display:flex; justify-content:center; margin-top: 18px; }
     .social-btn{
@@ -420,132 +382,6 @@ const compItalic = !!complications.text_italic;
       text-decoration:none;
       box-shadow: 0 14px 30px rgba(0,0,0,0.14);
       min-width: 160px;
-    }
-
-    /* Complicaciones: marquee */
-    .comp-marquee{
-      overflow: hidden;
-      white-space: nowrap;
-      margin-bottom: 12px;
-    }
-    .comp-marquee-track{
-      display: flex;
-      width: max-content;
-      animation: compMarquee var(--marqueeDuration, 18s) linear infinite;
-    }
-    .comp-marquee-seq{
-      font-size: 26px;
-      font-weight: 900;
-      letter-spacing: -0.2px;
-      padding-right: 22px;
-    }
-    @keyframes compMarquee{
-      0%{ transform: translateX(0); }
-      100%{ transform: translateX(-50%); }
-    }
-
-    /* Complicaciones: layout + estilos */
-    .comp-grid{
-      display:grid;
-      grid-template-columns: 1.05fr 0.95fr;
-      gap: 22px;
-      align-items: start;
-    }
-
-    .comp-eyebrow{ font-weight: 800; opacity: 0.75; margin-bottom: 8px; }
-    .comp-title{ margin: 0; font-size: 28px; letter-spacing: -0.2px; }
-    .comp-sub{ margin: 10px 0 0; line-height: 1.6; opacity: 0.9; }
-
-    .comp-bold .comp-sub,
-    .comp-bold .comp-box p,
-    .comp-bold .comp-bullets-list,
-    .comp-bold .comp-box-bullets{ font-weight: 700; }
-
-    .comp-italic .comp-sub,
-    .comp-italic .comp-box p{ font-style: italic; }
-
-    .comp-bullets{ margin-top: 12px; }
-    .comp-bullets-title{ font-weight: 900; margin-bottom: 6px; }
-    .comp-bullets-list{ margin: 0; padding-left: 18px; line-height: 1.6; opacity: 0.92; }
-
-    .price-card{
-      margin-top: 16px;
-      border: 1px solid rgba(0,0,0,0.10);
-      border-radius: 18px;
-      background: #fff;
-      box-shadow: 0 16px 40px rgba(15,23,42,0.06);
-      overflow: hidden;
-    }
-    .price-head{ padding: 14px 16px; display:flex; align-items: center; justify-content: space-between; gap: 12px; }
-    .plan-name{ font-weight: 900; }
-    .plan-price{ font-size: 22px; font-weight: 900; margin-top: 2px; }
-    .plan-period{ font-size: 12px; opacity: 0.7; margin-top: 2px; }
-    .plan-btn{
-      display:inline-flex; align-items:center; justify-content:center;
-      height: 40px; padding: 0 14px; border-radius: 999px;
-      font-weight: 900; text-decoration: none;
-      background: #16A34A; color: #fff;
-      box-shadow: 0 10px 24px rgba(0,0,0,0.12);
-      white-space: nowrap;
-    }
-    .price-includes{ border-top: 1px solid rgba(0,0,0,0.08); padding: 12px 16px 14px; }
-    .includes-title{ font-weight: 900; margin-bottom: 8px; }
-    .includes-list{ margin: 0; padding-left: 18px; line-height: 1.6; opacity: 0.9; }
-
-    .comp-box{
-      margin-top: 14px;
-      border: 1px solid rgba(0,0,0,0.06);
-      border-radius: 18px;
-      background: #F5F5F2;
-      padding: 14px 16px;
-      box-shadow: 0 16px 40px rgba(15,23,42,0.04);
-    }
-    .comp-box p{ margin: 8px 0 0; line-height: 1.6; opacity: 0.9; }
-    .comp-box-bullets{ margin: 10px 0 0; padding-left: 18px; line-height: 1.6; opacity: 0.92; }
-
-    .comp-right{
-      width: 100%;
-      border-radius: 18px;
-      overflow: hidden;
-      border: 1px solid rgba(0,0,0,0.06);
-      box-shadow: 0 16px 40px rgba(15,23,42,0.06);
-      background: rgba(255,255,255,0.35);
-      padding: 14px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-
-    .comp-right.comp-ratio-landscape{ aspect-ratio: 4 / 3; }
-    .comp-right.comp-ratio-square{ aspect-ratio: 1 / 1; }
-    .comp-right.comp-ratio-portrait{ aspect-ratio: 3 / 4; }
-
-    .comp-right img{ width:100%; height:100%; object-fit: cover; border-radius: 16px; display:block; }
-    .comp-placeholder{
-      width:100%; height:100%;
-      border-radius: 16px;
-      background:
-        radial-gradient(500px 240px at 20% 20%, rgba(255,255,255,0.70), rgba(255,255,255,0)),
-        linear-gradient(135deg, rgba(255,255,255,0.55), rgba(0,0,0,0.05));
-      border: 1px dashed rgba(0,0,0,0.12);
-    }
-
-    .comp-right.comp-shape-square img,
-    .comp-right.comp-shape-square .comp-placeholder{ border-radius: 0; }
-
-    .comp-right.comp-shape-rounded img,
-    .comp-right.comp-shape-rounded .comp-placeholder{ border-radius: 16px; }
-
-    .comp-right.comp-shape-circle{
-      aspect-ratio: 1 / 1;
-      padding: 18px;
-    }
-    .comp-right.comp-shape-circle img,
-    .comp-right.comp-shape-circle .comp-placeholder{ border-radius: 999px; }
-
-    @media (max-width: 980px){
-      .comp-grid{ grid-template-columns: 1fr; }
-      .comp-marquee-seq{ font-size: 22px; }
     }
   </style>
 </BaseLayout>
