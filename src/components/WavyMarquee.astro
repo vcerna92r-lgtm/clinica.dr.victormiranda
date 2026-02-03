@@ -6,16 +6,16 @@ const {
 
 const phrase = String(text || "").trim() || "Manejo de complicaciones";
 
-/* Mucho texto para que el loop sea continuo sin necesitar clones */
-const repeated = Array.from({ length: 26 }, () => phrase).join("   ✶   ");
+/* ✅ Mucho más largo para que NUNCA “se corte” en desktop */
+const repeated = Array.from({ length: 46 }, () => phrase).join("   ✶   ");
 
 const dur =
-  speed === "slow" ? "22s" :
-  speed === "fast" ? "11s" :
-  "16s";
+  speed === "slow" ? "26s" :
+  speed === "fast" ? "12s" :
+  "18s";
 ---
 
-<div class="wavyMarquee" aria-label={phrase}>
+<div class="wavyMarquee" aria-label={phrase} style={`--dur:${dur};`}>
   <svg
     class="wavySvg"
     viewBox="0 0 1200 140"
@@ -25,7 +25,6 @@ const dur =
     focusable="false"
   >
     <defs>
-      <!-- Onda serpiente -->
       <path
         id="wavePath"
         d="
@@ -36,21 +35,17 @@ const dur =
           S 1260  0, 1400 70
         "
       />
-
-      <!-- sombra suave -->
       <filter id="txtShadow" x="-30%" y="-30%" width="160%" height="160%">
         <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.18)" />
       </filter>
     </defs>
 
-    <!-- banda clara para lectura -->
     <rect class="wavyBand" x="-200" y="22" width="1600" height="96" rx="26" />
 
-    <!-- ✅ SOLO 1 texto: imposible que se “encime” -->
     <text class="wavyText" filter="url(#txtShadow)" dominant-baseline="middle">
       <textPath href="#wavePath" xlink:href="#wavePath" startOffset="0%">
-        <!-- Movimiento por startOffset -->
-        <animate attributeName="startOffset" from="0%" to="-50%" dur={dur} repeatCount="indefinite" />
+        <!-- ✅ Recorrido un poco mayor para que el loop sea más “uniforme” -->
+        <animate attributeName="startOffset" from="0%" to="-60%" dur="var(--dur)" repeatCount="indefinite" />
         <tspan>{repeated}</tspan>
       </textPath>
     </text>
@@ -66,8 +61,9 @@ const dur =
     height: 96px;
   }
 
+  /* ✅ Más ancho en general */
   .wavySvg{
-    width: 170%;
+    width: 200%;
     height: 100%;
   }
 
@@ -82,8 +78,9 @@ const dur =
   }
 
   @media (min-width: 900px){
-    .wavyMarquee{ height: 110px; transform: rotate(-1.5deg); }
-    .wavySvg{ width: 140%; }
+    .wavyMarquee{ height: 112px; transform: rotate(-1.5deg); }
+    /* ✅ Desktop: cubre mejor todo el ancho */
+    .wavySvg{ width: 170%; }
     .wavyBand{ fill: rgba(255,255,255,0.45); }
   }
 </style>
