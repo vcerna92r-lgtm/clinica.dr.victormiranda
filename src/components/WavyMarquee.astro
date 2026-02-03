@@ -6,16 +6,17 @@ const {
 
 const phrase = String(text || "").trim() || "Manejo de complicaciones";
 
-/* ✅ Mucho más largo para que NUNCA “se corte” en desktop */
-const repeated = Array.from({ length: 46 }, () => phrase).join("   ✶   ");
+/* ✅ Mucho texto para que nunca se “corte” */
+const repeated = Array.from({ length: 80 }, () => phrase).join("   ✶   ");
 
+/* ⚠️ IMPORTANTE: dur debe ser un string fijo (NO var(--dur)) */
 const dur =
   speed === "slow" ? "26s" :
   speed === "fast" ? "12s" :
   "18s";
 ---
 
-<div class="wavyMarquee" aria-label={phrase} style={`--dur:${dur};`}>
+<div class="wavyMarquee" aria-label={phrase}>
   <svg
     class="wavySvg"
     viewBox="0 0 1200 140"
@@ -25,6 +26,7 @@ const dur =
     focusable="false"
   >
     <defs>
+      <!-- Onda serpiente -->
       <path
         id="wavePath"
         d="
@@ -35,17 +37,26 @@ const dur =
           S 1260  0, 1400 70
         "
       />
+
       <filter id="txtShadow" x="-30%" y="-30%" width="160%" height="160%">
         <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.18)" />
       </filter>
     </defs>
 
+    <!-- banda para lectura -->
     <rect class="wavyBand" x="-200" y="22" width="1600" height="96" rx="26" />
 
+    <!-- ✅ 1 solo texto (no se encima nunca) -->
     <text class="wavyText" filter="url(#txtShadow)" dominant-baseline="middle">
       <textPath href="#wavePath" xlink:href="#wavePath" startOffset="0%">
-        <!-- ✅ Recorrido un poco mayor para que el loop sea más “uniforme” -->
-        <animate attributeName="startOffset" from="0%" to="-60%" dur="var(--dur)" repeatCount="indefinite" />
+        <!-- ✅ movimiento suave y continuo -->
+        <animate
+          attributeName="startOffset"
+          from="0%"
+          to="-50%"
+          dur={dur}
+          repeatCount="indefinite"
+        />
         <tspan>{repeated}</tspan>
       </textPath>
     </text>
@@ -58,12 +69,12 @@ const dur =
     overflow:hidden;
     margin: 0 0 12px 0;
     transform: rotate(-2deg);
-    height: 96px;
+    height: 98px;
   }
 
-  /* ✅ Más ancho en general */
+  /* ancho extra para que se vea “largo” */
   .wavySvg{
-    width: 200%;
+    width: 220%;
     height: 100%;
   }
 
@@ -72,14 +83,17 @@ const dur =
   }
 
   .wavyText{
-    font: 900 clamp(26px, 5.2vw, 46px)/1 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    font: 900 clamp(26px, 5.2vw, 48px)/1 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     letter-spacing: .3px;
     fill: #0f172a;
   }
 
   @media (min-width: 900px){
-    .wavyMarquee{ height: 112px; transform: rotate(-1.5deg); }
-    /* ✅ Desktop: cubre mejor todo el ancho */
+    .wavyMarquee{
+      height: 112px;
+      transform: rotate(-1.5deg);
+    }
+    /* desktop: sigue largo pero un poco menos exagerado */
     .wavySvg{ width: 170%; }
     .wavyBand{ fill: rgba(255,255,255,0.45); }
   }
