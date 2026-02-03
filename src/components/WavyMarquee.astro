@@ -7,7 +7,7 @@ const {
 const phrase = String(text || "").trim() || "Manejo de complicaciones";
 
 /* En móvil queremos claridad → menos repetición */
-const repeated = Array.from({ length: 10 }, () => phrase).join("   ✶   ");
+const repeated = Array.from({ length: 12 }, () => phrase).join("   ✶   ");
 
 const dur =
   speed === "slow" ? "22s" :
@@ -42,7 +42,7 @@ const dur =
       </filter>
     </defs>
 
-    <!-- Banda suave (opcional pero ayuda a leer) -->
+    <!-- Banda suave para lectura -->
     <rect class="wavyBand" x="-200" y="22" width="1600" height="96" rx="26" />
 
     <!-- Track animado -->
@@ -54,8 +54,8 @@ const dur =
         </textPath>
       </text>
 
-      <!-- Clone SOLO desktop para movimiento continuo (en móvil se oculta) -->
-      <text class="wavyText wavyClone" filter="url(#txtShadow)" dominant-baseline="middle" transform="translate(600 0)">
+      <!-- Clone SOLO desktop (para que sea infinito sin salto) -->
+      <text class="wavyText wavyClone" filter="url(#txtShadow)" dominant-baseline="middle">
         <textPath href="#wavePath" xlink:href="#wavePath" startOffset="0%">
           <tspan>{repeated}</tspan>
         </textPath>
@@ -71,6 +71,9 @@ const dur =
     height: 96px;
     margin: 0 0 12px 0;
     transform: rotate(-2deg);
+
+    /* ✅ Distancia de loop default (móvil) */
+    --shift: 600px;
   }
 
   .wavySvg{
@@ -93,27 +96,34 @@ const dur =
     animation: wavyMove var(--dur, 16s) linear infinite;
     transform: translateX(0);
     will-change: transform;
-    transform-box: fill-box;
-    transform-origin: center;
   }
 
   @keyframes wavyMove{
     from { transform: translateX(0); }
-    to   { transform: translateX(-600px); } /* 600 = mitad del viewBox (1200) */
+    to   { transform: translateX(calc(-1 * var(--shift))); }
   }
 
   @media (prefers-reduced-motion: reduce){
     .wavyTrack{ animation: none; }
   }
 
-  /* ✅ En móvil ocultamos el clone para que NO se vea “encimado” */
+  /* ✅ En móvil ocultamos el clone para que NO se vea encimado */
   .wavyClone{ display: none; }
 
-  /* ✅ En desktop sí mostramos el clone para que sea continuo y fluido */
+  /* ✅ En desktop: clone activo + loop de 1200px (NO se superpone) */
   @media (min-width: 900px){
-    .wavyClone{ display: block; }
-    .wavyMarquee{ height: 110px; transform: rotate(-1.5deg); }
+    .wavyMarquee{
+      height: 110px;
+      transform: rotate(-1.5deg);
+      --shift: 1200px; /* 1 ancho completo del viewBox */
+    }
+
     .wavySvg{ width: 140%; }
     .wavyBand{ fill: rgba(255,255,255,0.45); }
+
+    .wavyClone{
+      display: block;
+      transform: translateX(var(--shift)); /* clone exactamente a 1200px */
+    }
   }
 </style>
