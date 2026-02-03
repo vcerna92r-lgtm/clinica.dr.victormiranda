@@ -6,43 +6,57 @@ const {
 
 const phrase = String(text || "").trim() || "Manejo de complicaciones";
 
-// Repetimos bastante para que nunca “se acabe”
-const repeated = Array.from({ length: 14 }, () => phrase).join("  *  ");
+/* En móvil queremos claridad → menos repetición */
+const repeated = Array.from({ length: 10 }, () => phrase).join("   ✶   ");
 
-// Duración según velocidad
 const dur =
-  speed === "slow" ? "18s" :
-  speed === "fast" ? "9s"  :
-  "13s";
+  speed === "slow" ? "22s" :
+  speed === "fast" ? "11s" :
+  "16s";
 ---
 
 <div class="wavyMarquee" style={`--dur:${dur};`} aria-label={phrase}>
-  <svg class="wavySvg" viewBox="0 0 1200 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+  <svg
+    class="wavySvg"
+    viewBox="0 0 1200 140"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    aria-hidden="true"
+    focusable="false"
+  >
     <defs>
-      <!-- Onda más marcada (serpiente) -->
+      <!-- Onda serpiente (más marcada) -->
       <path
         id="wavePath"
         d="
           M -200 70
-          C -80  0,   80 140,  200 70
-          S  480  0,  600 70
-          S  880 140, 1000 70
-          S 1280  0,  1400 70
+          C -60  0,  60 140, 200 70
+          S  460  0, 600 70
+          S  860 140, 1000 70
+          S 1260  0, 1400 70
         "
       />
+      <!-- Sombra suave para legibilidad -->
+      <filter id="txtShadow" x="-30%" y="-30%" width="160%" height="160%">
+        <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.18)" />
+      </filter>
     </defs>
 
-    <!-- Movemos TODO el track con CSS (no dependemos de SMIL) -->
+    <!-- Banda suave (opcional pero ayuda a leer) -->
+    <rect class="wavyBand" x="-200" y="22" width="1600" height="96" rx="26" />
+
+    <!-- Track animado -->
     <g class="wavyTrack">
-      <text class="wavyText" dominant-baseline="middle">
-        <!-- Safari/iOS: mejor poner href + xlink:href -->
+      <!-- Texto principal -->
+      <text class="wavyText" filter="url(#txtShadow)" dominant-baseline="middle">
         <textPath href="#wavePath" xlink:href="#wavePath" startOffset="0%">
           <tspan>{repeated}</tspan>
         </textPath>
       </text>
 
-      <text class="wavyText" dominant-baseline="middle">
-        <textPath href="#wavePath" xlink:href="#wavePath" startOffset="50%">
+      <!-- Clone SOLO desktop para movimiento continuo (en móvil se oculta) -->
+      <text class="wavyText wavyClone" filter="url(#txtShadow)" dominant-baseline="middle" transform="translate(600 0)">
+        <textPath href="#wavePath" xlink:href="#wavePath" startOffset="0%">
           <tspan>{repeated}</tspan>
         </textPath>
       </text>
@@ -51,13 +65,12 @@ const dur =
 </div>
 
 <style>
-  /* Solo móvil */
   .wavyMarquee{
     display:block;
     overflow:hidden;
-    height: 92px;
+    height: 96px;
     margin: 0 0 12px 0;
-    transform: rotate(-3deg);
+    transform: rotate(-2deg);
   }
 
   .wavySvg{
@@ -65,29 +78,42 @@ const dur =
     height: 100%;
   }
 
-  .wavyText{
-    font: 900 clamp(26px, 6vw, 40px)/1 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    letter-spacing: .3px;
-    fill: #0f172a;
-    opacity: .95;
+  .wavyBand{
+    fill: rgba(255,255,255,0.58);
   }
 
-  /* Movimiento horizontal infinito (en unidades del viewBox) */
+  .wavyText{
+    font: 900 clamp(26px, 5.2vw, 46px)/1 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    letter-spacing: .3px;
+    fill: #0f172a;
+  }
+
+  /* Movimiento */
   .wavyTrack{
-    animation: wavyMove var(--dur, 13s) linear infinite;
+    animation: wavyMove var(--dur, 16s) linear infinite;
     transform: translateX(0);
+    will-change: transform;
+    transform-box: fill-box;
+    transform-origin: center;
   }
 
   @keyframes wavyMove{
     from { transform: translateX(0); }
-    to   { transform: translateX(-600px); } /* ~50% del ancho del viewBox (1200) */
+    to   { transform: translateX(-600px); } /* 600 = mitad del viewBox (1200) */
   }
 
   @media (prefers-reduced-motion: reduce){
     .wavyTrack{ animation: none; }
   }
 
-  @media (min-width: 769px){
-    .wavyMarquee{ display:none; }
+  /* ✅ En móvil ocultamos el clone para que NO se vea “encimado” */
+  .wavyClone{ display: none; }
+
+  /* ✅ En desktop sí mostramos el clone para que sea continuo y fluido */
+  @media (min-width: 900px){
+    .wavyClone{ display: block; }
+    .wavyMarquee{ height: 110px; transform: rotate(-1.5deg); }
+    .wavySvg{ width: 140%; }
+    .wavyBand{ fill: rgba(255,255,255,0.45); }
   }
 </style>
