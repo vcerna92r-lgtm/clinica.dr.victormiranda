@@ -2,6 +2,7 @@
   "home_gap_complications_social": "96px",
   "accent_color_2": "#06B6D4",
   "clinic_name": "Clínica Dr. Víctor Miranda",
+  "home_gap_social_footer": "56px",
   "logo_image": "/images/logo.png",
   "booking_url": "https://calendar.app.google/bmpjN2TAMFchpHd99",
   "bg_color": "#eff6ff",
@@ -15,6 +16,13 @@
   "nav_links_gap": "20px",
   "hero_image": "/images/hero.jpg",
   "whatsapp_message": "Hola Dr. Víctor, quiero agendar una valoración en Clínica Dr. Víctor Miranda.\n\nMi nombre: ________\nServicio de interés: ________\nFecha y hora preferida: ________\n\nGracias.",
+  "footer": {
+    "clinic_name": "Clinica Dr. Victor Miranda Cerna",
+    "city": "Managua. Km 10.5 Carretera Masaya. Urbanización Xochitlan.",
+    "email": "vcerna92r@gmail.com",
+    "policies_label": "Políticas",
+    "policies_url": "https://clinica-dr-victormiranda.pages.dev/politicas/"
+  },
   "email": "vcerna92r@gmail.com",
   "home_gap_services_complications": "96px"
 }
