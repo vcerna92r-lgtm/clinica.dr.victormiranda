@@ -87,6 +87,17 @@ collections:
               - { label: "72px (grande)", value: "72px" }
               - { label: "96px (muy grande)", value: "96px" }
 
+          - label: "Espacio entre Manejo de complicaciones y Redes sociales"
+            name: "home_gap_complications_social"
+            widget: "select"
+            default: "64px"
+            options:
+              - { label: "24px (pequeño)", value: "24px" }
+              - { label: "40px (medio)", value: "40px" }
+              - { label: "64px (recomendado)", value: "64px" }
+              - { label: "96px (grande)", value: "96px" }
+              - { label: "120px (muy grande)", value: "120px" }
+
           - { label: "Logo (subir imagen)", name: "logo_image", widget: "image", required: false }
           - { label: "Imagen principal / Hero (subir imagen)", name: "hero_image", widget: "image", required: false }
 
@@ -314,7 +325,7 @@ collections:
             name: "image_shape"
             widget: "select"
             required: false
-            default: "rounded"
+           default: "rounded"
             options:
               - { label: "Cuadrada", value: "square" }
               - { label: "Redondeada", value: "rounded" }
