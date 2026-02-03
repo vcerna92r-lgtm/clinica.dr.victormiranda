@@ -325,7 +325,7 @@ collections:
             name: "image_shape"
             widget: "select"
             required: false
-           default: "rounded"
+            default: "rounded"
             options:
               - { label: "Cuadrada", value: "square" }
               - { label: "Redondeada", value: "rounded" }
