@@ -1,0 +1,22 @@
+{
+  "eyebrow": "Respondemos a tus consultas",
+  "title": "Preguntas frecuentes",
+  "items": [
+    {
+      "question": "¿Cuál es la diferencia entre liposucción y lipoescultura?",
+      "answer": "Aquí escribirás tu respuesta. Puedes poner 2–4 líneas. Esta respuesta se despliega al tocar la pregunta."
+    },
+    {
+      "question": "¿A qué edad es la idónea para realizar un procedimiento quirúrgico estético?",
+      "answer": "Aquí escribirás tu respuesta. Recomendación: habla de valoración individual, salud general y expectativas."
+    },
+    {
+      "question": "Ojeras, ¿son todas tratables con cirugías plásticas o no?",
+      "answer": "Aquí escribirás tu respuesta. Puedes explicar causas: pigmento, surco, bolsas, laxitud y opciones."
+    },
+    {
+      "question": "¿Cada cuánto tiempo se retiran los implantes mamarios de silicona?",
+      "answer": "Aquí escribirás tu respuesta. Puedes mencionar controles, signos de recambio y seguimiento médico."
+    }
+  ]
+}
