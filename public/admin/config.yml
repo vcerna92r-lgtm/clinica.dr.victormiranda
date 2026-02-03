@@ -392,3 +392,22 @@ collections:
             required: false
             fields:
               - { label: "Item", name: "text", widget: "string" }
+              
+  - name: "home_faq"
+    label: "Inicio · Preguntas frecuentes"
+    files:
+      - label: "Sección (Inicio) — Preguntas frecuentes"
+        name: "home_faq_file"
+        file: "src/content/home_faq.json"
+        format: "json"
+        fields:
+          - { label: "Texto pequeño arriba (opcional)", name: "eyebrow", widget: "string", required: false }
+          - { label: "Título", name: "title", widget: "string" }
+
+          - label: "Preguntas y respuestas"
+            name: "items"
+            widget: "list"
+            min: 4
+            fields:
+              - { label: "Pregunta", name: "question", widget: "string" }
+              - { label: "Respuesta", name: "answer", widget: "text" }
