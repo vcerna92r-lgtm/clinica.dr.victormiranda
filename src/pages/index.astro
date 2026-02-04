@@ -1,6 +1,4 @@
 ---
-import clinic from "../content/home_clinic.json";
-import FaqPremium from "../components/FaqPremium.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import WavyMarquee from "../components/WavyMarquee.astro";
 import site from "../content/site.json";
@@ -12,10 +10,6 @@ import social from "../content/home_social.json";
 
 const siteName = site.clinic_name || site.name || "Clínica Dr. Víctor Miranda";
 const bookingUrl = String(site.booking_url || "").trim() || "/contacto/";
-
-const whatsappNum = String(site.whatsapp || "").trim();
-const whatsappMessage = encodeURIComponent(String(site.whatsapp_message || "").trim() || "Hola, quiero agendar una valoración.");
-const whatsappUrl = whatsappNum ? `https://wa.me/${whatsappNum}?text=${whatsappMessage}` : "https://wa.me/50587355501";
 
 function resolveImageSrc(src) {
   let s = String(src || "").trim();
@@ -85,13 +79,9 @@ const compAlign = String(complications.text_align || "left");
 const compBold = !!complications.text_bold;
 const compItalic = !!complications.text_italic;
 
-/* Gaps desde admin/site.json (ya usas estos en otras secciones) */
+/* Gaps desde admin/site.json */
 const gapCompToFaq = String(site.home_gap_complications_social || "64px").trim(); // Complicaciones -> FAQ
 const gapFaqToSocial = String(site.home_gap_faq_social || "56px").trim();        // FAQ -> Redes
-
-/* ✅ NUEVO: gaps para “La Clínica” (si no existen en site.json, usa defaults) */
-const gapCoverToClinic = String(site.home_gap_cover_clinic || "32px").trim();
-const gapClinicToServices = String(site.home_gap_clinic_services || "48px").trim();
 ---
 
 <BaseLayout
@@ -123,50 +113,8 @@ const gapClinicToServices = String(site.home_gap_clinic_services || "48px").trim
     </div>
   </section>
 
-  <!-- ✅ Gap Portada -> La Clínica -->
-  <div aria-hidden="true" style={`height:${gapCoverToClinic};`}></div>
-
-  <!-- ✅ LA CLÍNICA (imagen central + misión/visión/valores) -->
-  <section class="section clinic">
-    <div class="clinic-head">
-      <div class="clinic-eyebrow">{clinic.eyebrow || "LA CLÍNICA"}</div>
-      <h2 class="clinic-title">{clinic.title || "Clínica"}</h2>
-    </div>
-
-    <div class="clinic-hero">
-      {clinic.image ? (
-        <img src={resolveImageSrc(clinic.image)} alt={clinic.title || "La Clínica"} loading="lazy" />
-      ) : (
-        <div class="clinic-hero-placeholder" aria-hidden="true"></div>
-      )}
-    </div>
-
-    <div class="clinic-grid">
-      <article class="clinic-card">
-        <div class="clinic-card-title">{clinic.mission?.title || "Misión"}</div>
-        <p class="clinic-card-text">{clinic.mission?.text || ""}</p>
-      </article>
-
-      <article class="clinic-card">
-        <div class="clinic-card-title">{clinic.vision?.title || "Visión"}</div>
-        <p class="clinic-card-text">{clinic.vision?.text || ""}</p>
-      </article>
-
-      <article class="clinic-card clinic-card--wide">
-        <div class="clinic-card-title">{clinic.values?.title || "Valores"}</div>
-        {clinic.values?.text ? <p class="clinic-card-text">{clinic.values.text}</p> : null}
-
-        {(clinic.values?.bullets || []).length ? (
-          <ul class="clinic-values">
-            {clinic.values.bullets.map((b) => <li>{b.text}</li>)}
-          </ul>
-        ) : null}
-      </article>
-    </div>
-  </section>
-
-  <!-- ✅ Gap La Clínica -> Servicios -->
-  <div aria-hidden="true" style={`height:${gapClinicToServices};`}></div>
+  <!-- ✅ Gap Portada -> Servicios (normal, ya no existe La Clínica en Inicio) -->
+  <div class="gap-cover-services" aria-hidden="true"></div>
 
   <!-- Servicios principales -->
   <section class="section">
@@ -372,6 +320,9 @@ const gapClinicToServices = String(site.home_gap_clinic_services || "48px").trim
       .cover-photo{ width: min(520px, 85vw); margin: 0 auto; }
     }
 
+    /* ✅ gap portada -> servicios (de BaseLayout) */
+    .gap-cover-services{ height: var(--home-gap-cs, 48px); }
+
     /* gaps existentes */
     .gap-services-complications{ height: var(--home-gap-sc, 64px); }
 
@@ -410,91 +361,7 @@ const gapClinicToServices = String(site.home_gap_clinic_services || "48px").trim
     @media (max-width: 980px){ .home-service-card{ grid-column: span 6; } }
     @media (max-width: 640px){ .home-service-card{ grid-column: span 12; } }
 
-    /* ✅ LA CLÍNICA (premium editorial) */
-    .clinic{ padding-top: 8px; }
-    .clinic-head{ margin-bottom: 14px; }
-    .clinic-eyebrow{
-      font-size: 12px;
-      letter-spacing: .24em;
-      text-transform: uppercase;
-      opacity: .7;
-      margin-bottom: 10px;
-    }
-    .clinic-title{
-      margin: 0;
-      font-size: 34px;
-      letter-spacing: -0.35px;
-      line-height: 1.08;
-    }
-
-    .clinic-hero{
-      border-radius: 18px;
-      overflow: hidden;
-      border: 1px solid rgba(0,0,0,0.06);
-      box-shadow: 0 18px 50px rgba(15,23,42,0.10);
-      background: rgba(255,255,255,0.35);
-    }
-    .clinic-hero img{
-      width: 100%;
-      height: auto;
-      display:block;
-      aspect-ratio: 16 / 7;
-      object-fit: cover;
-    }
-    .clinic-hero-placeholder{
-      width: 100%;
-      aspect-ratio: 16 / 7;
-      background:
-        radial-gradient(600px 260px at 20% 20%, rgba(255,255,255,0.75), rgba(255,255,255,0)),
-        linear-gradient(135deg, rgba(255,255,255,0.55), rgba(0,0,0,0.06));
-      border: 1px dashed rgba(0,0,0,0.12);
-    }
-
-    .clinic-grid{
-      margin-top: 16px;
-      display:grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 16px;
-    }
-    .clinic-card{
-      grid-column: span 6;
-      border-radius: 18px;
-      border: 1px solid rgba(15,23,42,0.10);
-      background: rgba(255,255,255,0.70);
-      box-shadow: 0 16px 40px rgba(15,23,42,0.06);
-      padding: 16px 16px 14px;
-      backdrop-filter: blur(10px);
-    }
-    .clinic-card--wide{ grid-column: span 12; }
-
-    .clinic-card-title{
-      font-weight: 900;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      font-size: 12px;
-      opacity: .75;
-      margin-bottom: 10px;
-    }
-    .clinic-card-text{
-      margin: 0;
-      line-height: 1.7;
-      opacity: .90;
-      max-width: 78ch;
-    }
-    .clinic-values{
-      margin: 12px 0 0;
-      padding-left: 18px;
-      line-height: 1.7;
-      opacity: .92;
-    }
-
-    @media (max-width: 980px){
-      .clinic-title{ font-size: 30px; }
-      .clinic-card{ grid-column: span 12; }
-      .clinic-hero img, .clinic-hero-placeholder{ aspect-ratio: 16 / 10; }
-    }
-
-    /* Complicaciones (tu layout) */
+    /* Complicaciones */
     .comp-grid{
       display:grid;
       grid-template-columns: 1.05fr 0.95fr;
@@ -504,15 +371,19 @@ const gapClinicToServices = String(site.home_gap_clinic_services || "48px").trim
     .comp-eyebrow{ font-weight: 800; opacity: 0.75; margin-bottom: 8px; }
     .comp-title{ margin: 0; font-size: 28px; letter-spacing: -0.2px; }
     .comp-sub{ margin: 10px 0 0; line-height: 1.6; opacity: 0.9; }
+
     .comp-bold .comp-sub,
     .comp-bold .comp-box p,
     .comp-bold .comp-bullets-list,
     .comp-bold .comp-box-bullets{ font-weight: 700; }
+
     .comp-italic .comp-sub,
     .comp-italic .comp-box p{ font-style: italic; }
+
     .comp-bullets{ margin-top: 12px; }
     .comp-bullets-title{ font-weight: 900; margin-bottom: 6px; }
     .comp-bullets-list{ margin: 0; padding-left: 18px; line-height: 1.6; opacity: 0.92; }
+
     .price-card{
       margin-top: 16px;
       border: 1px solid rgba(0,0,0,0.10);
@@ -536,6 +407,7 @@ const gapClinicToServices = String(site.home_gap_clinic_services || "48px").trim
     .price-includes{ border-top: 1px solid rgba(0,0,0,0.08); padding: 12px 16px 14px; }
     .includes-title{ font-weight: 900; margin-bottom: 8px; }
     .includes-list{ margin: 0; padding-left: 18px; line-height: 1.6; opacity: 0.9; }
+
     .comp-box{
       margin-top: 14px;
       border: 1px solid rgba(0,0,0,0.06);
@@ -546,6 +418,7 @@ const gapClinicToServices = String(site.home_gap_clinic_services || "48px").trim
     }
     .comp-box p{ margin: 8px 0 0; line-height: 1.6; opacity: 0.9; }
     .comp-box-bullets{ margin: 10px 0 0; padding-left: 18px; line-height: 1.6; opacity: 0.92; }
+
     .comp-right{
       width: 100%;
       border-radius: 18px;
@@ -577,29 +450,84 @@ const gapClinicToServices = String(site.home_gap_clinic_services || "48px").trim
     .comp-right.comp-shape-circle{ aspect-ratio: 1 / 1; padding: 18px; }
     .comp-right.comp-shape-circle img,
     .comp-right.comp-shape-circle .comp-placeholder{ border-radius: 999px; }
+
     @media (max-width: 980px){
       .comp-grid{ grid-template-columns: 1fr; }
     }
 
-    /* FAQ (lo que ya tenías) */
+    /* FAQ */
     .faq{ padding-top: 8px; }
-    .faq-grid{ display:grid; grid-template-columns: 0.95fr 1.85fr; gap: 28px; align-items: start; }
-    .faq-eyebrow{ font-size: 12px; letter-spacing: .22em; text-transform: uppercase; opacity: .7; margin-bottom: 10px; }
-    .faq-title{ margin: 0; font-size: 34px; letter-spacing: -0.3px; line-height: 1.08; }
-    .faq-right{ display:flex; flex-direction: column; gap: 14px; }
-    .faq-item{ border-bottom: 1px solid rgba(15,23,42,0.18); padding: 14px 0; }
-    .faq-q{ list-style: none; cursor: pointer; display:flex; align-items: center; justify-content: space-between; gap: 14px; font-size: 22px; font-weight: 800; letter-spacing: -0.2px; }
-    .faq-q::-webkit-details-marker{ display:none; }
-    .faq-icon{ width: 18px; height: 18px; flex: 0 0 18px; position: relative; opacity: .55; }
-    .faq-icon::before, .faq-icon::after{
-      content:""; position:absolute; left:0; right:0; top:50%;
-      height:2px; background: rgba(15,23,42,0.55);
-      transform: translateY(-50%); border-radius: 2px;
+    .faq-grid{
+      display:grid;
+      grid-template-columns: 0.95fr 1.85fr;
+      gap: 28px;
+      align-items: start;
     }
-    .faq-icon::after{ transform: translateY(-50%) rotate(90deg); transition: transform .18s ease; }
-    details[open] .faq-icon::after{ transform: translateY(-50%) rotate(0deg); }
-    .faq-a{ padding: 10px 0 2px; max-width: 70ch; }
-    .faq-a p{ margin: 0; line-height: 1.65; opacity: .88; font-size: 16px; }
+    .faq-eyebrow{
+      font-size: 12px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      opacity: .7;
+      margin-bottom: 10px;
+    }
+    .faq-title{
+      margin: 0;
+      font-size: 34px;
+      letter-spacing: -0.3px;
+      line-height: 1.08;
+    }
+    .faq-right{ display:flex; flex-direction: column; gap: 14px; }
+    .faq-item{
+      border-bottom: 1px solid rgba(15,23,42,0.18);
+      padding: 14px 0;
+    }
+    .faq-q{
+      list-style: none;
+      cursor: pointer;
+      display:flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.2px;
+    }
+    .faq-q::-webkit-details-marker{ display:none; }
+    .faq-icon{
+      width: 18px;
+      height: 18px;
+      flex: 0 0 18px;
+      position: relative;
+      opacity: .55;
+    }
+    .faq-icon::before,
+    .faq-icon::after{
+      content:"";
+      position:absolute;
+      left:0; right:0;
+      top:50%;
+      height:2px;
+      background: rgba(15,23,42,0.55);
+      transform: translateY(-50%);
+      border-radius: 2px;
+    }
+    .faq-icon::after{
+      transform: translateY(-50%) rotate(90deg);
+      transition: transform .18s ease;
+    }
+    details[open] .faq-icon::after{
+      transform: translateY(-50%) rotate(0deg);
+    }
+    .faq-a{
+      padding: 10px 0 2px;
+      max-width: 70ch;
+    }
+    .faq-a p{
+      margin: 0;
+      line-height: 1.65;
+      opacity: .88;
+      font-size: 16px;
+    }
     @media (max-width: 980px){
       .faq-grid{ grid-template-columns: 1fr; }
       .faq-title{ font-size: 30px; }
@@ -608,7 +536,14 @@ const gapClinicToServices = String(site.home_gap_clinic_services || "48px").trim
 
     /* Redes */
     .social{ margin-bottom: 0; }
-    .social-grid{ display:flex; gap: 18px; flex-wrap: wrap; justify-content: center; align-items: center; margin-top: 14px; }
+    .social-grid{
+      display:flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      margin-top: 14px;
+    }
     .social-card{ display:block; width: min(220px, 90vw); }
     .social-media{
       width: 100%;
@@ -626,11 +561,18 @@ const gapClinicToServices = String(site.home_gap_clinic_services || "48px").trim
     .social-media.ss-shape-rounded{ border-radius: 18px; }
     .social-media.ss-shape-square{ border-radius: 0; }
     .social-media.ss-shape-circle{ aspect-ratio: 1 / 1; border-radius: 999px; }
+
     .social-cta{ display:flex; justify-content:center; margin-top: 18px; }
     .social-btn{
-      display:inline-flex; align-items:center; justify-content:center;
-      padding: 12px 18px; border-radius: 999px;
-      font-weight: 900; background: #16A34A; color: #fff; text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 12px 18px;
+      border-radius: 999px;
+      font-weight: 900;
+      background: #16A34A;
+      color: #fff;
+      text-decoration:none;
       box-shadow: 0 14px 30px rgba(0,0,0,0.14);
       min-width: 160px;
     }
