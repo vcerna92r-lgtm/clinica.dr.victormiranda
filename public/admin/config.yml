@@ -125,6 +125,44 @@ collections:
 
           - { label: "Logo (subir imagen)", name: "logo_image", widget: "image", required: false }
           - { label: "Imagen principal / Hero (subir imagen)", name: "hero_image", widget: "image", required: false }
+          
+  - name: "home_clinic"
+    label: "Inicio · La Clínica"
+    files:
+      - label: "Sección (Inicio) — La Clínica"
+        name: "home_clinic_file"
+        file: "src/content/home_clinic.json"
+        format: "json"
+        fields:
+          - { label: "Texto pequeño (opcional)", name: "eyebrow", widget: "string", required: false }
+          - { label: "Título", name: "title", widget: "string" }
+          - { label: "Imagen central (subir)", name: "image", widget: "image", required: false }
+
+          - label: "Misión"
+            name: "mission"
+            widget: "object"
+            fields:
+              - { label: "Título", name: "title", widget: "string", default: "Misión" }
+              - { label: "Texto", name: "text", widget: "text" }
+
+          - label: "Visión"
+            name: "vision"
+            widget: "object"
+            fields:
+              - { label: "Título", name: "title", widget: "string", default: "Visión" }
+              - { label: "Texto", name: "text", widget: "text" }
+
+          - label: "Valores"
+            name: "values"
+            widget: "object"
+            fields:
+              - { label: "Título", name: "title", widget: "string", default: "Valores" }
+              - { label: "Texto (opcional)", name: "text", widget: "text", required: false }
+              - label: "Lista de valores"
+                name: "bullets"
+                widget: "list"
+                fields:
+                  - { label: "Item", name: "text", widget: "string" }
 
   - name: "services"
     label: "Servicios"
@@ -246,6 +284,48 @@ collections:
                   - { label: "Cuadrada", value: "square" }
                   - { label: "Redondeada", value: "rounded" }
                   - { label: "Redonda", value: "circle" }
+
+                    - name: "home_clinic"
+
+    label: "Inicio · La Clínica"
+    files:
+      - label: "Sección (Inicio) — La Clínica"
+        name: "home_clinic_file"
+        file: "src/content/home_clinic.json"
+        format: "json"
+        fields:
+          - { label: "Mostrar sección", name: "enabled", widget: "boolean", required: false, default: true }
+          - { label: "Texto pequeño arriba (opcional)", name: "eyebrow", widget: "string", required: false }
+          - { label: "Título", name: "title", widget: "string", default: "La Clínica" }
+          - { label: "Imagen central (subir)", name: "image", widget: "image", required: false }
+          - { label: "Alt de la imagen (opcional)", name: "image_alt", widget: "string", required: false }
+
+          - label: "Misión"
+            name: "mission"
+            widget: "object"
+            fields:
+              - { label: "Título", name: "title", widget: "string", default: "Misión" }
+              - { label: "Texto", name: "text", widget: "text" }
+
+          - label: "Visión"
+            name: "vision"
+            widget: "object"
+            fields:
+              - { label: "Título", name: "title", widget: "string", default: "Visión" }
+              - { label: "Texto", name: "text", widget: "text" }
+
+          - label: "Valores"
+            name: "values"
+            widget: "object"
+            fields:
+              - { label: "Título", name: "title", widget: "string", default: "Valores" }
+              - { label: "Texto (opcional)", name: "text", widget: "text", required: false }
+              - label: "Lista de valores"
+                name: "items"
+                widget: "list"
+                min: 4
+                fields:
+                  - { label: "Item", name: "text", widget: "string" }
 
   - name: "home_social"
     label: "Inicio · Redes sociales"
@@ -392,7 +472,7 @@ collections:
             required: false
             fields:
               - { label: "Item", name: "text", widget: "string" }
-              
+
   - name: "home_faq"
     label: "Inicio · Preguntas frecuentes"
     files:

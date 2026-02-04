@@ -1,0 +1,23 @@
+{
+  "eyebrow": "LA CLÍNICA",
+  "title": "Clínica Dr. Víctor Miranda",
+  "image": "",
+  "mission": {
+    "title": "Misión",
+    "text": "Escribe aquí tu misión."
+  },
+  "vision": {
+    "title": "Visión",
+    "text": "Escribe aquí tu visión."
+  },
+  "values": {
+    "title": "Valores",
+    "text": "Nuestros valores apoyan nuestra misión y se sustentan en la ética médica, el profesionalismo y la seguridad del paciente.",
+    "bullets": [
+      { "text": "Ética médica y humana." },
+      { "text": "Profesionalismo." },
+      { "text": "Actualización y certificación continua." },
+      { "text": "Seguridad, calidad y seguimiento clínico." }
+    ]
+  }
+}
