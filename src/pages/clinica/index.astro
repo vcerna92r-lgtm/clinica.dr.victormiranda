@@ -1,7 +1,7 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-import clinic from "../content/home_clinic.json";
-import site from "../content/site.json";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import clinic from "../../content/home_clinic.json";
+import site from "../../content/site.json";
 
 const siteName = site.clinic_name || site.name || "Clínica Dr. Víctor Miranda";
 
@@ -19,7 +19,7 @@ function resolveImageSrc(src) {
   <section class="section clinic-page">
     <div class="clinic-head">
       <div class="clinic-eyebrow">{clinic.eyebrow || "LA CLÍNICA"}</div>
-      <h1 class="clinic-title">{clinic.title || "Clínica"}</h1>
+      <h1 class="clinic-title">{clinic.title || "La Clínica"}</h1>
     </div>
 
     <div class="clinic-hero">
