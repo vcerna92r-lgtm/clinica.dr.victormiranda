@@ -30,7 +30,16 @@ const visionText = clinic?.vision?.text || "";
 
 const valuesTitle = clinic?.values?.title || "Valores";
 const valuesText = clinic?.values?.text || "";
-const valuesItems = clinic?.values?.items || [];
+// Valores: soporta "items" o "bullets" (según cómo lo guarde el Admin)
+const valuesItemsRaw = clinic?.values?.items ?? clinic?.values?.bullets ?? [];
+
+// Normaliza: si vienen strings, los convierte a { text: "..." }
+const valuesItems = Array.isArray(valuesItemsRaw)
+  ? valuesItemsRaw
+      .map((v) => (typeof v === "string" ? { text: v } : v))
+      .filter((v) => v && typeof v.text === "string" && v.text.trim().length > 0)
+  : [];
+
 ---
 
 <BaseLayout
