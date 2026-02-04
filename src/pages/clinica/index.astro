@@ -1,7 +1,7 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import clinic from "../../content/home_clinic.json";
-import site from "../../content/site.json";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import site from "../content/site.json";
+import clinic from "../content/home_clinic.json";
 
 const siteName = site.clinic_name || site.name || "Clínica Dr. Víctor Miranda";
 
@@ -13,50 +13,77 @@ function resolveImageSrc(src) {
   if (!s.startsWith("/")) s = `/${s}`;
   return s;
 }
+
+const enabled = clinic?.enabled !== false;
+const eyebrow = clinic?.eyebrow || "Nuestra esencia";
+const title = clinic?.title || "La Clínica";
+const image = clinic?.image ? resolveImageSrc(clinic.image) : "";
+const imageAlt = clinic?.image_alt || title;
+
+const missionTitle = clinic?.mission?.title || "Misión";
+const missionText = clinic?.mission?.text || "";
+
+const visionTitle = clinic?.vision?.title || "Visión";
+const visionText = clinic?.vision?.text || "";
+
+const valuesTitle = clinic?.values?.title || "Valores";
+const valuesText = clinic?.values?.text || "";
+const valuesItems = clinic?.values?.items || [];
 ---
 
-<BaseLayout title={`${siteName} | La Clínica`} description="Conoce nuestra misión, visión y valores.">
-  <section class="section clinic-page">
+<BaseLayout
+  title={`${siteName} | ${title}`}
+  description="Conoce la misión, visión y valores de nuestra clínica."
+>
+  <section class="clinic">
     <div class="clinic-head">
-      <div class="clinic-eyebrow">{clinic.eyebrow || "LA CLÍNICA"}</div>
-      <h1 class="clinic-title">{clinic.title || "La Clínica"}</h1>
+      <div class="clinic-eyebrow">{eyebrow}</div>
+      <h1 class="clinic-title">{title}</h1>
     </div>
 
-    <div class="clinic-hero">
-      {clinic.image ? (
-        <img src={resolveImageSrc(clinic.image)} alt={clinic.title || "La Clínica"} loading="lazy" />
-      ) : (
-        <div class="clinic-hero-placeholder" aria-hidden="true"></div>
-      )}
-    </div>
+    {enabled ? (
+      <>
+        <div class="clinic-hero">
+          {image ? (
+            <img src={image} alt={imageAlt} loading="lazy" />
+          ) : (
+            <div class="clinic-hero-placeholder" aria-hidden="true"></div>
+          )}
+        </div>
 
-    <div class="clinic-grid">
-      <article class="clinic-card">
-        <div class="clinic-card-title">{clinic.mission?.title || "Misión"}</div>
-        <p class="clinic-card-text">{clinic.mission?.text || ""}</p>
-      </article>
+        <div class="clinic-grid">
+          <article class="clinic-card">
+            <div class="clinic-card-title">{missionTitle}</div>
+            <p class="clinic-card-text">{missionText}</p>
+          </article>
 
-      <article class="clinic-card">
-        <div class="clinic-card-title">{clinic.vision?.title || "Visión"}</div>
-        <p class="clinic-card-text">{clinic.vision?.text || ""}</p>
-      </article>
+          <article class="clinic-card">
+            <div class="clinic-card-title">{visionTitle}</div>
+            <p class="clinic-card-text">{visionText}</p>
+          </article>
 
-      <article class="clinic-card clinic-card--wide">
-        <div class="clinic-card-title">{clinic.values?.title || "Valores"}</div>
-        {clinic.values?.text ? <p class="clinic-card-text">{clinic.values.text}</p> : null}
+          <article class="clinic-card clinic-card--wide">
+            <div class="clinic-card-title">{valuesTitle}</div>
 
-        {(clinic.values?.bullets || []).length ? (
-          <ul class="clinic-values">
-            {clinic.values.bullets.map((b) => <li>{b.text}</li>)}
-          </ul>
-        ) : null}
-      </article>
-    </div>
+            {valuesText ? <p class="clinic-card-text">{valuesText}</p> : null}
+
+            {valuesItems?.length ? (
+              <ul class="clinic-values">
+                {valuesItems.map((it) => <li>{it.text}</li>)}
+              </ul>
+            ) : null}
+          </article>
+        </div>
+      </>
+    ) : (
+      <div class="clinic-disabled">
+        Esta sección está desactivada en el Admin.
+      </div>
+    )}
   </section>
 
   <style>
-    .section{ padding: 18px 0; }
-
+    .clinic{ padding: 22px 0 10px; }
     .clinic-head{ margin-bottom: 14px; }
     .clinic-eyebrow{
       font-size: 12px;
@@ -68,8 +95,8 @@ function resolveImageSrc(src) {
     .clinic-title{
       margin: 0;
       font-size: 40px;
-      letter-spacing: -0.4px;
-      line-height: 1.05;
+      letter-spacing: -0.45px;
+      line-height: 1.06;
     }
 
     .clinic-hero{
@@ -131,6 +158,14 @@ function resolveImageSrc(src) {
       padding-left: 18px;
       line-height: 1.7;
       opacity: .92;
+    }
+
+    .clinic-disabled{
+      border: 1px solid rgba(15,23,42,0.10);
+      border-radius: 18px;
+      padding: 14px 16px;
+      background: rgba(255,255,255,0.70);
+      opacity: .85;
     }
 
     @media (max-width: 980px){
