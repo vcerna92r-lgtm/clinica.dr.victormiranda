@@ -1,7 +1,7 @@
+---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import site from "../../content/site.json";
-import clinic from "../../content/home_clinic.json";≈
-
+import clinic from "../../content/home_clinic.json";
 
 const siteName = site.clinic_name || site.name || "Clínica Dr. Víctor Miranda";
 
@@ -15,8 +15,10 @@ function resolveImageSrc(src) {
 }
 
 const enabled = clinic?.enabled !== false;
+
 const eyebrow = clinic?.eyebrow || "Nuestra esencia";
 const title = clinic?.title || "La Clínica";
+
 const image = clinic?.image ? resolveImageSrc(clinic.image) : "";
 const imageAlt = clinic?.image_alt || title;
 
@@ -76,9 +78,7 @@ const valuesItems = clinic?.values?.items || [];
         </div>
       </>
     ) : (
-      <div class="clinic-disabled">
-        Esta sección está desactivada en el Admin.
-      </div>
+      <div class="clinic-disabled">Esta sección está desactivada en el Admin.</div>
     )}
   </section>
 
