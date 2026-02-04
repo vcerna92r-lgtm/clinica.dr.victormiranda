@@ -271,8 +271,10 @@ const footerPoliciesUrl = site.footer?.policies_url || "/politicas";
             <span>{siteName}</span>
           </a>
 
+          <!-- ✅ NAVBAR: agregamos "La Clínica" -->
           <div class="navlinks">
             <a href="/">Inicio</a>
+            <a href="/clinica/">La Clínica</a>
             <a href="/servicios/">Servicios</a>
             <a href="/complicaciones/">Complicaciones</a>
             <a href="/contacto/">Contacto</a>
@@ -320,6 +322,11 @@ const footerPoliciesUrl = site.footer?.policies_url || "/politicas";
             </a>
           </div>
         </div>
+
+        <div style="height:10px;"></div>
+        <small style="color:var(--muted);opacity:.8;">
+          © {year} · {siteName}
+        </small>
       </div>
     </footer>
 
