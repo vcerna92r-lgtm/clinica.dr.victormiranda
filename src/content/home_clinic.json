@@ -1,30 +1,39 @@
 {
   "eyebrow": "LA CLÍNICA",
   "title": "Clínica Dr. Víctor Miranda",
-  "image": "",
+  "image": "/images/uploads/ver-fotos-recientes.png",
   "mission": {
     "title": "Misión",
-    "text": "Escribe aquí tu misión."
+    "text": "En Clínica Dr. Víctor Miranda ayudamos a cada paciente a verse y sentirse mejor mediante un enfoque médico integral: evaluación personalizada, planificación estética precisa y tratamientos mínimamente invasivos con prioridad absoluta en la seguridad, la naturalidad y el seguimiento. Combinamos técnica, ciencia y experiencia clínica para lograr resultados armónicos y sostenibles en el tiempo."
   },
   "vision": {
     "title": "Visión",
-    "text": "Escribe aquí tu visión."
+    "text": "Ser la clínica referente en medicina estética por ofrecer armonización facial de alto nivel, con resultados naturales, seguros y elegantes, basada en evidencia, tecnología y una atención humana que inspira confianza."
   },
   "values": {
     "title": "Valores",
-    "text": "Nuestros valores apoyan nuestra misión y se sustentan en la ética médica, el profesionalismo y la seguridad del paciente.",
+    "text": "",
     "bullets": [
       {
-        "text": "Ética médica y humana."
+        "text": "Seguridad primero: protocolos, buenas prácticas y enfoque preventivo (incluye manejo responsable de complicaciones)."
       },
       {
-        "text": "Profesionalismo."
+        "text": "Resultados naturales: realzamos tus rasgos sin exageraciones; armonía antes que volumen."
       },
       {
-        "text": "Actualización y certificación continua."
+        "text": "Ética y transparencia: indicaciones claras, expectativas realistas y decisiones informadas."
       },
       {
-        "text": "Seguridad, calidad y seguimiento clínico."
+        "text": "Excelencia clínica: formación continua, técnica refinada y estándares de calidad en cada procedimiento."
+      },
+      {
+        "text": "Trato humano y respeto: empatía, escucha activa y acompañamiento antes, durante y después."
+      },
+      {
+        "text": "Confidencialidad: privacidad y discreción en todo el proceso."
+      },
+      {
+        "text": "Calidad: productos certificados, materiales adecuados y cuidado meticuloso en cada detalle."
       }
     ]
   },
