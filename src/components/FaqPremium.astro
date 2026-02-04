@@ -1,0 +1,234 @@
+---
+import faq from "../content/home_faq.json";
+
+const eyebrow = String(faq?.eyebrow || "").trim();
+const title = String(faq?.title || "Preguntas frecuentes").trim();
+const items = Array.isArray(faq?.items) ? faq.items : [];
+---
+
+<section class="faq" aria-label={title}>
+  <div class="faq-head">
+    {eyebrow ? <div class="faq-eyebrow">{eyebrow}</div> : null}
+    <h2 class="faq-title">{title}</h2>
+  </div>
+
+  <div class="faq-list">
+    {items.map((it, i) => {
+      const q = String(it?.question || "").trim();
+      const a = String(it?.answer || "").trim();
+      const id = `faq-panel-${i}`;
+      const bid = `faq-btn-${i}`;
+
+      return (
+        <div class="faq-item" data-faq-item>
+          <button
+            class="faq-q"
+            type="button"
+            aria-expanded="false"
+            aria-controls={id}
+            id={bid}
+          >
+            <span class="faq-q-text">{q || `Pregunta ${i + 1}`}</span>
+            <span class="faq-icon" aria-hidden="true"></span>
+          </button>
+
+          <div
+            class="faq-a"
+            id={id}
+            role="region"
+            aria-labelledby={bid}
+            data-faq-panel
+          >
+            <div class="faq-a-inner">
+              {a ? <p>{a}</p> : <p>Respuesta pendiente…</p>}
+            </div>
+          </div>
+        </div>
+      );
+    })}
+  </div>
+
+  <script is:inline>
+    (() => {
+      const root = document.currentScript?.closest(".faq");
+      if (!root) return;
+
+      const items = Array.from(root.querySelectorAll("[data-faq-item]"));
+
+      function closeItem(item) {
+        const btn = item.querySelector("button[aria-expanded]");
+        const panel = item.querySelector("[data-faq-panel]");
+        if (!btn || !panel) return;
+
+        btn.setAttribute("aria-expanded", "false");
+        item.classList.remove("is-open");
+        panel.style.maxHeight = "0px";
+      }
+
+      function openItem(item) {
+        const btn = item.querySelector("button[aria-expanded]");
+        const panel = item.querySelector("[data-faq-panel]");
+        const inner = panel?.querySelector(".faq-a-inner");
+        if (!btn || !panel || !inner) return;
+
+        // Cierra los demás
+        items.forEach((it) => (it === item ? null : closeItem(it)));
+
+        btn.setAttribute("aria-expanded", "true");
+        item.classList.add("is-open");
+
+        // Recalcula altura para animación suave
+        panel.style.maxHeight = inner.scrollHeight + "px";
+      }
+
+      // Inicializa todo cerrado
+      items.forEach((item) => {
+        const panel = item.querySelector("[data-faq-panel]");
+        if (panel) panel.style.maxHeight = "0px";
+
+        const btn = item.querySelector("button[aria-expanded]");
+        if (!btn) return;
+
+        btn.addEventListener("click", () => {
+          const expanded = btn.getAttribute("aria-expanded") === "true";
+          if (expanded) closeItem(item);
+          else openItem(item);
+        });
+      });
+
+      // Si cambia el tamaño, recalcula el abierto
+      const onResize = () => {
+        const open = items.find((it) => it.classList.contains("is-open"));
+        if (!open) return;
+        const panel = open.querySelector("[data-faq-panel]");
+        const inner = panel?.querySelector(".faq-a-inner");
+        if (panel && inner) panel.style.maxHeight = inner.scrollHeight + "px";
+      };
+      window.addEventListener("resize", onResize, { passive: true });
+    })();
+  </script>
+
+  <style>
+    .faq{
+      padding: 18px 0;
+    }
+
+    .faq-head{
+      display:flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .faq-eyebrow{
+      font-weight: 900;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      opacity: .7;
+      font-size: 12px;
+    }
+
+    .faq-title{
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: -0.2px;
+      line-height: 1.15;
+    }
+
+    .faq-list{
+      display:flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item{
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.72);
+      box-shadow: 0 16px 40px rgba(15,23,42,0.05);
+      overflow: hidden;
+      backdrop-filter: blur(8px);
+    }
+
+    .faq-q{
+      width: 100%;
+      text-align: left;
+      display:flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 16px;
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+      font-weight: 900;
+      letter-spacing: -0.1px;
+    }
+
+    .faq-q:hover{
+      background: rgba(0,0,0,0.03);
+    }
+
+    .faq-q:focus{
+      outline: 3px solid rgba(6,182,212,0.25);
+      outline-offset: 2px;
+    }
+
+    .faq-q-text{
+      font-size: 16px;
+      line-height: 1.35;
+    }
+
+    /* Icono premium: + que se vuelve x */
+    .faq-icon{
+      width: 18px;
+      height: 18px;
+      position: relative;
+      flex: 0 0 18px;
+      opacity: .8;
+    }
+    .faq-icon::before,
+    .faq-icon::after{
+      content:"";
+      position:absolute;
+      left: 50%;
+      top: 50%;
+      width: 18px;
+      height: 2px;
+      background: rgba(15,23,42,0.85);
+      transform: translate(-50%,-50%);
+      border-radius: 2px;
+      transition: transform 220ms ease, opacity 220ms ease;
+    }
+    .faq-icon::after{
+      transform: translate(-50%,-50%) rotate(90deg);
+    }
+
+    .faq-item.is-open .faq-icon::after{
+      transform: translate(-50%,-50%) rotate(0deg);
+      opacity: 0;
+    }
+
+    .faq-a{
+      max-height: 0px;
+      overflow: hidden;
+      transition: max-height 260ms ease;
+    }
+
+    .faq-a-inner{
+      padding: 0 16px 14px;
+      border-top: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .faq-a-inner p{
+      margin: 12px 0 0;
+      line-height: 1.65;
+      opacity: .9;
+    }
+
+    @media (min-width: 900px){
+      .faq-title{ font-size: 30px; }
+      .faq-q-text{ font-size: 16px; }
+    }
+  </style>
+</section>
