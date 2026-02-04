@@ -29,31 +29,6 @@ collections:
           - { label: "Color principal (hex)", name: "accent_color", widget: "string" }
           - { label: "Color secundario (hex)", name: "accent_color_2", widget: "string" }
 
-          - label: "Gap Redes → Footer"
-            name: "home_gap_social_footer"
-            widget: "select"
-            options:
-              - { label: "0", value: "0px" }
-              - { label: "16px", value: "16px" }
-              - { label: "24px", value: "24px" }
-              - { label: "32px", value: "32px" }
-              - { label: "48px", value: "48px" }
-              - { label: "56px (recomendado)", value: "56px" }
-              - { label: "64px", value: "64px" }
-              - { label: "80px", value: "80px" }
-              - { label: "96px", value: "96px" }
-            default: "56px"
-
-          - label: "Footer"
-            name: "footer"
-            widget: "object"
-            fields:
-              - { label: "Nombre de la clínica", name: "clinic_name", widget: "string" }
-              - { label: "Ubicación (ciudad)", name: "city", widget: "string" }
-              - { label: "Email de contacto", name: "email", widget: "string" }
-              - { label: "Texto link políticas", name: "policies_label", widget: "string", default: "Políticas" }
-              - { label: "URL políticas", name: "policies_url", widget: "string", default: "/politicas" }
-
           - label: "Fondo global (todas las páginas)"
             name: "bg_color"
             widget: "select"
@@ -90,17 +65,6 @@ collections:
               - { label: "20px (aireado)", value: "20px" }
               - { label: "24px (muy aireado)", value: "24px" }
 
-          - label: "Espacio entre Servicios principales y Manejo de complicaciones"
-            name: "home_gap_services_complications"
-            widget: "select"
-            default: "64px"
-            options:
-              - { label: "24px (pequeño)", value: "24px" }
-              - { label: "40px (medio)", value: "40px" }
-              - { label: "64px (grande recomendado)", value: "64px" }
-              - { label: "96px (muy grande)", value: "96px" }
-              - { label: "120px (extra)", value: "120px" }
-
           - label: "Espacio entre Portada (Inicio) y Servicios principales"
             name: "home_gap_cover_services"
             widget: "select"
@@ -112,7 +76,42 @@ collections:
               - { label: "72px (grande)", value: "72px" }
               - { label: "96px (muy grande)", value: "96px" }
 
-          - label: "Espacio entre Manejo de complicaciones y Redes sociales"
+          - label: "Espacio entre Portada (Inicio) y La Clínica"
+            name: "home_gap_cover_clinic"
+            widget: "select"
+            default: "32px"
+            options:
+              - { label: "0", value: "0px" }
+              - { label: "16px", value: "16px" }
+              - { label: "24px", value: "24px" }
+              - { label: "32px (recomendado)", value: "32px" }
+              - { label: "48px", value: "48px" }
+              - { label: "64px", value: "64px" }
+
+          - label: "Espacio entre La Clínica y Servicios principales"
+            name: "home_gap_clinic_services"
+            widget: "select"
+            default: "48px"
+            options:
+              - { label: "0", value: "0px" }
+              - { label: "16px", value: "16px" }
+              - { label: "24px", value: "24px" }
+              - { label: "48px (recomendado)", value: "48px" }
+              - { label: "64px", value: "64px" }
+              - { label: "96px", value: "96px" }
+
+          - label: "Espacio entre Servicios principales y Manejo de complicaciones"
+            name: "home_gap_services_complications"
+            widget: "select"
+            default: "64px"
+            options:
+              - { label: "24px (pequeño)", value: "24px" }
+              - { label: "40px (medio)", value: "40px" }
+              - { label: "64px (grande recomendado)", value: "64px" }
+              - { label: "96px (muy grande)", value: "96px" }
+              - { label: "120px (extra)", value: "120px" }
+
+          - label: "Espacio entre Manejo de complicaciones y Preguntas frecuentes"
             name: "home_gap_complications_social"
             widget: "select"
             default: "64px"
@@ -123,86 +122,48 @@ collections:
               - { label: "96px (grande)", value: "96px" }
               - { label: "120px (muy grande)", value: "120px" }
 
+          - label: "Espacio entre Preguntas frecuentes y Redes sociales"
+            name: "home_gap_faq_social"
+            widget: "select"
+            default: "56px"
+            options:
+              - { label: "0", value: "0px" }
+              - { label: "16px", value: "16px" }
+              - { label: "24px", value: "24px" }
+              - { label: "32px", value: "32px" }
+              - { label: "48px", value: "48px" }
+              - { label: "56px (recomendado)", value: "56px" }
+              - { label: "64px", value: "64px" }
+              - { label: "80px", value: "80px" }
+              - { label: "96px", value: "96px" }
+
+          - label: "Gap Redes → Footer"
+            name: "home_gap_social_footer"
+            widget: "select"
+            options:
+              - { label: "0", value: "0px" }
+              - { label: "16px", value: "16px" }
+              - { label: "24px", value: "24px" }
+              - { label: "32px", value: "32px" }
+              - { label: "48px", value: "48px" }
+              - { label: "56px (recomendado)", value: "56px" }
+              - { label: "64px", value: "64px" }
+              - { label: "80px", value: "80px" }
+              - { label: "96px", value: "96px" }
+            default: "56px"
+
+          - label: "Footer"
+            name: "footer"
+            widget: "object"
+            fields:
+              - { label: "Nombre de la clínica", name: "clinic_name", widget: "string" }
+              - { label: "Ubicación (ciudad)", name: "city", widget: "string" }
+              - { label: "Email de contacto", name: "email", widget: "string" }
+              - { label: "Texto link políticas", name: "policies_label", widget: "string", default: "Políticas" }
+              - { label: "URL políticas", name: "policies_url", widget: "string", default: "/politicas" }
+
           - { label: "Logo (subir imagen)", name: "logo_image", widget: "image", required: false }
           - { label: "Imagen principal / Hero (subir imagen)", name: "hero_image", widget: "image", required: false }
-          
-  - name: "home_clinic"
-    label: "Inicio · La Clínica"
-    files:
-      - label: "Sección (Inicio) — La Clínica"
-        name: "home_clinic_file"
-        file: "src/content/home_clinic.json"
-        format: "json"
-        fields:
-          - { label: "Texto pequeño (opcional)", name: "eyebrow", widget: "string", required: false }
-          - { label: "Título", name: "title", widget: "string" }
-          - { label: "Imagen central (subir)", name: "image", widget: "image", required: false }
-
-          - label: "Misión"
-            name: "mission"
-            widget: "object"
-            fields:
-              - { label: "Título", name: "title", widget: "string", default: "Misión" }
-              - { label: "Texto", name: "text", widget: "text" }
-
-          - label: "Visión"
-            name: "vision"
-            widget: "object"
-            fields:
-              - { label: "Título", name: "title", widget: "string", default: "Visión" }
-              - { label: "Texto", name: "text", widget: "text" }
-
-          - label: "Valores"
-            name: "values"
-            widget: "object"
-            fields:
-              - { label: "Título", name: "title", widget: "string", default: "Valores" }
-              - { label: "Texto (opcional)", name: "text", widget: "text", required: false }
-              - label: "Lista de valores"
-                name: "bullets"
-                widget: "list"
-                fields:
-                  - { label: "Item", name: "text", widget: "string" }
-
-  - name: "services"
-    label: "Servicios"
-    files:
-      - label: "Página de Servicios"
-        name: "services_page"
-        file: "src/content/services.json"
-        format: "json"
-        fields:
-          - { label: "Título de sección", name: "section_title", widget: "string" }
-          - { label: "Subtítulo", name: "section_subtitle", widget: "string", required: false }
-          - label: "Servicios"
-            name: "items"
-            widget: "list"
-            fields:
-              - { label: "Nombre", name: "name", widget: "string" }
-              - { label: "Precio (texto)", name: "price", widget: "string", required: false }
-              - { label: "Descripción", name: "description", widget: "text", required: false }
-              - { label: "Imagen", name: "image", widget: "image", required: false }
-
-              - label: "Forma de imagen"
-                name: "image_shape"
-                widget: "select"
-                required: false
-                default: "rounded"
-                options:
-                  - { label: "Cuadrada", value: "square" }
-                  - { label: "Redondeada", value: "rounded" }
-                  - { label: "Redonda", value: "circle" }
-
-              - { label: "Texto del botón", name: "button_text", widget: "string", default: "RESERVAR" }
-              - { label: "URL del botón (opcional)", name: "button_url", widget: "string", required: false }
-
-              - { label: "Color fondo tarjeta (hex)", name: "card_bg", widget: "string", default: "#F5F5F2" }
-              - { label: "Color título (hex)", name: "title_color", widget: "string", default: "#0F172A" }
-              - { label: "Color texto (hex)", name: "text_color", widget: "string", default: "#334155" }
-              - { label: "Fondo precio (hex)", name: "price_bg", widget: "string", default: "#FFFFFF" }
-              - { label: "Color precio (hex)", name: "price_color", widget: "string", default: "#0F172A" }
-              - { label: "Color botón (hex)", name: "button_bg", widget: "string", default: "#16A34A" }
-              - { label: "Color texto botón (hex)", name: "button_text_color", widget: "string", default: "#FFFFFF" }
 
   - name: "home"
     label: "Inicio"
@@ -257,44 +218,15 @@ collections:
               - { label: "Mediano (recomendado)", value: "md" }
               - { label: "Pequeño", value: "sm" }
 
-  - name: "home_services"
-    label: "Inicio · Servicios principales"
+  - name: "home_clinic"
+    label: "Página · La Clínica"
     files:
-      - label: "Servicios principales (Inicio)"
-        name: "home_services_file"
-        file: "src/content/home_services.json"
-        format: "json"
-        fields:
-          - { label: "Título de sección", name: "section_title", widget: "string" }
-          - { label: "Subtítulo (opcional)", name: "section_subtitle", widget: "string", required: false }
-          - label: "Servicios"
-            name: "items"
-            widget: "list"
-            fields:
-              - { label: "Nombre", name: "name", widget: "string" }
-              - { label: "Descripción", name: "description", widget: "text", required: false }
-              - { label: "Imagen", name: "image", widget: "image", required: false }
-
-              - label: "Forma de imagen"
-                name: "image_shape"
-                widget: "select"
-                required: false
-                default: "rounded"
-                options:
-                  - { label: "Cuadrada", value: "square" }
-                  - { label: "Redondeada", value: "rounded" }
-                  - { label: "Redonda", value: "circle" }
-
-                    - name: "home_clinic"
-
-    label: "Inicio · La Clínica"
-    files:
-      - label: "Sección (Inicio) — La Clínica"
+      - label: "Página — La Clínica"
         name: "home_clinic_file"
         file: "src/content/home_clinic.json"
         format: "json"
         fields:
-          - { label: "Mostrar sección", name: "enabled", widget: "boolean", required: false, default: true }
+          - { label: "Mostrar página", name: "enabled", widget: "boolean", required: false, default: true }
           - { label: "Texto pequeño arriba (opcional)", name: "eyebrow", widget: "string", required: false }
           - { label: "Título", name: "title", widget: "string", default: "La Clínica" }
           - { label: "Imagen central (subir)", name: "image", widget: "image", required: false }
@@ -321,32 +253,28 @@ collections:
               - { label: "Título", name: "title", widget: "string", default: "Valores" }
               - { label: "Texto (opcional)", name: "text", widget: "text", required: false }
               - label: "Lista de valores"
-                name: "items"
+                name: "bullets"
                 widget: "list"
                 min: 4
                 fields:
                   - { label: "Item", name: "text", widget: "string" }
 
-  - name: "home_social"
-    label: "Inicio · Redes sociales"
+  - name: "home_services"
+    label: "Inicio · Servicios principales"
     files:
-      - label: "Sección (Inicio) — Redes sociales"
-        name: "home_social_file"
-        file: "src/content/home_social.json"
+      - label: "Servicios principales (Inicio)"
+        name: "home_services_file"
+        file: "src/content/home_services.json"
         format: "json"
         fields:
           - { label: "Título de sección", name: "section_title", widget: "string" }
           - { label: "Subtítulo (opcional)", name: "section_subtitle", widget: "string", required: false }
-
-          - { label: "Texto del botón (opcional)", name: "button_text", widget: "string", required: false }
-          - { label: "URL del botón (opcional)", name: "button_url", widget: "string", required: false }
-
-          - label: "Redes"
+          - label: "Servicios"
             name: "items"
             widget: "list"
             fields:
               - { label: "Nombre", name: "name", widget: "string" }
-              - { label: "URL", name: "url", widget: "string", required: false }
+              - { label: "Descripción", name: "description", widget: "text", required: false }
               - { label: "Imagen", name: "image", widget: "image", required: false }
 
               - label: "Forma de imagen"
@@ -491,3 +419,75 @@ collections:
             fields:
               - { label: "Pregunta", name: "question", widget: "string" }
               - { label: "Respuesta", name: "answer", widget: "text" }
+
+  - name: "home_social"
+    label: "Inicio · Redes sociales"
+    files:
+      - label: "Sección (Inicio) — Redes sociales"
+        name: "home_social_file"
+        file: "src/content/home_social.json"
+        format: "json"
+        fields:
+          - { label: "Título de sección", name: "section_title", widget: "string" }
+          - { label: "Subtítulo (opcional)", name: "section_subtitle", widget: "string", required: false }
+
+          - { label: "Texto del botón (opcional)", name: "button_text", widget: "string", required: false }
+          - { label: "URL del botón (opcional)", name: "button_url", widget: "string", required: false }
+
+          - label: "Redes"
+            name: "items"
+            widget: "list"
+            fields:
+              - { label: "Nombre", name: "name", widget: "string" }
+              - { label: "URL", name: "url", widget: "string", required: false }
+              - { label: "Imagen", name: "image", widget: "image", required: false }
+
+              - label: "Forma de imagen"
+                name: "image_shape"
+                widget: "select"
+                required: false
+                default: "rounded"
+                options:
+                  - { label: "Cuadrada", value: "square" }
+                  - { label: "Redondeada", value: "rounded" }
+                  - { label: "Redonda", value: "circle" }
+
+  - name: "services"
+    label: "Servicios"
+    files:
+      - label: "Página de Servicios"
+        name: "services_page"
+        file: "src/content/services.json"
+        format: "json"
+        fields:
+          - { label: "Título de sección", name: "section_title", widget: "string" }
+          - { label: "Subtítulo", name: "section_subtitle", widget: "string", required: false }
+          - label: "Servicios"
+            name: "items"
+            widget: "list"
+            fields:
+              - { label: "Nombre", name: "name", widget: "string" }
+              - { label: "Precio (texto)", name: "price", widget: "string", required: false }
+              - { label: "Descripción", name: "description", widget: "text", required: false }
+              - { label: "Imagen", name: "image", widget: "image", required: false }
+
+              - label: "Forma de imagen"
+                name: "image_shape"
+                widget: "select"
+                required: false
+                default: "rounded"
+                options:
+                  - { label: "Cuadrada", value: "square" }
+                  - { label: "Redondeada", value: "rounded" }
+                  - { label: "Redonda", value: "circle" }
+
+              - { label: "Texto del botón", name: "button_text", widget: "string", default: "RESERVAR" }
+              - { label: "URL del botón (opcional)", name: "button_url", widget: "string", required: false }
+
+              - { label: "Color fondo tarjeta (hex)", name: "card_bg", widget: "string", default: "#F5F5F2" }
+              - { label: "Color título (hex)", name: "title_color", widget: "string", default: "#0F172A" }
+              - { label: "Color texto (hex)", name: "text_color", widget: "string", default: "#334155" }
+              - { label: "Fondo precio (hex)", name: "price_bg", widget: "string", default: "#FFFFFF" }
+              - { label: "Color precio (hex)", name: "price_color", widget: "string", default: "#0F172A" }
+              - { label: "Color botón (hex)", name: "button_bg", widget: "string", default: "#16A34A" }
+              - { label: "Color texto botón (hex)", name: "button_text_color", widget: "string", default: "#FFFFFF" }
