@@ -96,7 +96,7 @@ const rawTreatments = Object.entries(treatmentModules)
   })
   .filter((x) => x.label && x.slug && (x.category === "facial" || x.category === "corporal"));
 
-// Dedup: category+slug (evita repetir rutas/ítems si existe en 2 carpetas)
+// Dedup: category+slug
 const uniqMap = new Map<string, any>();
 for (const t of rawTreatments) {
   const key = `${t.category}:${t.slug}`;
@@ -104,7 +104,6 @@ for (const t of rawTreatments) {
     uniqMap.set(key, t);
   } else {
     const prev = uniqMap.get(key);
-    // se queda el que tenga menor "order"; si empatan, se queda el anterior
     if (t.order < prev.order) uniqMap.set(key, t);
   }
 }
@@ -189,17 +188,17 @@ const treatmentsCorporal = treatmentsAll
         min-height: 78px;
       }
 
-      /* Lados */
+      /* Lados (clave: iguales para que el centro quede centrado) */
       .nav-side{
         display:flex;
         align-items:center;
         gap: var(--nav-gap);
-        flex: 1;
+        flex: 1 1 0; /* ✅ hace ambos lados del mismo ancho */
         min-width: 0;
         flex-wrap: nowrap;
       }
-      .nav-left{ justify-content: flex-end; }
-      .nav-right{ justify-content: flex-start; }
+      .nav-left{ justify-content: flex-start; }  /* ✅ izquierda real */
+      .nav-right{ justify-content: flex-end; }   /* ✅ derecha real */
 
       /* Centro: logo tipo referencia (vertical) */
       .nav-center{
@@ -345,9 +344,7 @@ const treatmentsCorporal = treatmentsAll
         transform: translate(-50%, 0);
       }
 
-      .mega-wrap{
-        padding: 6px;
-      }
+      .mega-wrap{ padding: 6px; }
       .mega-grid{
         display:grid;
         grid-template-columns: 3fr 1.6fr;
@@ -363,9 +360,7 @@ const treatmentsCorporal = treatmentsAll
         margin: 4px 0 10px;
       }
 
-      .mega-items{
-        column-gap: 28px;
-      }
+      .mega-items{ column-gap: 28px; }
       .mega-items.cols-3{ columns: 3; }
       .mega-items.cols-2{ columns: 2; }
 
