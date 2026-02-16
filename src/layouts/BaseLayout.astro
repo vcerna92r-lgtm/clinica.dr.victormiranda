@@ -61,17 +61,28 @@ const treatmentsLabel = site?.navbar?.treatments_label || "Tratamientos";
 const treatmentsFacialTitle = site?.navbar?.treatments_facial_title || "Medicina estética facial";
 const treatmentsCorporalTitle = site?.navbar?.treatments_corporal_title || "Medicina estética corporal";
 
-// ===== Tratamientos desde Admin (Markdown) =====
-const treatmentFiles = await Astro.glob("../content/treatments/*.md");
+// ===== Tratamientos desde Markdown (orden estable + sin duplicados) =====
+function slugFromFilepath(fp: string) {
+  const name = String(fp).split("/").pop() || "";
+  return name.replace(/\.mdx?$/i, "");
+}
 
-const treatmentsAll = (treatmentFiles || [])
-  .map((t) => {
-    const fm = t.frontmatter ?? {};
+const treatmentModules = import.meta.glob(
+  [
+    "../content/treatments/**/*.{md,mdx}",
+    "../content/tratamientos/**/*.{md,mdx}",
+  ],
+  { eager: true }
+);
+
+const rawTreatments = Object.entries(treatmentModules)
+  .map(([filepath, mod]: any) => {
+    const fm = mod?.frontmatter || {};
     const slug =
       String(fm.slug || "").trim() ||
-      String(t.file?.split("/").pop() || "").replace(/\.md$/i, "");
+      String(slugFromFilepath(filepath)).trim();
 
-    const category = String(fm.category || "facial").trim(); // facial | corporal
+    const category = String(fm.category || "facial").toLowerCase().trim(); // facial | corporal
     const label = String(fm.menu_label || fm.title || slug).trim();
     const order = Number.isFinite(Number(fm.order)) ? Number(fm.order) : 999;
 
@@ -80,18 +91,37 @@ const treatmentsAll = (treatmentFiles || [])
       slug,
       label,
       order,
-      href: `/tratamientos/${category}/${slug}/`,
+      href: `/tratamientos-medicos/${category}/${slug}/`,
     };
   })
-  .filter((x) => x.label && x.slug);
+  .filter((x) => x.label && x.slug && (x.category === "facial" || x.category === "corporal"));
+
+// Dedup: category+slug (evita repetir rutas/ítems si existe en 2 carpetas)
+const uniqMap = new Map<string, any>();
+for (const t of rawTreatments) {
+  const key = `${t.category}:${t.slug}`;
+  if (!uniqMap.has(key)) {
+    uniqMap.set(key, t);
+  } else {
+    const prev = uniqMap.get(key);
+    // se queda el que tenga menor "order"; si empatan, se queda el anterior
+    if (t.order < prev.order) uniqMap.set(key, t);
+  }
+}
+
+const treatmentsAll = Array.from(uniqMap.values());
+
+const sortStable = (a: any, b: any) =>
+  (a.order - b.order) ||
+  a.label.localeCompare(b.label, "es", { sensitivity: "base" });
 
 const treatmentsFacial = treatmentsAll
   .filter((x) => x.category === "facial")
-  .sort((a, b) => a.order - b.order);
+  .sort(sortStable);
 
 const treatmentsCorporal = treatmentsAll
   .filter((x) => x.category === "corporal")
-  .sort((a, b) => a.order - b.order);
+  .sort(sortStable);
 ---
 
 <!doctype html>
