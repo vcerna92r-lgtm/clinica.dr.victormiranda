@@ -79,10 +79,10 @@ const rawTreatments = Object.entries(treatmentModules)
     const label = String(fm.menu_label || fm.title || slug).trim();
     const order = Number.isFinite(Number(fm.order)) ? Number(fm.order) : 999;
 
-    // permite ocultar páginas del mega menú principal (para sub-tratamientos)
+    // ocultar páginas del mega menú principal (sub-tratamientos)
     const hideFromMenu = Boolean(fm.hide_from_menu || fm.hideFromMenu || fm.hidden_in_menu);
 
-    // Sub-tratamientos (children) definidos en frontmatter del tratamiento padre
+    // children definidos en el padre
     const childrenRaw = Array.isArray(fm.children) ? fm.children : [];
     const children = childrenRaw
       .map((c: any) => {
@@ -110,7 +110,7 @@ const rawTreatments = Object.entries(treatmentModules)
   })
   .filter((x) => x.label && x.slug && (x.category === "facial" || x.category === "corporal"));
 
-// Dedup: category+slug (evita duplicados si existe en 2 carpetas)
+// Dedup: category+slug
 const uniqMap = new Map<string, any>();
 for (const t of rawTreatments) {
   const key = `${t.category}:${t.slug}`;
@@ -118,11 +118,8 @@ for (const t of rawTreatments) {
     uniqMap.set(key, t);
   } else {
     const prev = uniqMap.get(key);
-
-    // Mantén el que tenga menor order; si empatan, conserva children si el otro no tiene
-    if (t.order < prev.order) {
-      uniqMap.set(key, t);
-    } else if ((!prev.children || prev.children.length === 0) && t.children?.length) {
+    if (t.order < prev.order) uniqMap.set(key, t);
+    else if ((!prev.children || prev.children.length === 0) && t.children?.length) {
       prev.children = t.children;
       uniqMap.set(key, prev);
     }
@@ -135,7 +132,6 @@ const sortStable = (a: any, b: any) =>
   (a.order - b.order) ||
   a.label.localeCompare(b.label, "es", { sensitivity: "base" });
 
-// solo listamos como “principales” los que NO están ocultos
 const treatmentsFacial = treatmentsAll
   .filter((x) => x.category === "facial" && !x.hideFromMenu)
   .sort(sortStable);
@@ -144,11 +140,14 @@ const treatmentsCorporal = treatmentsAll
   .filter((x) => x.category === "corporal" && !x.hideFromMenu)
   .sort(sortStable);
 
-// Link principal del botón (click navega a “lista de tratamientos”)
+// En corporal: solo mostrar “Próximamente” (sin click)
+const CORPORAL_SOON_ONLY = true;
+
+// Link principal del botón
 const treatmentsMainHref =
   String(
     navbarItems.find((x: any) => x?.type === "treatments")?.href || ""
-  ).trim() || "/tratamientos-medicos/facial/"; // (por ahora)
+  ).trim() || "/tratamientos-medicos/facial/";
 ---
 
 <!doctype html>
@@ -250,7 +249,7 @@ const treatmentsMainHref =
       }
 
       .nav-bottom{
-        position: relative; /* para posicionar dropdowns */
+        position: relative;
         border-top: 1px solid rgba(15,23,42,.06);
         padding: 10px 0 12px;
       }
@@ -316,11 +315,22 @@ const treatmentsMainHref =
         color: #fff;
       }
 
+      /* ✅ FIX: “hover bridge” (evita que se cierre al bajar el mouse) */
+      .nav-item{
+        position: relative;
+        padding-bottom: 28px;
+        margin-bottom: -28px;
+      }
+      .nav-item--mega{
+        position: static;
+        padding-bottom: 34px;
+        margin-bottom: -34px;
+      }
+
       /* ===== Dropdown simple (hover) ===== */
-      .nav-item{ position: relative; }
       .dd-panel{
         position:absolute;
-        top: 100%; /* ✅ antes: calc(100% + 14px) -> causaba “gap” */
+        top: 100%;
         left: 50%;
         transform: translate(-50%, 10px);
         min-width: 240px;
@@ -331,6 +341,7 @@ const treatmentsMainHref =
         opacity: 0;
         pointer-events: none;
         transition: opacity .18s ease, transform .18s ease;
+        z-index: 80;
       }
       .nav-item:hover > .dd-panel,
       .nav-item:focus-within > .dd-panel{
@@ -350,12 +361,11 @@ const treatmentsMainHref =
       .dd-panel a:hover{ color: rgba(15,23,42,.90); }
 
       /* ===== Mega menu (Tratamientos) — sin recuadritos ===== */
-      .nav-item--mega{ position: static; }
       .mega-panel{
         position:absolute;
         left: 0;
         right: 0;
-        top: 100%; /* ✅ antes: calc(100% + 14px) -> causaba “gap” */
+        top: 100%;
         margin: 0 auto;
         width: min(var(--max), 92vw);
         background: rgba(255,255,255,.98);
@@ -366,6 +376,7 @@ const treatmentsMainHref =
         transform: translateY(12px);
         pointer-events: none;
         transition: opacity .18s ease, transform .18s ease;
+        z-index: 90;
       }
       .nav-item--mega:hover > .mega-panel,
       .nav-item--mega:focus-within > .mega-panel{
@@ -428,7 +439,6 @@ const treatmentsMainHref =
       }
       .mega-sublink:hover{ color: rgba(15,23,42,.90); }
 
-      /* Placeholder premium (corporal) */
       .mega-soon{
         display:block;
         padding: 6px 0;
@@ -466,7 +476,7 @@ const treatmentsMainHref =
         display:flex;
         flex-direction: column;
         gap: 10px;
-        z-index: 70;
+        z-index: 120;
       }
 
       details.mdd > summary{
@@ -622,24 +632,28 @@ const treatmentsMainHref =
                         <div>
                           <div class="mega-title">{treatmentsCorporalTitle}</div>
 
-                          {treatmentsCorporal.length ? (
-                            <div class="mega-items cols-2">
-                              {treatmentsCorporal.map((t: any) => (
-                                <div class="mega-block">
-                                  <a class="mega-link" href={t.href} role="menuitem">{t.label}</a>
-
-                                  {Array.isArray(t.children) && t.children.length ? (
-                                    <div class="mega-children">
-                                      {t.children.map((c: any) => (
-                                        <a class="mega-sublink" href={c.href} role="menuitem">{c.label}</a>
-                                      ))}
-                                    </div>
-                                  ) : null}
-                                </div>
-                              ))}
-                            </div>
-                          ) : (
+                          {CORPORAL_SOON_ONLY ? (
                             <span class="mega-soon">Próximamente</span>
+                          ) : (
+                            treatmentsCorporal.length ? (
+                              <div class="mega-items cols-2">
+                                {treatmentsCorporal.map((t: any) => (
+                                  <div class="mega-block">
+                                    <a class="mega-link" href={t.href} role="menuitem">{t.label}</a>
+
+                                    {Array.isArray(t.children) && t.children.length ? (
+                                      <div class="mega-children">
+                                        {t.children.map((c: any) => (
+                                          <a class="mega-sublink" href={c.href} role="menuitem">{c.label}</a>
+                                        ))}
+                                      </div>
+                                    ) : null}
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <span class="mega-soon">Próximamente</span>
+                            )
                           )}
                         </div>
                       </div>
@@ -708,7 +722,11 @@ const treatmentsMainHref =
                       {treatmentsCorporalTitle}
                     </strong>
 
-                    {treatmentsCorporal.length ? (
+                    {CORPORAL_SOON_ONLY ? (
+                      <div style="padding:10px 12px; border-radius:12px; border:1px dashed rgba(15,23,42,.16); opacity:.7; font-weight:800;">
+                        Próximamente
+                      </div>
+                    ) : (
                       treatmentsCorporal.map((t: any) => (
                         <div style="display:flex; flex-direction:column; gap:6px;">
                           <a href={t.href}>{t.label}</a>
@@ -724,10 +742,6 @@ const treatmentsMainHref =
                           ) : null}
                         </div>
                       ))
-                    ) : (
-                      <div style="padding:10px 12px; border-radius:12px; border:1px dashed rgba(15,23,42,.16); opacity:.7; font-weight:800;">
-                        Próximamente
-                      </div>
                     )}
                   </div>
                 </details>
