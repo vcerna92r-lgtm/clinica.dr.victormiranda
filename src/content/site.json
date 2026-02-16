@@ -1,22 +1,20 @@
 {
   "home_gap_complications_social": "64px",
   "accent_color_2": "#06B6D4",
-  "clinic_name": "VM Aesthetics Clinic",
+  "clinic_name": "Clínica Dr. Víctor Miranda",
   "home_gap_social_footer": "56px",
   "logo_image": "/images/uploads/logo.png",
   "booking_url": "https://calendar.app.google/bmpjN2TAMFchpHd99",
   "bg_color": "#eff6ff",
   "city": "Managua, Nicaragua",
-  "name": "VM Aesthetics Clinic",
+  "name": "Clínica Dr. Víctor Miranda",
   "max_width": "1200px",
-  "home_gap_clinic_services": "64px",
   "accent_color": "#0F766E",
   "initials": "VM",
   "home_gap_cover_services": "72px",
   "whatsapp": "50587355501",
   "nav_links_gap": "20px",
   "hero_image": "/images/hero.jpg",
-  "home_gap_cover_clinic": "64px",
   "whatsapp_message": "Hola Dr. Víctor, quiero agendar una valoración en Clínica Dr. Víctor Miranda.\n\nMi nombre: ________\nServicio de interés: ________\nFecha y hora preferida: ________\n\nGracias.",
   "footer": {
     "clinic_name": "Clinica Dr. Victor Miranda Cerna",
@@ -27,5 +25,69 @@
   },
   "email": "vcerna92r@gmail.com",
   "home_gap_services_complications": "64px",
-  "home_gap_faq_social": "64px"
+  "navbar": {
+    "items": [
+      {
+        "label": "Tratamientos estéticos",
+        "href": "/tratamientos-esteticos/",
+        "children": [
+          { "label": "Ver todos", "href": "/tratamientos-esteticos/" },
+          { "label": "Facial", "href": "/tratamientos-esteticos/facial/" },
+          { "label": "Corporal", "href": "/tratamientos-esteticos/corporal/" }
+        ]
+      },
+      {
+        "label": "Packs",
+        "href": "/packs/",
+        "children": [
+          { "label": "Ver packs", "href": "/packs/" },
+          { "label": "Packs faciales", "href": "/packs/faciales/" },
+          { "label": "Packs corporales", "href": "/packs/corporales/" }
+        ]
+      },
+      {
+        "label": "Tienda",
+        "href": "/tienda/",
+        "children": [
+          { "label": "Ver tienda", "href": "/tienda/" },
+          { "label": "Skincare", "href": "/tienda/skincare/" },
+          { "label": "Accesorios", "href": "/tienda/accesorios/" }
+        ]
+      },
+      {
+        "label": "Tarjeta de Regalo",
+        "href": "/tarjeta-de-regalo/",
+        "children": [
+          { "label": "Comprar tarjeta", "href": "/tarjeta-de-regalo/" },
+          { "label": "Cómo funciona", "href": "/tarjeta-de-regalo/como-funciona/" }
+        ]
+      },
+      {
+        "label": "Blog de belleza",
+        "href": "/blog/",
+        "children": [
+          { "label": "Ver blog", "href": "/blog/" },
+          { "label": "Rutinas", "href": "/blog/rutinas/" },
+          { "label": "Tips", "href": "/blog/tips/" }
+        ]
+      },
+      {
+        "label": "Contacto",
+        "href": "/contacto/",
+        "children": [
+          { "label": "Contáctanos", "href": "/contacto/" },
+          { "label": "Ubicación", "href": "/contacto/#ubicacion" },
+          { "label": "Pide tu cita", "href": "/contacto/#cita" }
+        ]
+      },
+      {
+        "label": "Rebon",
+        "href": "/rebon/",
+        "children": [
+          { "label": "Conocer Rebon", "href": "/rebon/" },
+          { "label": "¿Qué es?", "href": "/rebon/que-es/" }
+        ]
+      }
+    ]
+  }
 }
