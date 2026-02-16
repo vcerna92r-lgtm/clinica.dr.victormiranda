@@ -320,7 +320,7 @@ const treatmentsMainHref =
       .nav-item{ position: relative; }
       .dd-panel{
         position:absolute;
-        top: calc(100% + 14px);
+        top: 100%; /* ✅ antes: calc(100% + 14px) -> causaba “gap” */
         left: 50%;
         transform: translate(-50%, 10px);
         min-width: 240px;
@@ -355,7 +355,7 @@ const treatmentsMainHref =
         position:absolute;
         left: 0;
         right: 0;
-        top: calc(100% + 14px);
+        top: 100%; /* ✅ antes: calc(100% + 14px) -> causaba “gap” */
         margin: 0 auto;
         width: min(var(--max), 92vw);
         background: rgba(255,255,255,.98);
