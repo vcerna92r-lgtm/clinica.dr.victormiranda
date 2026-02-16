@@ -3,7 +3,7 @@
   "accent_color_2": "#06B6D4",
   "clinic_name": "VM Aesthetics Clinic",
   "home_gap_social_footer": "56px",
-  "logo_image": "/images/uploads/captura-de-pantalla-2025-07-23-a-la-s-4.21.21 p.m..png",
+  "logo_image": "/images/uploads/captura-de-pantalla-2025-07-23-a-la-s-4.21.21 p.m..png",
   "booking_url": "https://calendar.app.google/bmpjN2TAMFchpHd99",
   "bg_color": "#eff6ff",
   "city": "Managua, Nicaragua",
@@ -13,128 +13,79 @@
   "accent_color": "#0F766E",
   "initials": "VM",
   "home_gap_cover_services": "72px",
+
   "navbar": {
+    "leftCount": 3,
+    "treatments_label": "Tratamientos",
+    "treatments_facial_title": "Medicina estética facial",
+    "treatments_corporal_title": "Medicina estética corporal",
     "items": [
       {
-        "label": "Tratamientos estéticos",
-        "href": "/tratamientos-esteticos/",
-        "children": [
-          {
-            "label": "Ver todos",
-            "href": "/tratamientos-esteticos/"
-          },
-          {
-            "label": "Facial",
-            "href": "/tratamientos-esteticos/facial/"
-          },
-          {
-            "label": "Corporal",
-            "href": "/tratamientos-esteticos/corporal/"
-          }
-        ]
+        "type": "treatments",
+        "label": "Tratamientos",
+        "href": "/tratamientos/"
       },
       {
+        "type": "dropdown",
         "label": "Packs",
         "href": "/packs/",
         "children": [
-          {
-            "label": "Ver packs",
-            "href": "/packs/"
-          },
-          {
-            "label": "Packs faciales",
-            "href": "/packs/faciales/"
-          },
-          {
-            "label": "Packs corporales",
-            "href": "/packs/corporales/"
-          }
+          { "label": "Ver packs", "href": "/packs/" },
+          { "label": "Packs faciales", "href": "/packs/faciales/" },
+          { "label": "Packs corporales", "href": "/packs/corporales/" }
         ]
       },
       {
+        "type": "dropdown",
         "label": "Tienda",
         "href": "/tienda/",
         "children": [
-          {
-            "label": "Ver tienda",
-            "href": "/tienda/"
-          },
-          {
-            "label": "Skincare",
-            "href": "/tienda/skincare/"
-          },
-          {
-            "label": "Accesorios",
-            "href": "/tienda/accesorios/"
-          }
+          { "label": "Ver tienda", "href": "/tienda/" },
+          { "label": "Skincare", "href": "/tienda/skincare/" },
+          { "label": "Accesorios", "href": "/tienda/accesorios/" }
         ]
       },
       {
+        "type": "dropdown",
         "label": "Tarjeta de Regalo",
         "href": "/tarjeta-de-regalo/",
         "children": [
-          {
-            "label": "Comprar tarjeta",
-            "href": "/tarjeta-de-regalo/"
-          },
-          {
-            "label": "Cómo funciona",
-            "href": "/tarjeta-de-regalo/como-funciona/"
-          }
+          { "label": "Comprar tarjeta", "href": "/tarjeta-de-regalo/" },
+          { "label": "Cómo funciona", "href": "/tarjeta-de-regalo/como-funciona/" }
         ]
       },
       {
+        "type": "dropdown",
         "label": "Blog de belleza",
         "href": "/blog/",
         "children": [
-          {
-            "label": "Ver blog",
-            "href": "/blog/"
-          },
-          {
-            "label": "Rutinas",
-            "href": "/blog/rutinas/"
-          },
-          {
-            "label": "Tips",
-            "href": "/blog/tips/"
-          }
+          { "label": "Ver blog", "href": "/blog/" },
+          { "label": "Rutinas", "href": "/blog/rutinas/" },
+          { "label": "Tips", "href": "/blog/tips/" }
         ]
       },
       {
+        "type": "dropdown",
         "label": "Contacto",
         "href": "/contacto/",
         "children": [
-          {
-            "label": "Contáctanos",
-            "href": "/contacto/"
-          },
-          {
-            "label": "Ubicación",
-            "href": "/contacto/#ubicacion"
-          },
-          {
-            "label": "Pide tu cita",
-            "href": "/contacto/#cita"
-          }
+          { "label": "Contáctanos", "href": "/contacto/" },
+          { "label": "Ubicación", "href": "/contacto/#ubicacion" },
+          { "label": "Pide tu cita", "href": "/contacto/#cita" }
         ]
       },
       {
+        "type": "dropdown",
         "label": "Rebon",
         "href": "/rebon/",
         "children": [
-          {
-            "label": "Conocer Rebon",
-            "href": "/rebon/"
-          },
-          {
-            "label": "¿Qué es?",
-            "href": "/rebon/que-es/"
-          }
+          { "label": "Conocer Rebon", "href": "/rebon/" },
+          { "label": "¿Qué es?", "href": "/rebon/que-es/" }
         ]
       }
     ]
   },
+
   "whatsapp": "50587355501",
   "nav_links_gap": "20px",
   "hero_image": "/images/uploads/logo.png",

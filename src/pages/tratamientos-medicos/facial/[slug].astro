@@ -1,0 +1,61 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+
+const CATEGORY = "facial";
+
+function slugFromFilepath(fp) {
+  const name = String(fp).split("/").pop() || "";
+  return name.replace(/\.mdx?$/i, "");
+}
+
+export async function getStaticPaths() {
+  const entries = await Astro.glob("../../../content/treatments/**/*.{md,mdx}");
+
+  const items = entries
+    .map((entry) => {
+      const fm = entry.frontmatter || {};
+      const category = String(fm.category || "").toLowerCase().trim();
+      const slug = String(fm.slug || slugFromFilepath(entry.file)).trim();
+      return { entry, category, slug };
+    })
+    .filter((x) => x.slug && x.category === CATEGORY);
+
+  return items.map((x) => ({
+    params: { slug: x.slug },
+    props: { entry: x.entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content, frontmatter } = entry;
+
+const title = frontmatter?.title || "Tratamiento";
+const description = frontmatter?.description || "";
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="treat-page">
+    <a class="back" href={`/tratamientos-medicos/${CATEGORY}/`}>← Volver</a>
+
+    <header class="head">
+      <h1>{title}</h1>
+      {description ? <p class="desc">{description}</p> : null}
+    </header>
+
+    <div class="content">
+      <Content />
+    </div>
+  </article>
+
+  <style>
+    .treat-page{ padding: 18px 0; max-width: 980px; margin: 0 auto; }
+    .back{ display:inline-block; margin-bottom:14px; opacity:.8; }
+    .back:hover{ text-decoration: underline; text-underline-offset: 3px; opacity:1; }
+    .head h1{ margin: 0 0 8px 0; font-size: 34px; letter-spacing:-.02em; }
+    .desc{ margin:0; color: var(--muted); }
+    .content{ margin-top: 18px; }
+    .content :global(h2){ margin-top: 22px; }
+    .content :global(p){ margin: 10px 0; }
+    .content :global(ul){ margin: 10px 0; padding-left: 18px; }
+  </style>
+</BaseLayout>

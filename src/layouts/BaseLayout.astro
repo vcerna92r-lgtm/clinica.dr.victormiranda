@@ -1,7 +1,7 @@
 ---
 import site from "../content/site.json";
 
-const siteName = site.clinic_name || site.name || "Clínica Dr. Víctor Miranda";
+const siteName = site.clinic_name || site.name || "Clínica";
 const initials = site.initials || "VM";
 
 const {
@@ -11,16 +11,16 @@ const {
 
 const year = new Date().getFullYear();
 
-// Colores
+// Colores (del admin/site.json)
 const accent = String(site.accent_color || "#0F766E").trim();
 const accent2 = String(site.accent_color_2 || "#06B6D4").trim();
 
-// Fondo + ancho + separación
+// Fondo + ancho + separación del menú
 const bg = String(site.bg_color || "#ffffff").trim();
 const maxWidth = String(site.max_width || "1120px").trim();
 const navLinksGap = String(site.nav_links_gap || "16px").trim();
 
-// Espacios home
+// Espacios verticales
 const homeGapServicesComplications = String(site.home_gap_services_complications || "64px").trim();
 const homeGapCoverServices = String(site.home_gap_cover_services || "48px").trim();
 const homeGapComplicationsSocial = String(site.home_gap_complications_social || "64px").trim();
@@ -43,74 +43,55 @@ const footerEmail = site.footer?.email || site.email || "";
 const footerPoliciesLabel = site.footer?.policies_label || "Políticas";
 const footerPoliciesUrl = site.footer?.policies_url || "/politicas";
 
-// Navbar desde Admin (fallback)
-const defaultNavbarItems = [
-  {
-    label: "Tratamientos médicos",
-    href: "/tratamientos-medicos/",
-    mega: {
-      groups: [
-        {
-          title: "Medicina estética facial",
-          links: [
-            { label: "Full Face", href: "/tratamientos-medicos/full-face/" },
-            { label: "Triángulo invertido", href: "/tratamientos-medicos/triangulo-invertido/" },
-            { label: "Bruxismo", href: "/tratamientos-medicos/bruxismo/" }
-          ]
-        },
-        {
-          title: " ",
-          links: [
-            { label: "Labios", href: "/tratamientos-medicos/labios/" },
-            { label: "Relleno de ojeras", href: "/tratamientos-medicos/ojeras/" },
-            { label: "Rinomodelación", href: "/tratamientos-medicos/rinomodelacion/" }
-          ]
-        },
-        {
-          title: "Medicina estética corporal",
-          links: [
-            { label: "Intralipoterapia", href: "/tratamientos-medicos/intralipoterapia/" },
-            { label: "Hiperhidrosis", href: "/tratamientos-medicos/hiperhidrosis/" },
-            { label: "Mesoterapia", href: "/tratamientos-medicos/mesoterapia/" }
-          ]
-        }
-      ]
-    }
-  },
-  {
-    label: "Packs",
-    href: "/packs/",
-    children: [{ label: "Ver packs", href: "/packs/" }]
-  },
-  {
-    label: "Tienda",
-    href: "/tienda/",
-    children: [{ label: "Ver tienda", href: "/tienda/" }]
-  },
-  {
-    label: "Tarjeta de regalo",
-    href: "/tarjeta-de-regalo/",
-    children: [{ label: "Comprar", href: "/tarjeta-de-regalo/" }]
-  },
-  {
-    label: "Blog de belleza",
-    href: "/blog/",
-    children: [{ label: "Ver blog", href: "/blog/" }]
-  },
-  {
-    label: "Contacto",
-    href: "/contacto/",
-    children: [{ label: "Contáctanos", href: "/contacto/" }]
-  },
-  {
-    label: "Rebon",
-    href: "/rebon/",
-    children: [{ label: "Conocer", href: "/rebon/" }]
-  }
-];
-
+// Navbar items (admin)
 const navbarItems =
-  Array.isArray(site?.navbar?.items) && site.navbar.items.length ? site.navbar.items : defaultNavbarItems;
+  Array.isArray(site?.navbar?.items) && site.navbar.items.length
+    ? site.navbar.items
+    : [];
+
+const leftCount = Number.isFinite(Number(site?.navbar?.leftCount))
+  ? Number(site.navbar.leftCount)
+  : 3;
+
+const navLeft = navbarItems.slice(0, leftCount);
+const navRight = navbarItems.slice(leftCount);
+
+// Títulos del mega menú de tratamientos (admin)
+const treatmentsLabel = site?.navbar?.treatments_label || "Tratamientos";
+const treatmentsFacialTitle = site?.navbar?.treatments_facial_title || "Medicina estética facial";
+const treatmentsCorporalTitle = site?.navbar?.treatments_corporal_title || "Medicina estética corporal";
+
+// ===== Tratamientos desde Admin (Markdown) =====
+const treatmentFiles = await Astro.glob("../content/treatments/*.md");
+
+const treatmentsAll = (treatmentFiles || [])
+  .map((t) => {
+    const fm = t.frontmatter ?? {};
+    const slug =
+      String(fm.slug || "").trim() ||
+      String(t.file?.split("/").pop() || "").replace(/\.md$/i, "");
+
+    const category = String(fm.category || "facial").trim(); // facial | corporal
+    const label = String(fm.menu_label || fm.title || slug).trim();
+    const order = Number.isFinite(Number(fm.order)) ? Number(fm.order) : 999;
+
+    return {
+      category,
+      slug,
+      label,
+      order,
+      href: `/tratamientos/${category}/${slug}/`,
+    };
+  })
+  .filter((x) => x.label && x.slug);
+
+const treatmentsFacial = treatmentsAll
+  .filter((x) => x.category === "facial")
+  .sort((a, b) => a.order - b.order);
+
+const treatmentsCorporal = treatmentsAll
+  .filter((x) => x.category === "corporal")
+  .sort((a, b) => a.order - b.order);
 ---
 
 <!doctype html>
@@ -140,6 +121,9 @@ const navbarItems =
         --text: #0f172a;
         --muted: #475569;
         --line: #e2e8f0;
+        --soft: #f8fafc;
+
+        --radius: 18px;
       }
 
       *{ box-sizing:border-box; }
@@ -153,100 +137,93 @@ const navbarItems =
       a{ color: inherit; text-decoration: none; }
       .container{ max-width: var(--max); margin:0 auto; padding: 18px; }
 
-      /* Header (se esconde al bajar) */
+      /* ===== Header / Navbar ===== */
       .header{
         position: sticky;
         top: 0;
         z-index: 50;
-        background: rgba(255,255,255,.78);
+        background: rgba(255,255,255,.82);
         backdrop-filter: blur(12px);
         border-bottom: 1px solid rgba(15,23,42,.10);
-        transition: transform 220ms ease, background 180ms ease;
+        transition: transform .22s ease, background .22s ease, box-shadow .22s ease;
         will-change: transform;
       }
-      .header.is-hidden{ transform: translateY(-110%); }
+      .header.header--hide{
+        transform: translateY(-110%);
+      }
 
-      /* Fila superior */
-      .nav-top{
-        display:grid;
-        grid-template-columns: 1fr auto 1fr;
+      .nav-shell{
+        display:flex;
         align-items:center;
         gap: 14px;
-        padding: 14px 0 8px;
+        min-height: 78px;
       }
-      .top-left{ justify-self:start; }
-      .top-center{ justify-self:center; }
-      .top-right{ justify-self:end; display:flex; gap:10px; align-items:center; }
 
-      /* Logo */
+      /* Lados */
+      .nav-side{
+        display:flex;
+        align-items:center;
+        gap: var(--nav-gap);
+        flex: 1;
+        min-width: 0;
+        flex-wrap: nowrap;
+      }
+      .nav-left{ justify-content: flex-end; }
+      .nav-right{ justify-content: flex-start; }
+
+      /* Centro: logo tipo referencia (vertical) */
+      .nav-center{
+        display:flex;
+        flex-direction: column;
+        align-items:center;
+        justify-content:center;
+        gap: 6px;
+        text-align:center;
+        flex: 0 0 auto;
+      }
+
       .brand{
         display:flex;
         flex-direction: column;
         align-items:center;
         gap: 8px;
         font-weight: 900;
-        letter-spacing: .2px;
-        text-align:center;
+        letter-spacing: .12px;
       }
+
       .brand-badge{
-        width: 56px;
-        height: 56px;
+        width: 52px;
+        height: 52px;
         border-radius: 18px;
         background:
-          radial-gradient(100px 50px at 20% 10%, var(--accent2), rgba(255,255,255,0)),
+          radial-gradient(90px 40px at 20% 10%, var(--accent2), rgba(255,255,255,0)),
           linear-gradient(135deg, var(--accent), #0f172a);
         color: #fff;
         display:flex;
         align-items:center;
         justify-content:center;
-        box-shadow: 0 14px 30px rgba(15,23,42,0.18);
+        box-shadow: 0 16px 30px rgba(2,6,23,.18);
         overflow: hidden;
-        flex: 0 0 auto;
       }
-      .brand-badge img{ width:100%; height:100%; object-fit:cover; display:block; }
-      .brand-name{ font-weight: 900; font-size: 16px; letter-spacing: .02em; white-space: nowrap; }
-
-      /* Botones */
-      .btn{
-        display:inline-flex;
-        align-items:center;
-        justify-content:center;
-        gap:10px;
-        padding: 12px 16px;
-        border-radius: 16px;
-        border: 1px solid rgba(15,23,42,.12);
-        background: rgba(255,255,255,.95);
-        color: rgba(15,23,42,.92);
-        font-weight: 900;
-        box-shadow: 0 10px 24px rgba(15,23,42,0.05);
-        white-space: nowrap;
-      }
-      .btn:hover{ background: rgba(15,23,42,.05); }
-      .btn-primary{
-        background: linear-gradient(135deg, var(--accent), var(--accent2));
-        border: none;
-        color: #fff;
-        box-shadow: 0 14px 30px rgba(6,182,212,0.18);
-      }
-      .btn-primary:hover{ filter: brightness(.97); }
-
-      /* Fila inferior: menú */
-      .nav-bottom{
-        position: relative;
-        padding: 8px 0 12px;
-      }
-      .nav-menu{
+      .brand-badge img{
         width: 100%;
-        display:flex !important;
-        flex-direction: row !important;
-        flex-wrap: nowrap !important;
-        align-items:center;
-        justify-content: space-between;
-        gap: var(--nav-gap);
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .brand-name{
+        font-weight: 900;
+        letter-spacing: .10em;
+        font-size: 18px;
+        text-transform: uppercase;
+        color: rgba(15,23,42,.88);
+        line-height: 1.1;
+        white-space: nowrap;
       }
 
       /* Dropdown base */
-      details.dd{ position: relative; flex: 0 0 auto; }
+      details.dd{ position: relative; }
       details.dd > summary{
         list-style:none;
         cursor:pointer;
@@ -255,7 +232,7 @@ const navbarItems =
         color: rgba(15,23,42,.78);
         font-weight: 900;
         font-size: 12px;
-        letter-spacing: .06em;
+        letter-spacing: .05em;
         text-transform: uppercase;
         user-select: none;
         display:flex;
@@ -270,13 +247,12 @@ const navbarItems =
       }
       .caret{ font-size: 12px; opacity:.7; }
 
-      /* Panel normal */
       .dd-panel{
         position:absolute;
         top: calc(100% + 10px);
         left: 0;
         min-width: 240px;
-        max-width: min(360px, 75vw);
+        max-width: min(420px, 78vw);
         background: rgba(255,255,255,.98);
         border: 1px solid rgba(15,23,42,.10);
         border-radius: 16px;
@@ -285,19 +261,14 @@ const navbarItems =
         z-index: 60;
 
         opacity: 0;
-        transform: translateY(-8px);
+        transform: translateY(8px);
         pointer-events: none;
-        transition: opacity 180ms ease, transform 180ms ease;
+        transition: opacity .18s ease, transform .18s ease;
       }
       details.dd[open] > .dd-panel{
         opacity: 1;
         transform: translateY(0);
         pointer-events: auto;
-      }
-      details.dd.closing > .dd-panel{
-        opacity: 0;
-        transform: translateY(-8px);
-        pointer-events: none;
       }
 
       .dd-main{
@@ -317,77 +288,108 @@ const navbarItems =
         border-radius: 12px;
         border: 1px solid rgba(15,23,42,.08);
         background: rgba(255,255,255,.9);
+        color: rgba(15,23,42,.86);
         font-weight: 800;
+        margin-bottom: 8px;
       }
       .dd-item:hover{ background: rgba(15,23,42,.05); }
+      .dd-item:last-child{ margin-bottom: 0; }
 
-      /* ===== Mega menú (horizontal en columnas) ===== */
-      .mega-panel{
-        position:absolute;
-        top: calc(100% + 12px);
+      .dd-empty{
+        display:block;
+        padding: 10px 10px;
+        border-radius: 12px;
+        border: 1px dashed rgba(15,23,42,.20);
+        color: rgba(15,23,42,.55);
+        font-weight: 800;
+      }
+
+      /* ===== Mega menú (Tratamientos) ===== */
+      details.dd.dd-mega > .dd-panel{
         left: 50%;
-        transform: translateX(-50%) translateY(-10px);
-        width: min(var(--max), calc(100vw - 36px));
-        background: rgba(255,255,255,.98);
-        border: 1px solid rgba(15,23,42,.10);
-        border-radius: 18px;
-        box-shadow: 0 18px 52px rgba(2,6,23,.16);
-        z-index: 80;
-        padding: 18px;
-
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 190ms ease, transform 190ms ease;
+        transform: translate(-50%, 8px);
+        width: min(1120px, 92vw);
+        max-width: min(1120px, 92vw);
       }
-      details.dd[open] > .mega-panel{
-        opacity: 1;
-        pointer-events: auto;
-        transform: translateX(-50%) translateY(0);
-      }
-      details.dd.closing > .mega-panel{
-        opacity: 0;
-        pointer-events: none;
-        transform: translateX(-50%) translateY(-10px);
+      details.dd.dd-mega[open] > .dd-panel{
+        transform: translate(-50%, 0);
       }
 
+      .mega-wrap{
+        padding: 6px;
+      }
       .mega-grid{
         display:grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 18px 26px;
-        align-items:start;
+        grid-template-columns: 3fr 1.6fr;
+        gap: 26px;
       }
 
       .mega-title{
         font-weight: 900;
-        font-size: 12px;
-        letter-spacing: .10em;
         text-transform: uppercase;
-        color: rgba(15,23,42,.55);
-        margin: 0 0 10px;
+        letter-spacing: .06em;
+        font-size: 12px;
+        color: rgba(15,23,42,.70);
+        margin: 4px 0 10px;
       }
+
+      .mega-items{
+        column-gap: 28px;
+      }
+      .mega-items.cols-3{ columns: 3; }
+      .mega-items.cols-2{ columns: 2; }
 
       .mega-link{
         display:block;
-        padding: 9px 10px;
+        break-inside: avoid;
+        padding: 10px 10px;
         border-radius: 12px;
-        font-weight: 800;
-        color: rgba(15,23,42,.80);
-        border: 1px solid rgba(15,23,42,.06);
+        border: 1px solid rgba(15,23,42,.08);
         background: rgba(15,23,42,.02);
-        margin-bottom: 8px;
+        font-weight: 800;
+        color: rgba(15,23,42,.84);
+        margin: 0 0 10px;
       }
-      .mega-link:hover{
-        background: rgba(15,23,42,.06);
-        color: rgba(15,23,42,.95);
-      }
+      .mega-link:hover{ background: rgba(15,23,42,.06); }
 
-      /* ===== Menú móvil (hamburguesa) ===== */
-      .nav-mobile{ display:none !important; position: relative; }
+      /* CTA (derecha) */
+      .nav-cta{
+        display:flex;
+        gap:10px;
+        align-items:center;
+        margin-left: 12px;
+        flex: 0 0 auto;
+      }
+      .btn{
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        gap:10px;
+        padding: 11px 14px;
+        border-radius: 16px;
+        border: 1px solid rgba(15,23,42,.12);
+        background: rgba(255,255,255,.95);
+        color: rgba(15,23,42,.92);
+        font-weight: 900;
+        box-shadow: 0 10px 24px rgba(15,23,42,0.05);
+        white-space: nowrap;
+      }
+      .btn:hover{ background: rgba(15,23,42,.05); }
+      .btn-primary{
+        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        border: none;
+        color: #fff;
+        box-shadow: 0 14px 30px rgba(6,182,212,0.18);
+      }
+      .btn-primary:hover{ filter: brightness(.97); }
+
+      /* ===== Mobile ===== */
+      .nav-mobile{ display:none; margin-left:auto; position: relative; }
       .burger{
         list-style:none;
         cursor:pointer;
         padding: 10px 12px;
-        border-radius: 14px;
+        border-radius: 12px;
         border: 1px solid rgba(15,23,42,.12);
         background: rgba(255,255,255,.92);
         font-weight: 900;
@@ -395,32 +397,20 @@ const navbarItems =
       }
       .burger::-webkit-details-marker{ display:none; }
 
-      details.nav-mobile:not([open]) .mobile-panel{ display:none; }
-      details.nav-mobile[open] .mobile-panel{ display:flex; }
-
       .mobile-panel{
         position:absolute;
         right: 0;
         top: calc(100% + 10px);
-        width: min(380px, 92vw);
+        width: min(420px, 92vw);
         background: rgba(255,255,255,.98);
         border: 1px solid rgba(15,23,42,.10);
-        border-radius: 18px;
+        border-radius: 16px;
         padding: 12px;
         box-shadow: 0 16px 40px rgba(2,6,23,.12);
+        display:flex;
         flex-direction: column;
         gap: 10px;
-        z-index: 90;
-      }
-
-      .m-home{
-        display:flex;
-        justify-content:center;
-        padding: 12px 12px;
-        border-radius: 12px;
-        border: 1px solid rgba(15,23,42,.10);
-        background: rgba(15,23,42,.02);
-        font-weight: 900;
+        z-index: 70;
       }
 
       details.mdd > summary{
@@ -451,34 +441,22 @@ const navbarItems =
         background: rgba(15,23,42,.02);
         font-weight: 800;
       }
+      .mdd-panel a:hover{ background: rgba(15,23,42,.06); }
 
-      .m-group-title{
-        font-size: 12px;
-        font-weight: 900;
-        letter-spacing: .08em;
-        text-transform: uppercase;
-        opacity: .6;
-        margin-top: 8px;
+      .mobile-cta{
+        display:flex;
+        gap: 10px;
+        margin-top: 4px;
       }
+      .mobile-cta .btn{ flex: 1; }
 
-      .mobile-cta{ display:flex; gap:10px; }
-      .mobile-cta .btn{ flex:1; }
-
-      @media (max-width: 860px){
-        .container{ padding: 14px; }
-        .nav-bottom{ display:none !important; }
-        .top-right .btn{ display:none !important; }
-        .nav-mobile{ display:block !important; }
-
-        .nav-top{ padding: 10px 0 10px; }
-        .brand{ flex-direction: row; gap: 10px; }
-        .brand-badge{ width: 42px; height: 42px; border-radius: 14px; }
-        .brand-name{
-          font-size: 14px;
-          max-width: 210px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
+      @media (max-width: 980px){
+        .nav-left, .nav-right, .nav-cta{ display:none; }
+        .nav-mobile{ display:block; }
+        .brand-name{ font-size: 16px; }
+      }
+      @media (max-width: 520px){
+        .brand-name{ display:none; }
       }
 
       /* Footer */
@@ -493,15 +471,31 @@ const navbarItems =
         gap: 14px;
         color: var(--muted);
       }
-      .footer-brand{ color: var(--text); font-weight: 800; letter-spacing: .2px; }
-      .footer-heading{ font-size: 12px; opacity: .65; margin-bottom: 6px; }
+      .footer-brand{
+        color: var(--text);
+        font-weight: 800;
+        letter-spacing: .2px;
+      }
+      .footer-heading{
+        font-size: 12px;
+        opacity: .65;
+        margin-bottom: 6px;
+      }
+      .footer-link:hover{
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
       @media (min-width: 768px){
-        .footer-inner{ grid-template-columns: 1fr 1fr 1fr; gap: 24px; align-items: start; }
+        .footer-inner{
+          grid-template-columns: 1fr 1fr 1fr;
+          gap: 24px;
+          align-items: start;
+        }
         .footer-center{ text-align: center; }
         .footer-right{ text-align: right; }
       }
 
-      /* WhatsApp flotante */
+      /* Floating WhatsApp */
       .wa-fab{
         position: fixed !important;
         right: 18px !important;
@@ -521,14 +515,73 @@ const navbarItems =
   </head>
 
   <body>
-    <header class="header">
+    <header class="header" id="site-header">
       <div class="container">
+        <nav class="nav-shell" aria-label="Navegación principal">
 
-        <!-- FILA 1 -->
-        <div class="nav-top" aria-label="Barra superior">
-          <div class="top-left"></div>
+          <!-- Left -->
+          <div class="nav-side nav-left" aria-label="Menú izquierdo">
+            {navLeft.map((item) => (
+              item?.type === "treatments" ? (
+                <details class="dd dd-mega">
+                  <summary>
+                    {item.label || treatmentsLabel} <span class="caret">▾</span>
+                  </summary>
 
-          <div class="top-center">
+                  <div class="dd-panel" role="menu">
+                    <div class="mega-wrap">
+                      <div class="mega-grid">
+                        <div>
+                          <div class="mega-title">{treatmentsFacialTitle}</div>
+                          {treatmentsFacial.length ? (
+                            <div class="mega-items cols-3">
+                              {treatmentsFacial.map((t) => (
+                                <a class="mega-link" href={t.href} role="menuitem">{t.label}</a>
+                              ))}
+                            </div>
+                          ) : (
+                            <span class="dd-empty">Próximamente</span>
+                          )}
+                        </div>
+
+                        <div>
+                          <div class="mega-title">{treatmentsCorporalTitle}</div>
+                          {treatmentsCorporal.length ? (
+                            <div class="mega-items cols-2">
+                              {treatmentsCorporal.map((t) => (
+                                <a class="mega-link" href={t.href} role="menuitem">{t.label}</a>
+                              ))}
+                            </div>
+                          ) : (
+                            <span class="dd-empty">Próximamente</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </details>
+              ) : (
+                <details class="dd">
+                  <summary>
+                    {item.label} <span class="caret">▾</span>
+                  </summary>
+                  <div class="dd-panel" role="menu">
+                    <a class="dd-main" href={item.href} role="menuitem">Ver sección</a>
+                    {Array.isArray(item.children) && item.children.length ? (
+                      item.children.map((c) => (
+                        <a class="dd-item" href={c.href} role="menuitem">{c.label}</a>
+                      ))
+                    ) : (
+                      <span class="dd-empty">Próximamente</span>
+                    )}
+                  </div>
+                </details>
+              )
+            ))}
+          </div>
+
+          <!-- Center brand -->
+          <div class="nav-center">
             <a class="brand" href="/" aria-label={siteName}>
               <span class="brand-badge">
                 {logoImage ? <img src={logoImage} alt="Logo" /> : initials}
@@ -537,100 +590,80 @@ const navbarItems =
             </a>
           </div>
 
-          <div class="top-right">
-            <a class="btn" href={whatsappLink} target="_blank" rel="noreferrer">💬 WhatsApp</a>
-            <a class="btn btn-primary" href={bookingUrl} target="_blank" rel="noreferrer">Pide tu cita</a>
-
-            <!-- Burger (solo teléfono) -->
-            <details class="nav-mobile">
-              <summary class="burger" aria-label="Abrir menú">☰</summary>
-              <div class="mobile-panel">
-                <a class="m-home" href="/">Inicio</a>
-
-                {navbarItems.map((item) => (
-                  <details class="mdd">
-                    <summary>
-                      <span>{item.label}</span>
-                      <span class="caret">▾</span>
-                    </summary>
-
-                    <div class="mdd-panel">
-                      <a href={item.href}>Ver sección</a>
-
-                      {item?.mega?.groups?.length ? (
-                        item.mega.groups.map((g) => (
-                          <>
-                            <div class="m-group-title">{g.title}</div>
-                            {Array.isArray(g.links) ? g.links.map((lnk) => (
-                              <a href={lnk.href}>{lnk.label}</a>
-                            )) : null}
-                          </>
-                        ))
-                      ) : Array.isArray(item.children) && item.children.length ? (
-                        item.children.map((c) => (
-                          <a href={c.href}>{c.label}</a>
-                        ))
-                      ) : null}
-                    </div>
-                  </details>
-                ))}
-
-                <div class="mobile-cta">
-                  <a class="btn" href={whatsappLink} target="_blank" rel="noreferrer">💬 WhatsApp</a>
-                  <a class="btn btn-primary" href={bookingUrl} target="_blank" rel="noreferrer">Pide tu cita</a>
-                </div>
-              </div>
-            </details>
-          </div>
-        </div>
-
-        <!-- FILA 2 (DESKTOP) -->
-        <div class="nav-bottom" aria-label="Menú principal">
-          <div class="nav-menu">
-            {navbarItems.map((item) => {
-              const isMega = !!(item?.mega?.groups && Array.isArray(item.mega.groups) && item.mega.groups.length);
-
-              return (
-                <details class="dd">
-                  <summary>
-                    {item.label} <span class="caret">▾</span>
-                  </summary>
-
-                  {isMega ? (
-                    <div class="mega-panel" role="menu">
-                      <div class="mega-grid">
-                        {item.mega.groups.map((g) => (
-                          <div>
-                            <div class="mega-title">{g.title}</div>
-                            {Array.isArray(g.links) && g.links.length ? (
-                              g.links.map((lnk) => (
-                                <a class="mega-link" href={lnk.href} role="menuitem">{lnk.label}</a>
-                              ))
-                            ) : (
-                              <a class="mega-link" href={item.href} role="menuitem">Ver sección</a>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
+          <!-- Right -->
+          <div class="nav-side nav-right" aria-label="Menú derecho">
+            {navRight.map((item) => (
+              <details class="dd">
+                <summary>
+                  {item.label} <span class="caret">▾</span>
+                </summary>
+                <div class="dd-panel" role="menu">
+                  <a class="dd-main" href={item.href} role="menuitem">Ver sección</a>
+                  {Array.isArray(item.children) && item.children.length ? (
+                    item.children.map((c) => (
+                      <a class="dd-item" href={c.href} role="menuitem">{c.label}</a>
+                    ))
                   ) : (
-                    <div class="dd-panel" role="menu">
-                      <a class="dd-main" href={item.href} role="menuitem">Ver sección</a>
-                      {Array.isArray(item.children) && item.children.length ? (
-                        item.children.map((c) => (
-                          <a class="dd-item" href={c.href} role="menuitem">{c.label}</a>
-                        ))
-                      ) : (
-                        <span class="dd-empty">Próximamente</span>
-                      )}
-                    </div>
+                    <span class="dd-empty">Próximamente</span>
                   )}
-                </details>
-              );
-            })}
-          </div>
-        </div>
+                </div>
+              </details>
+            ))}
 
+            <div class="nav-cta">
+              <a class="btn" href={whatsappLink} target="_blank" rel="noreferrer">💬 WhatsApp</a>
+              <a class="btn btn-primary" href={bookingUrl} target="_blank" rel="noreferrer">Pide tu cita</a>
+            </div>
+          </div>
+
+          <!-- Mobile -->
+          <details class="nav-mobile">
+            <summary class="burger" aria-label="Abrir menú">☰</summary>
+
+            <div class="mobile-panel">
+              <details class="mdd" open>
+                <summary>
+                  <span>{treatmentsLabel}</span>
+                  <span class="caret">▾</span>
+                </summary>
+                <div class="mdd-panel">
+                  <strong style="opacity:.75; font-size:12px; text-transform:uppercase; letter-spacing:.06em;">
+                    {treatmentsFacialTitle}
+                  </strong>
+                  {treatmentsFacial.map((t) => (<a href={t.href}>{t.label}</a>))}
+
+                  <div style="height:10px"></div>
+
+                  <strong style="opacity:.75; font-size:12px; text-transform:uppercase; letter-spacing:.06em;">
+                    {treatmentsCorporalTitle}
+                  </strong>
+                  {treatmentsCorporal.map((t) => (<a href={t.href}>{t.label}</a>))}
+                </div>
+              </details>
+
+              {navbarItems.filter((x) => x.type !== "treatments").map((item) => (
+                <details class="mdd">
+                  <summary>
+                    <span>{item.label}</span>
+                    <span class="caret">▾</span>
+                  </summary>
+                  <div class="mdd-panel">
+                    <a href={item.href}>Ver sección</a>
+                    {Array.isArray(item.children) && item.children.length ? (
+                      item.children.map((c) => (<a href={c.href}>{c.label}</a>))
+                    ) : null}
+                  </div>
+                </details>
+              ))}
+
+              <div class="mobile-cta">
+                <a class="btn" href={whatsappLink} target="_blank" rel="noreferrer">💬 WhatsApp</a>
+                <a class="btn btn-primary" href={bookingUrl} target="_blank" rel="noreferrer">Pide tu cita</a>
+              </div>
+            </div>
+          </details>
+
+        </nav>
       </div>
     </header>
 
@@ -649,7 +682,7 @@ const navbarItems =
 
           <div class="footer-col footer-center">
             <div class="footer-heading">Ubicación</div>
-            <div class="footer-text">{footerCity}</div>
+            <div>{footerCity}</div>
           </div>
 
           <div class="footer-col footer-right">
@@ -681,112 +714,72 @@ const navbarItems =
     </a>
 
     <script is:inline>
-      // ===== Dropdown suave (abre/cierra con animación) + hover desktop =====
-      (() => {
-        const prefersReduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        if (prefersReduce) return;
-
-        const isDesktop = () => window.matchMedia("(min-width: 861px)").matches;
-        const dds = Array.from(document.querySelectorAll("details.dd"));
-        if (!dds.length) return;
-
-        const closeWithAnim = (d) => {
-          if (!d.open) return;
-          if (d.classList.contains("closing")) return;
-          d.classList.add("closing");
-          setTimeout(() => {
-            d.removeAttribute("open");
-            d.classList.remove("closing");
-          }, 170);
-        };
-
-        const closeOthers = (current) => {
-          dds.forEach((o) => {
-            if (o !== current && o.open) closeWithAnim(o);
-          });
-        };
-
-        // Click: cerrar suave
-        dds.forEach((d) => {
-          const summary = d.querySelector("summary");
-          if (!summary) return;
-
-          summary.addEventListener("click", (e) => {
-            if (!isDesktop()) return;
-            if (d.open) {
-              e.preventDefault();
-              closeWithAnim(d);
-            } else {
-              closeOthers(d);
-              // abrir normal
-            }
-          });
-
-          // Hover desktop (tipo referencia)
-          d.addEventListener("mouseenter", () => {
-            if (!isDesktop()) return;
-            closeOthers(d);
-            d.setAttribute("open", "");
-          });
-
-          d.addEventListener("mouseleave", () => {
-            if (!isDesktop()) return;
-            closeWithAnim(d);
-          });
+      // 1) Cierra dropdowns desktop al hacer click fuera (y solo 1 abierto)
+      document.addEventListener("click", (e) => {
+        document.querySelectorAll("details.dd[open]").forEach((d) => {
+          if (!d.contains(e.target)) d.removeAttribute("open");
         });
 
-        // Click fuera
-        document.addEventListener("click", (e) => {
-          dds.forEach((d) => {
-            if (d.open && !d.contains(e.target)) closeWithAnim(d);
-          });
-        });
-      })();
+        const mob = document.querySelector(".nav-mobile");
+        if (mob && mob.hasAttribute("open")) {
+          const panel = mob.querySelector(".mobile-panel");
+          const burger = mob.querySelector(".burger");
+          if (panel && panel.contains(e.target)) {
+            if (e.target.tagName === "A") mob.removeAttribute("open");
+          } else if (burger && burger.contains(e.target)) {
+            // click en burger
+          } else {
+            mob.removeAttribute("open");
+          }
+        }
+      });
 
-      // ===== Ocultar header al bajar / mostrar al subir =====
-      (() => {
-        const header = document.querySelector(".header");
+      document.querySelectorAll("details.dd").forEach((d) => {
+        d.addEventListener("toggle", () => {
+          if (d.open) {
+            document.querySelectorAll("details.dd").forEach((other) => {
+              if (other !== d) other.removeAttribute("open");
+            });
+          }
+        });
+      });
+
+      // 2) Oculta header al bajar y muestra al subir
+      (function(){
+        const header = document.getElementById("site-header");
         if (!header) return;
 
-        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        if (reduceMotion) return;
+        let lastY = window.scrollY || 0;
+        let ticking = false;
 
-        let lastY = window.scrollY;
-        let hidden = false;
-
-        const isMobileMenuOpen = () => {
-          const mob = document.querySelector(".nav-mobile");
-          return mob && mob.hasAttribute("open");
+        const shouldKeepVisible = () => {
+          const mobOpen = document.querySelector(".nav-mobile[open]");
+          return !!mobOpen;
         };
 
-        window.addEventListener("scroll", () => {
-          const y = window.scrollY;
-
-          if (isMobileMenuOpen()) {
-            header.classList.remove("is-hidden");
-            hidden = false;
-            lastY = y;
-            return;
-          }
-
-          if (y < 40) {
-            header.classList.remove("is-hidden");
-            hidden = false;
-            lastY = y;
-            return;
-          }
-
+        const onScroll = () => {
+          const y = window.scrollY || 0;
           const goingDown = y > lastY;
 
-          if (goingDown && !hidden && y > 120) {
-            header.classList.add("is-hidden");
-            hidden = true;
-          } else if (!goingDown && hidden) {
-            header.classList.remove("is-hidden");
-            hidden = false;
+          if (y < 60 || shouldKeepVisible()) {
+            header.classList.remove("header--hide");
+          } else if (goingDown) {
+            header.classList.add("header--hide");
+          } else {
+            header.classList.remove("header--hide");
           }
 
           lastY = y;
+        };
+
+        window.addEventListener("scroll", () => {
+          if (!ticking) {
+            window.requestAnimationFrame(() => {
+              onScroll();
+              ticking = false;
+            });
+            ticking = true;
+          }
         }, { passive: true });
       })();
     </script>

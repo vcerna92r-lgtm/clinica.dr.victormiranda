@@ -54,7 +54,7 @@ collections:
               - { label: "1320px (extra)", value: "1320px" }
               - { label: "1360px (máximo)", value: "1360px" }
 
-          - label: "Separación links del menú (Inicio/Servicios/...)"
+          - label: "Separación links del menú"
             name: "nav_links_gap"
             widget: "select"
             default: "20px"
@@ -64,6 +64,45 @@ collections:
               - { label: "16px (recomendado)", value: "16px" }
               - { label: "20px (aireado)", value: "20px" }
               - { label: "24px (muy aireado)", value: "24px" }
+
+          # ✅ NUEVO: Navbar editable (incluye el mega menú de tratamientos)
+          - label: "Navbar"
+            name: "navbar"
+            widget: "object"
+            fields:
+              - label: "Items antes del logo (izquierda)"
+                name: "leftCount"
+                widget: "number"
+                value_type: "int"
+                default: 3
+                min: 0
+
+              - { label: "Texto menú Tratamientos", name: "treatments_label", widget: "string", default: "Tratamientos" }
+              - { label: "Título columna Facial", name: "treatments_facial_title", widget: "string", default: "Medicina estética facial" }
+              - { label: "Título columna Corporal", name: "treatments_corporal_title", widget: "string", default: "Medicina estética corporal" }
+
+              - label: "Items del menú"
+                name: "items"
+                widget: "list"
+                fields:
+                  - label: "Tipo"
+                    name: "type"
+                    widget: "select"
+                    default: "dropdown"
+                    options:
+                      - { label: "Tratamientos (auto desde Admin)", value: "treatments" }
+                      - { label: "Dropdown normal", value: "dropdown" }
+
+                  - { label: "Texto", name: "label", widget: "string" }
+                  - { label: "Link principal", name: "href", widget: "string" }
+
+                  - label: "Sub-items (solo para Dropdown normal)"
+                    name: "children"
+                    widget: "list"
+                    required: false
+                    fields:
+                      - { label: "Texto", name: "label", widget: "string" }
+                      - { label: "Link", name: "href", widget: "string" }
 
           - label: "Espacio entre Portada (Inicio) y Servicios principales"
             name: "home_gap_cover_services"
@@ -174,21 +213,17 @@ collections:
         format: "json"
         fields:
           - { label: "Título (tu nombre)", name: "hero_title", widget: "string" }
-
           - label: "Lista (viñetas)"
             name: "hero_bullets"
             widget: "list"
             fields:
               - { label: "Texto", name: "text", widget: "string" }
-
           - label: "Párrafos"
             name: "hero_paragraphs"
             widget: "list"
             fields:
               - { label: "Texto", name: "text", widget: "text" }
-
           - { label: "Foto de portada (subir imagen)", name: "hero_image", widget: "image", required: false }
-
           - label: "Tipo de letra"
             name: "hero_font_family"
             widget: "select"
@@ -197,7 +232,6 @@ collections:
             options:
               - { label: "Moderna (recomendada)", value: "system" }
               - { label: "Elegante (serif)", value: "serif" }
-
           - label: "Tamaño del título"
             name: "hero_title_size"
             widget: "select"
@@ -207,7 +241,6 @@ collections:
               - { label: "Grande", value: "xl" }
               - { label: "Mediano", value: "lg" }
               - { label: "Pequeño", value: "md" }
-
           - label: "Tamaño del texto"
             name: "hero_text_size"
             widget: "select"
@@ -231,21 +264,18 @@ collections:
           - { label: "Título", name: "title", widget: "string", default: "La Clínica" }
           - { label: "Imagen central (subir)", name: "image", widget: "image", required: false }
           - { label: "Alt de la imagen (opcional)", name: "image_alt", widget: "string", required: false }
-
           - label: "Misión"
             name: "mission"
             widget: "object"
             fields:
               - { label: "Título", name: "title", widget: "string", default: "Misión" }
               - { label: "Texto", name: "text", widget: "text" }
-
           - label: "Visión"
             name: "vision"
             widget: "object"
             fields:
               - { label: "Título", name: "title", widget: "string", default: "Visión" }
               - { label: "Texto", name: "text", widget: "text" }
-
           - label: "Valores"
             name: "values"
             widget: "object"
@@ -276,7 +306,6 @@ collections:
               - { label: "Nombre", name: "name", widget: "string" }
               - { label: "Descripción", name: "description", widget: "text", required: false }
               - { label: "Imagen", name: "image", widget: "image", required: false }
-
               - label: "Forma de imagen"
                 name: "image_shape"
                 widget: "select"
@@ -306,11 +335,9 @@ collections:
               - { label: "Lento", value: "slow" }
               - { label: "Normal", value: "normal" }
               - { label: "Rápido", value: "fast" }
-
           - { label: "Texto pequeño arriba (opcional)", name: "eyebrow", widget: "string", required: false }
           - { label: "Título", name: "title", widget: "string" }
           - { label: "Descripción (opcional)", name: "subtitle", widget: "text", required: false }
-
           - label: "Tipo de letra"
             name: "font_family"
             widget: "select"
@@ -319,7 +346,6 @@ collections:
             options:
               - { label: "Moderna (recomendada)", value: "system" }
               - { label: "Elegante (serif)", value: "serif" }
-
           - label: "Tamaño del texto"
             name: "text_size"
             widget: "select"
@@ -329,7 +355,6 @@ collections:
               - { label: "Grande", value: "lg" }
               - { label: "Mediano", value: "md" }
               - { label: "Pequeño", value: "sm" }
-
           - label: "Alineación del texto"
             name: "text_align"
             widget: "select"
@@ -340,10 +365,8 @@ collections:
               - { label: "Centrado", value: "center" }
               - { label: "Derecha", value: "right" }
               - { label: "Justificado", value: "justify" }
-
           - { label: "Negrita", name: "text_bold", widget: "boolean", required: false, default: false }
           - { label: "Cursiva", name: "text_italic", widget: "boolean", required: false, default: false }
-
           - { label: "Título de viñetas (opcional)", name: "bullets_title", widget: "string", required: false }
           - label: "Viñetas"
             name: "bullets"
@@ -351,9 +374,7 @@ collections:
             required: false
             fields:
               - { label: "Item", name: "text", widget: "string" }
-
           - { label: "Imagen (subir)", name: "image", widget: "image", required: false }
-
           - label: "Forma de imagen"
             name: "image_shape"
             widget: "select"
@@ -363,7 +384,6 @@ collections:
               - { label: "Cuadrada", value: "square" }
               - { label: "Redondeada", value: "rounded" }
               - { label: "Redonda", value: "circle" }
-
           - label: "Formato de imagen"
             name: "image_ratio"
             widget: "select"
@@ -373,7 +393,6 @@ collections:
               - { label: "Horizontal (rectangular)", value: "landscape" }
               - { label: "Cuadrada", value: "square" }
               - { label: "Vertical (rectangular)", value: "portrait" }
-
           - label: "Tarjeta de precio"
             name: "plan"
             widget: "object"
@@ -383,17 +402,14 @@ collections:
               - { label: "Periodo (opcional)", name: "period", widget: "string", required: false }
               - { label: "Texto botón", name: "cta_text", widget: "string", default: "Solicitar evaluación" }
               - { label: "URL botón (opcional)", name: "cta_url", widget: "string", required: false }
-
           - { label: "Título lista (Incluye)", name: "includes_title", widget: "string", required: false }
           - label: "Lista de incluye"
             name: "includes"
             widget: "list"
             fields:
               - { label: "Item", name: "text", widget: "string" }
-
           - { label: "Título del cuadro inferior", name: "box_title", widget: "string", required: false }
           - { label: "Texto del cuadro inferior", name: "box_text", widget: "text", required: false }
-
           - label: "Viñetas del cuadro inferior"
             name: "box_bullets"
             widget: "list"
@@ -411,7 +427,6 @@ collections:
         fields:
           - { label: "Texto pequeño arriba (opcional)", name: "eyebrow", widget: "string", required: false }
           - { label: "Título", name: "title", widget: "string" }
-
           - label: "Preguntas y respuestas"
             name: "items"
             widget: "list"
@@ -430,10 +445,8 @@ collections:
         fields:
           - { label: "Título de sección", name: "section_title", widget: "string" }
           - { label: "Subtítulo (opcional)", name: "section_subtitle", widget: "string", required: false }
-
           - { label: "Texto del botón (opcional)", name: "button_text", widget: "string", required: false }
           - { label: "URL del botón (opcional)", name: "button_url", widget: "string", required: false }
-
           - label: "Redes"
             name: "items"
             widget: "list"
@@ -441,7 +454,6 @@ collections:
               - { label: "Nombre", name: "name", widget: "string" }
               - { label: "URL", name: "url", widget: "string", required: false }
               - { label: "Imagen", name: "image", widget: "image", required: false }
-
               - label: "Forma de imagen"
                 name: "image_shape"
                 widget: "select"
@@ -463,31 +475,4 @@ collections:
           - { label: "Título de sección", name: "section_title", widget: "string" }
           - { label: "Subtítulo", name: "section_subtitle", widget: "string", required: false }
           - label: "Servicios"
-            name: "items"
-            widget: "list"
-            fields:
-              - { label: "Nombre", name: "name", widget: "string" }
-              - { label: "Precio (texto)", name: "price", widget: "string", required: false }
-              - { label: "Descripción", name: "description", widget: "text", required: false }
-              - { label: "Imagen", name: "image", widget: "image", required: false }
-
-              - label: "Forma de imagen"
-                name: "image_shape"
-                widget: "select"
-                required: false
-                default: "rounded"
-                options:
-                  - { label: "Cuadrada", value: "square" }
-                  - { label: "Redondeada", value: "rounded" }
-                  - { label: "Redonda", value: "circle" }
-
-              - { label: "Texto del botón", name: "button_text", widget: "string", default: "RESERVAR" }
-              - { label: "URL del botón (opcional)", name: "button_url", widget: "string", required: false }
-
-              - { label: "Color fondo tarjeta (hex)", name: "card_bg", widget: "string", default: "#F5F5F2" }
-              - { label: "Color título (hex)", name: "title_color", widget: "string", default: "#0F172A" }
-              - { label: "Color texto (hex)", name: "text_color", widget: "string", default: "#334155" }
-              - { label: "Fondo precio (hex)", name: "price_bg", widget: "string", default: "#FFFFFF" }
-              - { label: "Color precio (hex)", name: "price_color", widget: "string", default: "#0F172A" }
-              - { label: "Color botón (hex)", name: "button_bg", widget: "string", default: "#16A34A" }
-              - { label: "Color texto botón (hex)", name: "button_text_color", widget: "string", default: "#FFFFFF" }
+            name:
