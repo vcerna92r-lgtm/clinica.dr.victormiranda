@@ -1,12 +1,32 @@
 ---
-title: "Microneedling"
-menu_label: "Microneedling"
+title: "Microagujas (Microneedling)"
+menu_label: "Microagujas"
+order: 40
+description: "Inducción de colágeno para mejorar textura, poros, cicatrices y calidad de piel."
 category: "facial"
 slug: "microneedling"
-order: 40
-description: "Textura, poros, cicatrices y luminosidad con o sin activos."
+
+children:
+  - label: "Rejuvenecimiento / SkinQuality"
+    slug: "mn-skinquality"
+  - label: "Cicatrices de acné"
+    slug: "mn-cicatrices-acne"
+  - label: "Poros y textura"
+    slug: "mn-poros-textura"
+  - label: "Manchas / Melasma"
+    slug: "mn-melasma-manchas"
+  - label: "Acné activo"
+    slug: "mn-acne-activo"
+  - label: "Estrías"
+    slug: "mn-estrias"
+  - label: "Ojeras (selección de casos)"
+    slug: "mn-ojeras"
+  - label: "Combinado con activos"
+    slug: "mn-activos"
 ---
 
-# Microneedling
+# Microagujas (Microneedling)
 
-Contenido editable desde Admin.
+El microneedling estimula la **renovación cutánea** y la **producción de colágeno**, ayudando a mejorar textura, poros, cicatrices y calidad de piel.
+
+> Nota: La profundidad, número de sesiones y combinaciones se definen en consulta.
