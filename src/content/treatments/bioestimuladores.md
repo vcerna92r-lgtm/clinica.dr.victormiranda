@@ -1,28 +1,26 @@
 ---
-title: "Bioestimuladores de colágeno"
+title: "Bioestimuladores (Radiesse® CaHA)"
 menu_label: "Bioestimuladores"
 category: "facial"
 slug: "bioestimuladores"
 order: 30
-description: "Mejora progresiva de firmeza, textura y calidad de piel."
+description: "Protocolos con CaHA (Radiesse®) para bioestimulación y mejora de calidad de piel."
 
 children:
-  - label: "Sculptra (PLLA)"
-    slug: "bio-sculptra-plla"
-  - label: "Radiesse (CaHA)"
-    slug: "bio-radiesse-caha"
-  - label: "HarmonyCa"
-    slug: "bio-harmonyca"
-  - label: "Hiper-dilución (cuello / escote)"
-    slug: "bio-hiperdilucion-cuello-escote"
+  - label: "Full Face (solo CaHA)"
+    slug: "radiesse-full-face-caha"
   - label: "Manos"
-    slug: "bio-manos"
-  - label: "Full face (armonización)"
-    slug: "bio-full-face"
+    slug: "radiesse-manos"
+  - label: "Hiperdilución (cuello / escote)"
+    slug: "radiesse-hiperdilucion-cuello-escote"
+  - label: "Híbridos (CaHA + Ácido hialurónico)"
+    slug: "radiesse-hibridos-caha-ha"
+  - label: "Protocolo SkinQuality"
+    slug: "radiesse-skinquality"
 ---
 
-# Bioestimuladores de colágeno
+# Bioestimuladores (Radiesse® CaHA)
 
-Los bioestimuladores ayudan a mejorar **firmeza**, **textura** y **calidad de piel** de forma progresiva, con un plan médico personalizado.
+Radiesse® (CaHA) se utiliza para **bioestimulación** y mejora progresiva de **firmeza** y **calidad de piel**, con técnica y dilución ajustadas a cada zona.
 
-> Nota: La indicación exacta (producto, zonas y número de sesiones) se define en consulta.
+> Nota: La indicación exacta (zonas, dilución, número de sesiones) se define en consulta.
