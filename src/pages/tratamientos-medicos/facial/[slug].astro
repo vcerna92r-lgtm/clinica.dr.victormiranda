@@ -1,15 +1,15 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 
-// Categoría fija para esta carpeta
-const CATEGORY = "facial";
-
 function slugFromFilepath(fp: string) {
   const name = String(fp).split("/").pop() || "";
   return name.replace(/\.mdx?$/i, "");
 }
 
 export async function getStaticPaths() {
+  // Categoría fija (definida aquí adentro para que nunca “falte” en build)
+  const CATEGORY = "facial";
+
   // Lee contenido desde src/content/treatments (y también soporta "tratamientos" por si existe)
   const modules = import.meta.glob(
     [
@@ -43,7 +43,7 @@ const description = frontmatter?.description || "";
 
 <BaseLayout title={title} description={description}>
   <article class="treat-page">
-    <a class="back" href={`/tratamientos-medicos/${CATEGORY}/`}>← Volver</a>
+    <a class="back" href="/tratamientos-medicos/facial/">← Volver</a>
 
     <header class="head">
       <h1>{title}</h1>
