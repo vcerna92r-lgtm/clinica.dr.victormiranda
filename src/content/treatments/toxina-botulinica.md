@@ -1,5 +1,7 @@
 ---
 title: "Toxina botulínica"
+menu_label: "Toxina botulínica"
+order: 10
 description: "Tratamiento médico-estético para suavizar líneas de expresión y equilibrar la dinámica facial con resultados naturales."
 category: "facial"
 slug: "toxina-botulinica"
