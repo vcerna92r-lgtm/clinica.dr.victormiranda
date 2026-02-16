@@ -18,7 +18,7 @@ const accent2 = String(site.accent_color_2 || "#06B6D4").trim();
 // Fondo + ancho + separación del menú
 const bg = String(site.bg_color || "#ffffff").trim();
 const maxWidth = String(site.max_width || "1120px").trim();
-const navLinksGap = String(site.nav_links_gap || "16px").trim();
+const navLinksGap = String(site.nav_links_gap || "22px").trim();
 
 // Espacios verticales
 const homeGapServicesComplications = String(site.home_gap_services_complications || "64px").trim();
@@ -49,15 +49,8 @@ const navbarItems =
     ? site.navbar.items
     : [];
 
-const leftCount = Number.isFinite(Number(site?.navbar?.leftCount))
-  ? Number(site.navbar.leftCount)
-  : 3;
-
-const navLeft = navbarItems.slice(0, leftCount);
-const navRight = navbarItems.slice(leftCount);
-
-// Títulos del mega menú de tratamientos (admin)
-const treatmentsLabel = site?.navbar?.treatments_label || "Tratamientos";
+// Labels del mega menú (admin)
+const treatmentsLabel = site?.navbar?.treatments_label || "Tratamientos médicos";
 const treatmentsFacialTitle = site?.navbar?.treatments_facial_title || "Medicina estética facial";
 const treatmentsCorporalTitle = site?.navbar?.treatments_corporal_title || "Medicina estética corporal";
 
@@ -96,13 +89,12 @@ const rawTreatments = Object.entries(treatmentModules)
   })
   .filter((x) => x.label && x.slug && (x.category === "facial" || x.category === "corporal"));
 
-// Dedup: category+slug
+// Dedup: category+slug (evita duplicados si existe en 2 carpetas)
 const uniqMap = new Map<string, any>();
 for (const t of rawTreatments) {
   const key = `${t.category}:${t.slug}`;
-  if (!uniqMap.has(key)) {
-    uniqMap.set(key, t);
-  } else {
+  if (!uniqMap.has(key)) uniqMap.set(key, t);
+  else {
     const prev = uniqMap.get(key);
     if (t.order < prev.order) uniqMap.set(key, t);
   }
@@ -114,13 +106,14 @@ const sortStable = (a: any, b: any) =>
   (a.order - b.order) ||
   a.label.localeCompare(b.label, "es", { sensitivity: "base" });
 
-const treatmentsFacial = treatmentsAll
-  .filter((x) => x.category === "facial")
-  .sort(sortStable);
+const treatmentsFacial = treatmentsAll.filter((x) => x.category === "facial").sort(sortStable);
+const treatmentsCorporal = treatmentsAll.filter((x) => x.category === "corporal").sort(sortStable);
 
-const treatmentsCorporal = treatmentsAll
-  .filter((x) => x.category === "corporal")
-  .sort(sortStable);
+// Link principal del botón (click navega a “lista de tratamientos”)
+const treatmentsMainHref =
+  String(
+    navbarItems.find((x: any) => x?.type === "treatments")?.href || ""
+  ).trim() || "/tratamientos-medicos/facial/"; // (por ahora)
 ---
 
 <!doctype html>
@@ -138,7 +131,7 @@ const treatmentsCorporal = treatmentsAll
       :root{
         --bg: #ffffff;
         --max: 1120px;
-        --nav-gap: 16px;
+        --nav-gap: 22px;
         --accent: #0F766E;
         --accent2: #06B6D4;
 
@@ -148,11 +141,8 @@ const treatmentsCorporal = treatmentsAll
         --home-gap-sf: 56px;
 
         --text: #0f172a;
-        --muted: #475569;
+        --muted: #64748b;
         --line: #e2e8f0;
-        --soft: #f8fafc;
-
-        --radius: 18px;
       }
 
       *{ box-sizing:border-box; }
@@ -166,247 +156,221 @@ const treatmentsCorporal = treatmentsAll
       a{ color: inherit; text-decoration: none; }
       .container{ max-width: var(--max); margin:0 auto; padding: 18px; }
 
-      /* ===== Header / Navbar ===== */
+      /* ===== Header (2 líneas, premium) ===== */
       .header{
         position: sticky;
         top: 0;
         z-index: 50;
-        background: rgba(255,255,255,.82);
+        background: rgba(255,255,255,.92);
         backdrop-filter: blur(12px);
         border-bottom: 1px solid rgba(15,23,42,.10);
-        transition: transform .22s ease, background .22s ease, box-shadow .22s ease;
+        transition: transform .22s ease;
         will-change: transform;
       }
-      .header.header--hide{
-        transform: translateY(-110%);
-      }
+      .header.header--hide{ transform: translateY(-110%); }
 
-      .nav-shell{
+      .nav-top{
         display:flex;
-        align-items:center;
-        gap: 14px;
-        min-height: 78px;
-      }
-
-      /* Lados (clave: iguales para que el centro quede centrado) */
-      .nav-side{
-        display:flex;
-        align-items:center;
-        gap: var(--nav-gap);
-        flex: 1 1 0; /* ✅ hace ambos lados del mismo ancho */
-        min-width: 0;
-        flex-wrap: nowrap;
-      }
-      .nav-left{ justify-content: flex-start; }  /* ✅ izquierda real */
-      .nav-right{ justify-content: flex-end; }   /* ✅ derecha real */
-
-      /* Centro: logo tipo referencia (vertical) */
-      .nav-center{
-        display:flex;
-        flex-direction: column;
         align-items:center;
         justify-content:center;
-        gap: 6px;
-        text-align:center;
-        flex: 0 0 auto;
+        padding: 10px 0 6px;
       }
-
       .brand{
         display:flex;
-        flex-direction: column;
         align-items:center;
-        gap: 8px;
-        font-weight: 900;
-        letter-spacing: .12px;
+        gap: 12px;
       }
-
       .brand-badge{
-        width: 52px;
-        height: 52px;
-        border-radius: 18px;
-        background:
-          radial-gradient(90px 40px at 20% 10%, var(--accent2), rgba(255,255,255,0)),
-          linear-gradient(135deg, var(--accent), #0f172a);
-        color: #fff;
+        width: 46px;
+        height: 46px;
+        border-radius: 999px;
+        overflow:hidden;
+        border: 1px solid rgba(15,23,42,.12);
+        background: #fff;
         display:flex;
         align-items:center;
         justify-content:center;
-        box-shadow: 0 16px 30px rgba(2,6,23,.18);
-        overflow: hidden;
       }
       .brand-badge img{
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
+        width:100%;
+        height:100%;
+        object-fit:cover;
+        display:block;
       }
-
-      .brand-name{
+      .brand-initials{
         font-weight: 900;
-        letter-spacing: .10em;
-        font-size: 18px;
+        letter-spacing:.08em;
+        font-size: 14px;
+        color: rgba(15,23,42,.75);
+      }
+      .brand-name{
+        font-family: ui-serif, Georgia, "Times New Roman", serif;
+        font-weight: 700;
+        letter-spacing: .06em;
         text-transform: uppercase;
+        font-size: 30px;
+        line-height: 1;
         color: rgba(15,23,42,.88);
-        line-height: 1.1;
         white-space: nowrap;
       }
 
-      /* Dropdown base */
-      details.dd{ position: relative; }
-      details.dd > summary{
-        list-style:none;
-        cursor:pointer;
-        padding: 10px 10px;
-        border-radius: 12px;
-        color: rgba(15,23,42,.78);
-        font-weight: 900;
-        font-size: 12px;
-        letter-spacing: .05em;
-        text-transform: uppercase;
-        user-select: none;
+      .nav-bottom{
+        position: relative; /* para posicionar dropdowns */
+        border-top: 1px solid rgba(15,23,42,.06);
+        padding: 10px 0 12px;
+      }
+
+      .nav-row{
+        display:grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items:center;
+        gap: 12px;
+      }
+
+      .nav-links{
+        grid-column: 2;
         display:flex;
         align-items:center;
-        gap: 6px;
+        justify-content:center;
+        gap: var(--nav-gap);
+        flex-wrap: nowrap;
+      }
+
+      .nav-link{
+        font-size: 12px;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        color: rgba(15,23,42,.62);
+        font-weight: 700;
+        padding: 6px 4px;
         white-space: nowrap;
       }
-      details.dd > summary::-webkit-details-marker{ display:none; }
-      details.dd > summary:hover{
-        background: rgba(15,23,42,.06);
-        color: rgba(15,23,42,.92);
-      }
-      .caret{ font-size: 12px; opacity:.7; }
+      .nav-link:hover{ color: rgba(15,23,42,.88); }
 
-      .dd-panel{
-        position:absolute;
-        top: calc(100% + 10px);
-        left: 0;
-        min-width: 240px;
-        max-width: min(420px, 78vw);
-        background: rgba(255,255,255,.98);
-        border: 1px solid rgba(15,23,42,.10);
-        border-radius: 16px;
-        padding: 10px;
-        box-shadow: 0 16px 40px rgba(2,6,23,.12);
-        z-index: 60;
-
-        opacity: 0;
-        transform: translateY(8px);
-        pointer-events: none;
-        transition: opacity .18s ease, transform .18s ease;
-      }
-      details.dd[open] > .dd-panel{
-        opacity: 1;
-        transform: translateY(0);
-        pointer-events: auto;
+      .caret{
+        margin-left: 6px;
+        font-size: 10px;
+        opacity:.55;
       }
 
-      .dd-main{
-        display:block;
-        padding: 10px 10px;
-        border-radius: 12px;
-        font-weight: 900;
-        border: 1px solid rgba(15,23,42,.10);
-        background: rgba(15,23,42,.02);
-        margin-bottom: 8px;
-      }
-      .dd-main:hover{ background: rgba(15,23,42,.06); }
-
-      .dd-item{
-        display:block;
-        padding: 10px 10px;
-        border-radius: 12px;
-        border: 1px solid rgba(15,23,42,.08);
-        background: rgba(255,255,255,.9);
-        color: rgba(15,23,42,.86);
-        font-weight: 800;
-        margin-bottom: 8px;
-      }
-      .dd-item:hover{ background: rgba(15,23,42,.05); }
-      .dd-item:last-child{ margin-bottom: 0; }
-
-      .dd-empty{
-        display:block;
-        padding: 10px 10px;
-        border-radius: 12px;
-        border: 1px dashed rgba(15,23,42,.20);
-        color: rgba(15,23,42,.55);
-        font-weight: 800;
-      }
-
-      /* ===== Mega menú (Tratamientos) ===== */
-      details.dd.dd-mega > .dd-panel{
-        left: 50%;
-        transform: translate(-50%, 8px);
-        width: min(1120px, 92vw);
-        max-width: min(1120px, 92vw);
-      }
-      details.dd.dd-mega[open] > .dd-panel{
-        transform: translate(-50%, 0);
-      }
-
-      .mega-wrap{ padding: 6px; }
-      .mega-grid{
-        display:grid;
-        grid-template-columns: 3fr 1.6fr;
-        gap: 26px;
-      }
-
-      .mega-title{
-        font-weight: 900;
-        text-transform: uppercase;
-        letter-spacing: .06em;
-        font-size: 12px;
-        color: rgba(15,23,42,.70);
-        margin: 4px 0 10px;
-      }
-
-      .mega-items{ column-gap: 28px; }
-      .mega-items.cols-3{ columns: 3; }
-      .mega-items.cols-2{ columns: 2; }
-
-      .mega-link{
-        display:block;
-        break-inside: avoid;
-        padding: 10px 10px;
-        border-radius: 12px;
-        border: 1px solid rgba(15,23,42,.08);
-        background: rgba(15,23,42,.02);
-        font-weight: 800;
-        color: rgba(15,23,42,.84);
-        margin: 0 0 10px;
-      }
-      .mega-link:hover{ background: rgba(15,23,42,.06); }
-
-      /* CTA (derecha) */
+      /* CTA derecha */
       .nav-cta{
+        grid-column: 3;
+        justify-self: end;
         display:flex;
         gap:10px;
         align-items:center;
-        margin-left: 12px;
-        flex: 0 0 auto;
       }
       .btn{
         display:inline-flex;
         align-items:center;
         justify-content:center;
         gap:10px;
-        padding: 11px 14px;
-        border-radius: 16px;
+        padding: 10px 14px;
+        border-radius: 999px;
         border: 1px solid rgba(15,23,42,.12);
         background: rgba(255,255,255,.95);
-        color: rgba(15,23,42,.92);
-        font-weight: 900;
-        box-shadow: 0 10px 24px rgba(15,23,42,0.05);
+        color: rgba(15,23,42,.86);
+        font-weight: 800;
         white-space: nowrap;
       }
-      .btn:hover{ background: rgba(15,23,42,.05); }
+      .btn:hover{ background: rgba(15,23,42,.04); }
       .btn-primary{
         background: linear-gradient(135deg, var(--accent), var(--accent2));
         border: none;
         color: #fff;
-        box-shadow: 0 14px 30px rgba(6,182,212,0.18);
       }
-      .btn-primary:hover{ filter: brightness(.97); }
+
+      /* ===== Dropdown simple (hover) ===== */
+      .nav-item{ position: relative; }
+      .dd-panel{
+        position:absolute;
+        top: calc(100% + 14px);
+        left: 50%;
+        transform: translate(-50%, 10px);
+        min-width: 240px;
+        background: rgba(255,255,255,.98);
+        border-radius: 14px;
+        box-shadow: 0 18px 50px rgba(2,6,23,.10);
+        padding: 14px 16px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity .18s ease, transform .18s ease;
+      }
+      .nav-item:hover > .dd-panel,
+      .nav-item:focus-within > .dd-panel{
+        opacity: 1;
+        transform: translate(-50%, 0);
+        pointer-events: auto;
+      }
+      .dd-panel a{
+        display:block;
+        padding: 8px 0;
+        font-size: 12px;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        color: rgba(15,23,42,.60);
+        font-weight: 700;
+      }
+      .dd-panel a:hover{ color: rgba(15,23,42,.90); }
+
+      /* ===== Mega menu (Tratamientos) — sin recuadritos ===== */
+      .nav-item--mega{ position: static; } /* clave: panel se alinea al contenedor */
+      .mega-panel{
+        position:absolute;
+        left: 0;
+        right: 0;
+        top: calc(100% + 14px);
+        margin: 0 auto;
+        width: min(var(--max), 92vw);
+        background: rgba(255,255,255,.98);
+        border-radius: 18px;
+        box-shadow: 0 18px 60px rgba(2,6,23,.10);
+        padding: 26px 22px;
+        opacity: 0;
+        transform: translateY(12px);
+        pointer-events: none;
+        transition: opacity .18s ease, transform .18s ease;
+      }
+      .nav-item--mega:hover > .mega-panel,
+      .nav-item--mega:focus-within > .mega-panel{
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+
+      .mega-grid{
+        display:grid;
+        grid-template-columns: 3fr 1.6fr;
+        gap: 36px;
+      }
+
+      .mega-title{
+        font-size: 12px;
+        letter-spacing: .10em;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: rgba(15,23,42,.55);
+        margin: 0 0 14px;
+      }
+
+      .mega-items{
+        column-gap: 34px;
+      }
+      .mega-items.cols-3{ columns: 3; }
+      .mega-items.cols-2{ columns: 2; }
+
+      .mega-link{
+        display:block;
+        break-inside: avoid;
+        padding: 6px 0;
+        font-size: 12px;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: rgba(15,23,42,.55);
+      }
+      .mega-link:hover{ color: rgba(15,23,42,.90); }
 
       /* ===== Mobile ===== */
       .nav-mobile{ display:none; margin-left:auto; position: relative; }
@@ -425,7 +389,7 @@ const treatmentsCorporal = treatmentsAll
       .mobile-panel{
         position:absolute;
         right: 0;
-        top: calc(100% + 10px);
+        top: calc(100% + 12px);
         width: min(420px, 92vw);
         background: rgba(255,255,255,.98);
         border: 1px solid rgba(15,23,42,.10);
@@ -466,7 +430,6 @@ const treatmentsCorporal = treatmentsAll
         background: rgba(15,23,42,.02);
         font-weight: 800;
       }
-      .mdd-panel a:hover{ background: rgba(15,23,42,.06); }
 
       .mobile-cta{
         display:flex;
@@ -476,12 +439,14 @@ const treatmentsCorporal = treatmentsAll
       .mobile-cta .btn{ flex: 1; }
 
       @media (max-width: 980px){
-        .nav-left, .nav-right, .nav-cta{ display:none; }
-        .nav-mobile{ display:block; }
-        .brand-name{ font-size: 16px; }
+        .nav-cta{ display:none; }
+        .nav-links{ display:none; }
+        .nav-row{ grid-template-columns: 1fr auto; }
+        .nav-mobile{ display:block; justify-self: end; grid-column: 2; }
+        .brand-name{ font-size: 22px; }
       }
       @media (max-width: 520px){
-        .brand-name{ display:none; }
+        .brand-name{ font-size: 18px; letter-spacing:.04em; }
       }
 
       /* Footer */
@@ -542,19 +507,30 @@ const treatmentsCorporal = treatmentsAll
   <body>
     <header class="header" id="site-header">
       <div class="container">
-        <nav class="nav-shell" aria-label="Navegación principal">
+        <!-- Línea 1: marca centrada -->
+        <div class="nav-top">
+          <a class="brand" href="/" aria-label={siteName}>
+            <span class="brand-badge">
+              {logoImage ? <img src={logoImage} alt="Logo" /> : <span class="brand-initials">{initials}</span>}
+            </span>
+            <span class="brand-name">{siteName}</span>
+          </a>
+        </div>
 
-          <!-- Left -->
-          <div class="nav-side nav-left" aria-label="Menú izquierdo">
-            {navLeft.map((item) => (
-              item?.type === "treatments" ? (
-                <details class="dd dd-mega">
-                  <summary>
-                    {item.label || treatmentsLabel} <span class="caret">▾</span>
-                  </summary>
+        <!-- Línea 2: menú centrado + CTA derecha -->
+        <div class="nav-bottom">
+          <nav class="nav-row" aria-label="Navegación principal">
+            <div></div>
 
-                  <div class="dd-panel" role="menu">
-                    <div class="mega-wrap">
+            <div class="nav-links">
+              {navbarItems.map((item: any) => (
+                item?.type === "treatments" ? (
+                  <div class="nav-item nav-item--mega">
+                    <a class="nav-link" href={treatmentsMainHref}>
+                      {item.label || treatmentsLabel}<span class="caret">▾</span>
+                    </a>
+
+                    <div class="mega-panel" role="menu" aria-label="Tratamientos">
                       <div class="mega-grid">
                         <div>
                           <div class="mega-title">{treatmentsFacialTitle}</div>
@@ -564,9 +540,7 @@ const treatmentsCorporal = treatmentsAll
                                 <a class="mega-link" href={t.href} role="menuitem">{t.label}</a>
                               ))}
                             </div>
-                          ) : (
-                            <span class="dd-empty">Próximamente</span>
-                          )}
+                          ) : null}
                         </div>
 
                         <div>
@@ -577,118 +551,86 @@ const treatmentsCorporal = treatmentsAll
                                 <a class="mega-link" href={t.href} role="menuitem">{t.label}</a>
                               ))}
                             </div>
-                          ) : (
-                            <span class="dd-empty">Próximamente</span>
-                          )}
+                          ) : null}
                         </div>
                       </div>
                     </div>
                   </div>
-                </details>
-              ) : (
-                <details class="dd">
-                  <summary>
-                    {item.label} <span class="caret">▾</span>
-                  </summary>
-                  <div class="dd-panel" role="menu">
-                    <a class="dd-main" href={item.href} role="menuitem">Ver sección</a>
-                    {Array.isArray(item.children) && item.children.length ? (
-                      item.children.map((c) => (
-                        <a class="dd-item" href={c.href} role="menuitem">{c.label}</a>
-                      ))
-                    ) : (
-                      <span class="dd-empty">Próximamente</span>
-                    )}
-                  </div>
-                </details>
-              )
-            ))}
-          </div>
-
-          <!-- Center brand -->
-          <div class="nav-center">
-            <a class="brand" href="/" aria-label={siteName}>
-              <span class="brand-badge">
-                {logoImage ? <img src={logoImage} alt="Logo" /> : initials}
-              </span>
-              <span class="brand-name">{siteName}</span>
-            </a>
-          </div>
-
-          <!-- Right -->
-          <div class="nav-side nav-right" aria-label="Menú derecho">
-            {navRight.map((item) => (
-              <details class="dd">
-                <summary>
-                  {item.label} <span class="caret">▾</span>
-                </summary>
-                <div class="dd-panel" role="menu">
-                  <a class="dd-main" href={item.href} role="menuitem">Ver sección</a>
-                  {Array.isArray(item.children) && item.children.length ? (
-                    item.children.map((c) => (
-                      <a class="dd-item" href={c.href} role="menuitem">{c.label}</a>
-                    ))
+                ) : (
+                  Array.isArray(item?.children) && item.children.length ? (
+                    <div class="nav-item">
+                      <a class="nav-link" href={item.href || "#"}>
+                        {item.label}<span class="caret">▾</span>
+                      </a>
+                      <div class="dd-panel" role="menu" aria-label={item.label}>
+                        {item.children.map((c: any) => (
+                          <a href={c.href} role="menuitem">{c.label}</a>
+                        ))}
+                      </div>
+                    </div>
                   ) : (
-                    <span class="dd-empty">Próximamente</span>
-                  )}
-                </div>
-              </details>
-            ))}
+                    <a class="nav-link" href={item.href || "#"}>{item.label}</a>
+                  )
+                )
+              ))}
+            </div>
 
             <div class="nav-cta">
               <a class="btn" href={whatsappLink} target="_blank" rel="noreferrer">💬 WhatsApp</a>
               <a class="btn btn-primary" href={bookingUrl} target="_blank" rel="noreferrer">Pide tu cita</a>
             </div>
-          </div>
 
-          <!-- Mobile -->
-          <details class="nav-mobile">
-            <summary class="burger" aria-label="Abrir menú">☰</summary>
+            <!-- Mobile -->
+            <details class="nav-mobile">
+              <summary class="burger" aria-label="Abrir menú">☰</summary>
 
-            <div class="mobile-panel">
-              <details class="mdd" open>
-                <summary>
-                  <span>{treatmentsLabel}</span>
-                  <span class="caret">▾</span>
-                </summary>
-                <div class="mdd-panel">
-                  <strong style="opacity:.75; font-size:12px; text-transform:uppercase; letter-spacing:.06em;">
-                    {treatmentsFacialTitle}
-                  </strong>
-                  {treatmentsFacial.map((t) => (<a href={t.href}>{t.label}</a>))}
-
-                  <div style="height:10px"></div>
-
-                  <strong style="opacity:.75; font-size:12px; text-transform:uppercase; letter-spacing:.06em;">
-                    {treatmentsCorporalTitle}
-                  </strong>
-                  {treatmentsCorporal.map((t) => (<a href={t.href}>{t.label}</a>))}
-                </div>
-              </details>
-
-              {navbarItems.filter((x) => x.type !== "treatments").map((item) => (
-                <details class="mdd">
+              <div class="mobile-panel">
+                <details class="mdd" open>
                   <summary>
-                    <span>{item.label}</span>
+                    <span>{treatmentsLabel}</span>
                     <span class="caret">▾</span>
                   </summary>
                   <div class="mdd-panel">
-                    <a href={item.href}>Ver sección</a>
-                    {Array.isArray(item.children) && item.children.length ? (
-                      item.children.map((c) => (<a href={c.href}>{c.label}</a>))
-                    ) : null}
+                    <a href={treatmentsMainHref} style="font-weight:900;">Ver todos</a>
+
+                    <strong style="opacity:.75; font-size:12px; text-transform:uppercase; letter-spacing:.06em;">
+                      {treatmentsFacialTitle}
+                    </strong>
+                    {treatmentsFacial.map((t) => (<a href={t.href}>{t.label}</a>))}
+
+                    <div style="height:10px"></div>
+
+                    <strong style="opacity:.75; font-size:12px; text-transform:uppercase; letter-spacing:.06em;">
+                      {treatmentsCorporalTitle}
+                    </strong>
+                    {treatmentsCorporal.map((t) => (<a href={t.href}>{t.label}</a>))}
                   </div>
                 </details>
-              ))}
 
-              <div class="mobile-cta">
-                <a class="btn" href={whatsappLink} target="_blank" rel="noreferrer">💬 WhatsApp</a>
-                <a class="btn btn-primary" href={bookingUrl} target="_blank" rel="noreferrer">Pide tu cita</a>
+                {navbarItems.filter((x: any) => x?.type !== "treatments").map((item: any) => (
+                  Array.isArray(item?.children) && item.children.length ? (
+                    <details class="mdd">
+                      <summary>
+                        <span>{item.label}</span>
+                        <span class="caret">▾</span>
+                      </summary>
+                      <div class="mdd-panel">
+                        {item.children.map((c: any) => (<a href={c.href}>{c.label}</a>))}
+                      </div>
+                    </details>
+                  ) : (
+                    <a class="btn" href={item.href || "#"} style="border-radius:14px;">{item.label}</a>
+                  )
+                ))}
+
+                <div class="mobile-cta">
+                  <a class="btn" href={whatsappLink} target="_blank" rel="noreferrer">💬 WhatsApp</a>
+                  <a class="btn btn-primary" href={bookingUrl} target="_blank" rel="noreferrer">Pide tu cita</a>
+                </div>
               </div>
-            </div>
-          </details>
-
-        </nav>
+            </details>
+          </nav>
+        </div>
       </div>
     </header>
 
@@ -739,12 +681,8 @@ const treatmentsCorporal = treatmentsAll
     </a>
 
     <script is:inline>
-      // 1) Cierra dropdowns desktop al hacer click fuera (y solo 1 abierto)
+      // Mobile: cerrar menú al tocar fuera / al tocar link
       document.addEventListener("click", (e) => {
-        document.querySelectorAll("details.dd[open]").forEach((d) => {
-          if (!d.contains(e.target)) d.removeAttribute("open");
-        });
-
         const mob = document.querySelector(".nav-mobile");
         if (mob && mob.hasAttribute("open")) {
           const panel = mob.querySelector(".mobile-panel");
@@ -759,17 +697,7 @@ const treatmentsCorporal = treatmentsAll
         }
       });
 
-      document.querySelectorAll("details.dd").forEach((d) => {
-        d.addEventListener("toggle", () => {
-          if (d.open) {
-            document.querySelectorAll("details.dd").forEach((other) => {
-              if (other !== d) other.removeAttribute("open");
-            });
-          }
-        });
-      });
-
-      // 2) Oculta header al bajar y muestra al subir
+      // Oculta header al bajar y muestra al subir
       (function(){
         const header = document.getElementById("site-header");
         if (!header) return;
@@ -786,13 +714,9 @@ const treatmentsCorporal = treatmentsAll
           const y = window.scrollY || 0;
           const goingDown = y > lastY;
 
-          if (y < 60 || shouldKeepVisible()) {
-            header.classList.remove("header--hide");
-          } else if (goingDown) {
-            header.classList.add("header--hide");
-          } else {
-            header.classList.remove("header--hide");
-          }
+          if (y < 60 || shouldKeepVisible()) header.classList.remove("header--hide");
+          else if (goingDown) header.classList.add("header--hide");
+          else header.classList.remove("header--hide");
 
           lastY = y;
         };
