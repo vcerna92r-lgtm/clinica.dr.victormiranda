@@ -1,28 +1,36 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 
+// Categoría fija para esta carpeta
 const CATEGORY = "facial";
 
-function slugFromFilepath(fp) {
+function slugFromFilepath(fp: string) {
   const name = String(fp).split("/").pop() || "";
   return name.replace(/\.mdx?$/i, "");
 }
 
 export async function getStaticPaths() {
-  const entries = await Astro.glob("../../../content/treatments/**/*.{md,mdx}");
+  // Lee contenido desde src/content/treatments (y también soporta "tratamientos" por si existe)
+  const modules = import.meta.glob(
+    [
+      "../../../content/treatments/**/*.{md,mdx}",
+      "../../../content/tratamientos/**/*.{md,mdx}",
+    ],
+    { eager: true }
+  );
 
-  const items = entries
-    .map((entry) => {
-      const fm = entry.frontmatter || {};
+  const items = Object.entries(modules)
+    .map(([filepath, mod]: any) => {
+      const fm = mod.frontmatter || {};
       const category = String(fm.category || "").toLowerCase().trim();
-      const slug = String(fm.slug || slugFromFilepath(entry.file)).trim();
-      return { entry, category, slug };
+      const slug = String(fm.slug || slugFromFilepath(filepath)).trim();
+      return { mod, category, slug };
     })
     .filter((x) => x.slug && x.category === CATEGORY);
 
   return items.map((x) => ({
     params: { slug: x.slug },
-    props: { entry: x.entry },
+    props: { entry: x.mod },
   }));
 }
 
