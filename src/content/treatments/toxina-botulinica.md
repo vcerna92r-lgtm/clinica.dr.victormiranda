@@ -5,6 +5,27 @@ order: 10
 description: "Tratamiento médico-estético para suavizar líneas de expresión y equilibrar la dinámica facial con resultados naturales."
 category: "facial"
 slug: "toxina-botulinica"
+
+# Sub-tratamientos (para mostrar debajo en el menú)
+children:
+  - label: "Tercio superior"
+    slug: "toxina-tercio-superior"
+  - label: "Full Face"
+    slug: "toxina-full-face"
+  - label: "ID TOX (SkinQuality)"
+    slug: "toxina-id-tox-skinquality"
+  - label: "Hiperhidrosis (manos, axilas)"
+    slug: "toxina-hiperhidrosis"
+  - label: "Nefertiti Lift"
+    slug: "toxina-nefertiti-lift"
+  - label: "Bandas platismales"
+    slug: "toxina-bandas-platismales"
+  - label: "Bruxismo"
+    slug: "toxina-bruxismo"
+  - label: "Mentón empedrado"
+    slug: "toxina-menton-empedrado"
+  - label: "Sonrisa gingival"
+    slug: "toxina-sonrisa-gingival"
 ---
 
 # Toxina botulínica

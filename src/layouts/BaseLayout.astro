@@ -79,12 +79,29 @@ const rawTreatments = Object.entries(treatmentModules)
     const label = String(fm.menu_label || fm.title || slug).trim();
     const order = Number.isFinite(Number(fm.order)) ? Number(fm.order) : 999;
 
+    // Sub-tratamientos (children) definidos en frontmatter del tratamiento padre
+    const childrenRaw = Array.isArray(fm.children) ? fm.children : [];
+    const children = childrenRaw
+      .map((c: any) => {
+        const cLabel = String(c?.label || c?.title || "").trim();
+        const cSlug = String(c?.slug || "").trim();
+        return cLabel && cSlug
+          ? {
+              label: cLabel,
+              slug: cSlug,
+              href: `/tratamientos-medicos/${category}/${cSlug}/`,
+            }
+          : null;
+      })
+      .filter(Boolean);
+
     return {
       category,
       slug,
       label,
       order,
       href: `/tratamientos-medicos/${category}/${slug}/`,
+      children,
     };
   })
   .filter((x) => x.label && x.slug && (x.category === "facial" || x.category === "corporal"));
@@ -93,10 +110,18 @@ const rawTreatments = Object.entries(treatmentModules)
 const uniqMap = new Map<string, any>();
 for (const t of rawTreatments) {
   const key = `${t.category}:${t.slug}`;
-  if (!uniqMap.has(key)) uniqMap.set(key, t);
-  else {
+  if (!uniqMap.has(key)) {
+    uniqMap.set(key, t);
+  } else {
     const prev = uniqMap.get(key);
-    if (t.order < prev.order) uniqMap.set(key, t);
+
+    // Mantén el que tenga menor order; si empatan, conserva children si el otro no tiene
+    if (t.order < prev.order) {
+      uniqMap.set(key, t);
+    } else if ((!prev.children || prev.children.length === 0) && t.children?.length) {
+      prev.children = t.children;
+      uniqMap.set(key, prev);
+    }
   }
 }
 
@@ -354,15 +379,18 @@ const treatmentsMainHref =
         margin: 0 0 14px;
       }
 
-      .mega-items{
-        column-gap: 34px;
-      }
+      .mega-items{ column-gap: 34px; }
       .mega-items.cols-3{ columns: 3; }
       .mega-items.cols-2{ columns: 2; }
 
+      /* Bloque por tratamiento (evita que se separen hijos en columnas) */
+      .mega-block{
+        break-inside: avoid;
+        margin: 0 0 14px;
+      }
+
       .mega-link{
         display:block;
-        break-inside: avoid;
         padding: 6px 0;
         font-size: 12px;
         letter-spacing: .06em;
@@ -371,6 +399,26 @@ const treatmentsMainHref =
         color: rgba(15,23,42,.55);
       }
       .mega-link:hover{ color: rgba(15,23,42,.90); }
+
+      /* Sub-tratamientos (más pequeño, debajo del padre) */
+      .mega-children{
+        margin-top: 6px;
+        padding-left: 10px;
+        border-left: 1px solid rgba(15,23,42,.10);
+      }
+      .mega-sublink{
+        display:block;
+        padding: 4px 0;
+        font-size: 11px;
+        letter-spacing: .05em;
+        text-transform: uppercase;
+        font-weight: 650;
+        color: rgba(15,23,42,.48);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .mega-sublink:hover{ color: rgba(15,23,42,.90); }
 
       /* ===== Mobile ===== */
       .nav-mobile{ display:none; margin-left:auto; position: relative; }
@@ -534,10 +582,23 @@ const treatmentsMainHref =
                       <div class="mega-grid">
                         <div>
                           <div class="mega-title">{treatmentsFacialTitle}</div>
+
                           {treatmentsFacial.length ? (
                             <div class="mega-items cols-3">
-                              {treatmentsFacial.map((t) => (
-                                <a class="mega-link" href={t.href} role="menuitem">{t.label}</a>
+                              {treatmentsFacial.map((t: any) => (
+                                <div class="mega-block">
+                                  <a class="mega-link" href={t.href} role="menuitem">{t.label}</a>
+
+                                  {Array.isArray(t.children) && t.children.length ? (
+                                    <div class="mega-children" aria-label={`Sub-tratamientos de ${t.label}`}>
+                                      {t.children.map((c: any) => (
+                                        <a class="mega-sublink" href={c.href} role="menuitem">
+                                          {c.label}
+                                        </a>
+                                      ))}
+                                    </div>
+                                  ) : null}
+                                </div>
                               ))}
                             </div>
                           ) : null}
@@ -545,10 +606,21 @@ const treatmentsMainHref =
 
                         <div>
                           <div class="mega-title">{treatmentsCorporalTitle}</div>
+
                           {treatmentsCorporal.length ? (
                             <div class="mega-items cols-2">
-                              {treatmentsCorporal.map((t) => (
-                                <a class="mega-link" href={t.href} role="menuitem">{t.label}</a>
+                              {treatmentsCorporal.map((t: any) => (
+                                <div class="mega-block">
+                                  <a class="mega-link" href={t.href} role="menuitem">{t.label}</a>
+
+                                  {Array.isArray(t.children) && t.children.length ? (
+                                    <div class="mega-children">
+                                      {t.children.map((c: any) => (
+                                        <a class="mega-sublink" href={c.href} role="menuitem">{c.label}</a>
+                                      ))}
+                                    </div>
+                                  ) : null}
+                                </div>
                               ))}
                             </div>
                           ) : null}
@@ -590,20 +662,51 @@ const treatmentsMainHref =
                     <span>{treatmentsLabel}</span>
                     <span class="caret">▾</span>
                   </summary>
+
                   <div class="mdd-panel">
                     <a href={treatmentsMainHref} style="font-weight:900;">Ver todos</a>
 
                     <strong style="opacity:.75; font-size:12px; text-transform:uppercase; letter-spacing:.06em;">
                       {treatmentsFacialTitle}
                     </strong>
-                    {treatmentsFacial.map((t) => (<a href={t.href}>{t.label}</a>))}
+
+                    {treatmentsFacial.map((t: any) => (
+                      <div style="display:flex; flex-direction:column; gap:6px;">
+                        <a href={t.href}>{t.label}</a>
+
+                        {Array.isArray(t.children) && t.children.length ? (
+                          <div style="display:flex; flex-direction:column; gap:6px; margin-left:12px; opacity:.95;">
+                            {t.children.map((c: any) => (
+                              <a href={c.href} style="font-size:12px; font-weight:700; opacity:.85;">
+                                {c.label}
+                              </a>
+                            ))}
+                          </div>
+                        ) : null}
+                      </div>
+                    ))}
 
                     <div style="height:10px"></div>
 
                     <strong style="opacity:.75; font-size:12px; text-transform:uppercase; letter-spacing:.06em;">
                       {treatmentsCorporalTitle}
                     </strong>
-                    {treatmentsCorporal.map((t) => (<a href={t.href}>{t.label}</a>))}
+
+                    {treatmentsCorporal.map((t: any) => (
+                      <div style="display:flex; flex-direction:column; gap:6px;">
+                        <a href={t.href}>{t.label}</a>
+
+                        {Array.isArray(t.children) && t.children.length ? (
+                          <div style="display:flex; flex-direction:column; gap:6px; margin-left:12px; opacity:.95;">
+                            {t.children.map((c: any) => (
+                              <a href={c.href} style="font-size:12px; font-weight:700; opacity:.85;">
+                                {c.label}
+                              </a>
+                            ))}
+                          </div>
+                        ) : null}
+                      </div>
+                    ))}
                   </div>
                 </details>
 
