@@ -79,6 +79,9 @@ const rawTreatments = Object.entries(treatmentModules)
     const label = String(fm.menu_label || fm.title || slug).trim();
     const order = Number.isFinite(Number(fm.order)) ? Number(fm.order) : 999;
 
+    // permite ocultar páginas del mega menú principal (para sub-tratamientos)
+    const hideFromMenu = Boolean(fm.hide_from_menu || fm.hideFromMenu || fm.hidden_in_menu);
+
     // Sub-tratamientos (children) definidos en frontmatter del tratamiento padre
     const childrenRaw = Array.isArray(fm.children) ? fm.children : [];
     const children = childrenRaw
@@ -100,6 +103,7 @@ const rawTreatments = Object.entries(treatmentModules)
       slug,
       label,
       order,
+      hideFromMenu,
       href: `/tratamientos-medicos/${category}/${slug}/`,
       children,
     };
@@ -131,8 +135,14 @@ const sortStable = (a: any, b: any) =>
   (a.order - b.order) ||
   a.label.localeCompare(b.label, "es", { sensitivity: "base" });
 
-const treatmentsFacial = treatmentsAll.filter((x) => x.category === "facial").sort(sortStable);
-const treatmentsCorporal = treatmentsAll.filter((x) => x.category === "corporal").sort(sortStable);
+// solo listamos como “principales” los que NO están ocultos
+const treatmentsFacial = treatmentsAll
+  .filter((x) => x.category === "facial" && !x.hideFromMenu)
+  .sort(sortStable);
+
+const treatmentsCorporal = treatmentsAll
+  .filter((x) => x.category === "corporal" && !x.hideFromMenu)
+  .sort(sortStable);
 
 // Link principal del botón (click navega a “lista de tratamientos”)
 const treatmentsMainHref =
@@ -340,7 +350,7 @@ const treatmentsMainHref =
       .dd-panel a:hover{ color: rgba(15,23,42,.90); }
 
       /* ===== Mega menu (Tratamientos) — sin recuadritos ===== */
-      .nav-item--mega{ position: static; } /* clave: panel se alinea al contenedor */
+      .nav-item--mega{ position: static; }
       .mega-panel{
         position:absolute;
         left: 0;
@@ -383,7 +393,6 @@ const treatmentsMainHref =
       .mega-items.cols-3{ columns: 3; }
       .mega-items.cols-2{ columns: 2; }
 
-      /* Bloque por tratamiento (evita que se separen hijos en columnas) */
       .mega-block{
         break-inside: avoid;
         margin: 0 0 14px;
@@ -400,7 +409,6 @@ const treatmentsMainHref =
       }
       .mega-link:hover{ color: rgba(15,23,42,.90); }
 
-      /* Sub-tratamientos (más pequeño, debajo del padre) */
       .mega-children{
         margin-top: 6px;
         padding-left: 10px;
@@ -419,6 +427,17 @@ const treatmentsMainHref =
         text-overflow: ellipsis;
       }
       .mega-sublink:hover{ color: rgba(15,23,42,.90); }
+
+      /* Placeholder premium (corporal) */
+      .mega-soon{
+        display:block;
+        padding: 6px 0;
+        font-size: 12px;
+        letter-spacing: .10em;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: rgba(15,23,42,.40);
+      }
 
       /* ===== Mobile ===== */
       .nav-mobile{ display:none; margin-left:auto; position: relative; }
@@ -555,7 +574,6 @@ const treatmentsMainHref =
   <body>
     <header class="header" id="site-header">
       <div class="container">
-        <!-- Línea 1: marca centrada -->
         <div class="nav-top">
           <a class="brand" href="/" aria-label={siteName}>
             <span class="brand-badge">
@@ -565,7 +583,6 @@ const treatmentsMainHref =
           </a>
         </div>
 
-        <!-- Línea 2: menú centrado + CTA derecha -->
         <div class="nav-bottom">
           <nav class="nav-row" aria-label="Navegación principal">
             <div></div>
@@ -590,11 +607,9 @@ const treatmentsMainHref =
                                   <a class="mega-link" href={t.href} role="menuitem">{t.label}</a>
 
                                   {Array.isArray(t.children) && t.children.length ? (
-                                    <div class="mega-children" aria-label={`Sub-tratamientos de ${t.label}`}>
+                                    <div class="mega-children">
                                       {t.children.map((c: any) => (
-                                        <a class="mega-sublink" href={c.href} role="menuitem">
-                                          {c.label}
-                                        </a>
+                                        <a class="mega-sublink" href={c.href} role="menuitem">{c.label}</a>
                                       ))}
                                     </div>
                                   ) : null}
@@ -623,7 +638,9 @@ const treatmentsMainHref =
                                 </div>
                               ))}
                             </div>
-                          ) : null}
+                          ) : (
+                            <span class="mega-soon">Próximamente</span>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -652,7 +669,6 @@ const treatmentsMainHref =
               <a class="btn btn-primary" href={bookingUrl} target="_blank" rel="noreferrer">Pide tu cita</a>
             </div>
 
-            <!-- Mobile -->
             <details class="nav-mobile">
               <summary class="burger" aria-label="Abrir menú">☰</summary>
 
@@ -692,21 +708,27 @@ const treatmentsMainHref =
                       {treatmentsCorporalTitle}
                     </strong>
 
-                    {treatmentsCorporal.map((t: any) => (
-                      <div style="display:flex; flex-direction:column; gap:6px;">
-                        <a href={t.href}>{t.label}</a>
+                    {treatmentsCorporal.length ? (
+                      treatmentsCorporal.map((t: any) => (
+                        <div style="display:flex; flex-direction:column; gap:6px;">
+                          <a href={t.href}>{t.label}</a>
 
-                        {Array.isArray(t.children) && t.children.length ? (
-                          <div style="display:flex; flex-direction:column; gap:6px; margin-left:12px; opacity:.95;">
-                            {t.children.map((c: any) => (
-                              <a href={c.href} style="font-size:12px; font-weight:700; opacity:.85;">
-                                {c.label}
-                              </a>
-                            ))}
-                          </div>
-                        ) : null}
+                          {Array.isArray(t.children) && t.children.length ? (
+                            <div style="display:flex; flex-direction:column; gap:6px; margin-left:12px; opacity:.95;">
+                              {t.children.map((c: any) => (
+                                <a href={c.href} style="font-size:12px; font-weight:700; opacity:.85;">
+                                  {c.label}
+                                </a>
+                              ))}
+                            </div>
+                          ) : null}
+                        </div>
+                      ))
+                    ) : (
+                      <div style="padding:10px 12px; border-radius:12px; border:1px dashed rgba(15,23,42,.16); opacity:.7; font-weight:800;">
+                        Próximamente
                       </div>
-                    ))}
+                    )}
                   </div>
                 </details>
 
@@ -784,7 +806,6 @@ const treatmentsMainHref =
     </a>
 
     <script is:inline>
-      // Mobile: cerrar menú al tocar fuera / al tocar link
       document.addEventListener("click", (e) => {
         const mob = document.querySelector(".nav-mobile");
         if (mob && mob.hasAttribute("open")) {
@@ -793,14 +814,12 @@ const treatmentsMainHref =
           if (panel && panel.contains(e.target)) {
             if (e.target.tagName === "A") mob.removeAttribute("open");
           } else if (burger && burger.contains(e.target)) {
-            // click en burger
           } else {
             mob.removeAttribute("open");
           }
         }
       });
 
-      // Oculta header al bajar y muestra al subir
       (function(){
         const header = document.getElementById("site-header");
         if (!header) return;
