@@ -24,7 +24,7 @@ const navLinksGap = String(site.nav_links_gap || "16px").trim();
 const homeGapServicesComplications = String(site.home_gap_services_complications || "64px").trim(); // sc
 const homeGapCoverServices = String(site.home_gap_cover_services || "48px").trim(); // cs
 const homeGapComplicationsSocial = String(site.home_gap_complications_social || "64px").trim(); // ccs
-const homeGapSocialFooter = String(site.home_gap_social_footer || "56px").trim(); // sf ✅ NUEVO
+const homeGapSocialFooter = String(site.home_gap_social_footer || "56px").trim(); // sf
 
 // WhatsApp
 const whatsappNumber = String(site.whatsapp || "").replace(/\D/g, "");
@@ -42,6 +42,20 @@ const footerCity = site.footer?.city || site.city || "";
 const footerEmail = site.footer?.email || site.email || "";
 const footerPoliciesLabel = site.footer?.policies_label || "Políticas";
 const footerPoliciesUrl = site.footer?.policies_url || "/politicas";
+
+// Navbar editable desde Admin
+const defaultNavbarItems = [
+  { label: "Tratamientos estéticos", href: "/servicios/", children: [{ label: "Ver sección", href: "/servicios/" }] },
+  { label: "Packs", href: "/packs/", children: [{ label: "Ver sección", href: "/packs/" }] },
+  { label: "Tienda", href: "/tienda/", children: [{ label: "Ver sección", href: "/tienda/" }] },
+  { label: "Tarjeta de Regalo", href: "/tarjeta-de-regalo/", children: [{ label: "Ver sección", href: "/tarjeta-de-regalo/" }] },
+  { label: "Blog de belleza", href: "/blog/", children: [{ label: "Ver sección", href: "/blog/" }] },
+  { label: "Contacto", href: "/contacto/", children: [{ label: "Ver sección", href: "/contacto/" }] },
+  { label: "Rebon", href: "/rebon/", children: [{ label: "Ver sección", href: "/rebon/" }] },
+];
+
+const navbarItems =
+  Array.isArray(site?.navbar?.items) && site.navbar.items.length ? site.navbar.items : defaultNavbarItems;
 ---
 
 <!doctype html>
@@ -57,27 +71,20 @@ const footerPoliciesUrl = site.footer?.policies_url || "/politicas";
 
     <style>
       :root{
-        /* Estos valores se sobreescriben con el style="" del <html> */
         --bg: #ffffff;
         --max: 1120px;
         --nav-gap: 16px;
         --accent: #0F766E;
         --accent2: #06B6D4;
 
-        /* Espacios verticales (defaults) */
-        --home-gap-sc: 64px;  /* servicios -> complicaciones */
-        --home-gap-cs: 48px;  /* portada -> servicios */
-        --home-gap-ccs: 64px; /* complicaciones -> redes */
-        --home-gap-sf: 56px;  /* redes -> footer ✅ nuevo */
+        --home-gap-sc: 64px;
+        --home-gap-cs: 48px;
+        --home-gap-ccs: 64px;
+        --home-gap-sf: 56px;
 
         --text: #0f172a;
         --muted: #475569;
         --line: #e2e8f0;
-        --soft: #f8fafc;
-        --soft2:#f1f5f9;
-
-        --radius: 18px;
-        --shadow: 0 16px 40px rgba(15,23,42,0.08);
       }
 
       *{ box-sizing:border-box; }
@@ -89,11 +96,9 @@ const footerPoliciesUrl = site.footer?.policies_url || "/politicas";
         line-height:1.55;
       }
       a{ color: inherit; text-decoration: none; }
-      a.link{ text-decoration: underline; text-underline-offset: 3px; }
-
       .container{ max-width: var(--max); margin:0 auto; padding: 18px; }
 
-      /* ===== Header / Navbar (estilo más “clínica grande”) ===== */
+      /* ===== Header (2 filas) ===== */
       .header{
         position: sticky;
         top: 0;
@@ -103,89 +108,61 @@ const footerPoliciesUrl = site.footer?.policies_url || "/politicas";
         border-bottom: 1px solid rgba(15,23,42,.10);
       }
 
-      .nav{
-        display:flex;
+      /* Fila superior: logo centrado + acciones derecha */
+      .nav-top{
+        display:grid;
+        grid-template-columns: 1fr auto 1fr;
         align-items:center;
-        gap:14px;
-        flex-wrap: nowrap;
+        gap: 14px;
+        padding: 14px 0 8px;
       }
+      .top-left{ justify-self:start; }
+      .top-center{ justify-self:center; }
+      .top-right{ justify-self:end; display:flex; gap:10px; align-items:center; }
 
+      /* ✅ Logo estilo referencia (apilado) */
       .brand{
         display:flex;
+        flex-direction: column;
         align-items:center;
-        gap:10px;
+        gap: 8px;
         font-weight: 900;
         letter-spacing: .2px;
-        min-width: 0;
-      }
-
-      .brand span{
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 340px;
+        text-align:center;
       }
 
       .brand-badge{
-        width: 38px;
-        height: 38px;
-        border-radius: 14px;
+        width: 56px;
+        height: 56px;
+        border-radius: 18px;
         background:
-          radial-gradient(90px 40px at 20% 10%, var(--accent2), rgba(255,255,255,0)),
+          radial-gradient(100px 50px at 20% 10%, var(--accent2), rgba(255,255,255,0)),
           linear-gradient(135deg, var(--accent), #0f172a);
         color: #fff;
         display:flex;
         align-items:center;
         justify-content:center;
-        box-shadow: 0 10px 22px rgba(15,23,42,0.18);
+        box-shadow: 0 14px 30px rgba(15,23,42,0.18);
         overflow: hidden;
         flex: 0 0 auto;
       }
+      .brand-badge img{ width:100%; height:100%; object-fit:cover; display:block; }
 
-      .brand-badge img{
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-      }
-
-      .navlinks{
-        margin-left: auto;
-        display:flex;
-        align-items: center;
-        gap: var(--nav-gap);
-      }
-
-      .navlinks a{
-        padding: 10px 12px;
-        border-radius: 12px;
-        color: rgba(15,23,42,.78);
-        font-weight: 800;
-        font-size: 13px;
+      .brand-name{
+        font-weight: 900;
+        font-size: 16px;
         letter-spacing: .02em;
-        text-transform: uppercase;
+        white-space: nowrap;
       }
 
-      .navlinks a:hover{
-        background: rgba(15,23,42,.06);
-        color: rgba(15,23,42,.92);
-      }
-
-      .nav-cta{
-        display:flex;
-        gap:10px;
-        align-items:center;
-        margin-left: 10px;
-      }
-
-      /* Buttons */
+      /* Botones (misma posición derecha) */
       .btn{
         display:inline-flex;
         align-items:center;
         justify-content:center;
         gap:10px;
-        padding: 11px 14px;
-        border-radius: 14px;
+        padding: 12px 16px;
+        border-radius: 16px;
         border: 1px solid rgba(15,23,42,.12);
         background: rgba(255,255,255,.95);
         color: rgba(15,23,42,.92);
@@ -193,7 +170,6 @@ const footerPoliciesUrl = site.footer?.policies_url || "/politicas";
         box-shadow: 0 10px 24px rgba(15,23,42,0.05);
         white-space: nowrap;
       }
-
       .btn:hover{ background: rgba(15,23,42,.05); }
 
       .btn-primary{
@@ -202,15 +178,93 @@ const footerPoliciesUrl = site.footer?.policies_url || "/politicas";
         color: #fff;
         box-shadow: 0 14px 30px rgba(6,182,212,0.18);
       }
-
       .btn-primary:hover{ filter: brightness(.97); }
 
-      /* ===== Menú móvil ===== */
-      .nav-mobile{
-        display:none;
-        margin-left: auto;
-        position: relative;
+      /* Fila inferior: menú horizontal full width */
+      .nav-bottom{ padding: 8px 0 12px; }
+
+      .nav-menu{
+        width: 100%;
+        display:flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        align-items:center;
+        justify-content: space-between;
+        gap: var(--nav-gap);
       }
+
+      /* Dropdown */
+      details.dd{ position: relative; flex: 0 0 auto; }
+      details.dd > summary{
+        list-style:none;
+        cursor:pointer;
+        padding: 10px 10px;
+        border-radius: 12px;
+        color: rgba(15,23,42,.78);
+        font-weight: 900;
+        font-size: 12px;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        user-select: none;
+        display:flex;
+        align-items:center;
+        gap: 6px;
+        white-space: nowrap;
+      }
+      details.dd > summary::-webkit-details-marker{ display:none; }
+      details.dd > summary:hover{
+        background: rgba(15,23,42,.06);
+        color: rgba(15,23,42,.92);
+      }
+      .caret{ font-size: 12px; opacity:.7; }
+
+      .dd-panel{
+        position:absolute;
+        top: calc(100% + 10px);
+        left: 0;
+        min-width: 240px;
+        max-width: min(360px, 75vw);
+        background: rgba(255,255,255,.98);
+        border: 1px solid rgba(15,23,42,.10);
+        border-radius: 16px;
+        padding: 10px;
+        box-shadow: 0 16px 40px rgba(2,6,23,.12);
+        z-index: 60;
+      }
+      details.dd.align-right .dd-panel{ left:auto; right:0; }
+
+      .dd-main{
+        display:block;
+        padding: 10px 10px;
+        border-radius: 12px;
+        font-weight: 900;
+        border: 1px solid rgba(15,23,42,.10);
+        background: rgba(15,23,42,.02);
+        margin-bottom: 8px;
+      }
+      .dd-main:hover{ background: rgba(15,23,42,.06); }
+
+      .dd-item{
+        display:block;
+        padding: 10px 10px;
+        border-radius: 12px;
+        border: 1px solid rgba(15,23,42,.08);
+        background: rgba(255,255,255,.9);
+        font-weight: 800;
+      }
+      .dd-item:hover{ background: rgba(15,23,42,.05); }
+
+      .dd-empty{
+        display:block;
+        padding: 10px 10px;
+        border-radius: 12px;
+        border: 1px dashed rgba(15,23,42,.20);
+        color: rgba(15,23,42,.55);
+        font-weight: 800;
+      }
+
+      /* ===== Mobile burger (solo teléfono) ===== */
+      .nav-mobile{ display:none !important; position: relative; }
 
       .burger{
         list-style:none;
@@ -222,111 +276,99 @@ const footerPoliciesUrl = site.footer?.policies_url || "/politicas";
         font-weight: 900;
         user-select: none;
       }
-
       .burger::-webkit-details-marker{ display:none; }
+
+      details.nav-mobile:not([open]) .mobile-panel{ display:none; }
+      details.nav-mobile[open] .mobile-panel{ display:flex; }
 
       .mobile-panel{
         position:absolute;
         right: 0;
         top: calc(100% + 10px);
-        width: min(360px, 92vw);
+        width: min(380px, 92vw);
         background: rgba(255,255,255,.98);
         border: 1px solid rgba(15,23,42,.10);
         border-radius: 16px;
         padding: 12px;
         box-shadow: 0 16px 40px rgba(2,6,23,.12);
+        flex-direction: column;
+        gap: 10px;
+        z-index: 70;
+      }
+
+      .m-home{
+        display:flex;
+        justify-content:center;
+        padding: 12px 12px;
+        border-radius: 12px;
+        border: 1px solid rgba(15,23,42,.10);
+        background: rgba(15,23,42,.02);
+        font-weight: 900;
+      }
+
+      details.mdd > summary{
+        list-style:none;
+        cursor:pointer;
+        padding: 12px 12px;
+        border-radius: 12px;
+        border: 1px solid rgba(15,23,42,.10);
+        background: rgba(255,255,255,.92);
+        font-weight: 900;
+        display:flex;
+        align-items:center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      details.mdd > summary::-webkit-details-marker{ display:none; }
+
+      .mdd-panel{
         display:flex;
         flex-direction: column;
         gap: 8px;
-        z-index: 60;
+        padding: 10px 0 0 0;
       }
-
-      .mobile-panel a{
+      .mdd-panel a{
         padding: 12px 12px;
         border-radius: 12px;
-        color: rgba(15,23,42,.90);
-        text-decoration:none;
         border: 1px solid rgba(15,23,42,.08);
         background: rgba(15,23,42,.02);
         font-weight: 800;
       }
 
-      .mobile-panel a:hover{
-        background: rgba(15,23,42,.06);
+      .mobile-cta{ display:flex; gap:10px; }
+      .mobile-cta .btn{ flex:1; }
+
+      @media (max-width: 860px){
+        .nav-bottom{ display:none !important; }
+        .top-right .btn{ display:none !important; }
+        .nav-mobile{ display:block !important; }
+
+        /* logo más compacto en móvil */
+        .brand-badge{ width: 48px; height: 48px; }
+        .brand-name{ font-size: 14px; }
       }
 
-      .mobile-cta{
-        display:flex;
-        gap: 10px;
-        margin-top: 4px;
-      }
-
-      .mobile-cta .btn{ flex: 1; }
-
-      @media (max-width: 900px){
-        .navlinks{ display:none; }
-        .nav-cta{ display:none; }
-        .nav-mobile{ display:block; }
-        .brand span{ max-width: 200px; }
-      }
-
-      @media (max-width: 420px){
-        .brand span{ display:none; }
-      }
-
-      /* ✅ Footer minimalista */
+      /* Footer */
       .site-footer{
         margin-top: var(--home-gap-sf);
         border-top: 1px solid var(--line);
         padding: 26px 0;
       }
-
       .footer-inner{
         display: grid;
         grid-template-columns: 1fr;
         gap: 14px;
         color: var(--muted);
       }
-
-      .footer-brand{
-        color: var(--text);
-        font-weight: 800;
-        letter-spacing: .2px;
-      }
-
-      .footer-heading{
-        font-size: 12px;
-        opacity: .65;
-        margin-bottom: 6px;
-      }
-
-      .footer-text{
-        opacity: .9;
-      }
-
-      .footer-link{
-        display: inline-block;
-        opacity: .9;
-        text-decoration: none;
-      }
-
-      .footer-link:hover{
-        opacity: 1;
-        text-decoration: underline;
-        text-underline-offset: 3px;
-      }
-
+      .footer-brand{ color: var(--text); font-weight: 800; letter-spacing: .2px; }
+      .footer-heading{ font-size: 12px; opacity: .65; margin-bottom: 6px; }
       @media (min-width: 768px){
-        .footer-inner{
-          grid-template-columns: 1fr 1fr 1fr;
-          gap: 24px;
-          align-items: start;
-        }
+        .footer-inner{ grid-template-columns: 1fr 1fr 1fr; gap: 24px; align-items: start; }
         .footer-center{ text-align: center; }
         .footer-right{ text-align: right; }
       }
 
-      /* Floating WhatsApp */
+      /* WhatsApp flotante */
       .wa-fab{
         position: fixed !important;
         right: 18px !important;
@@ -348,45 +390,81 @@ const footerPoliciesUrl = site.footer?.policies_url || "/politicas";
   <body>
     <header class="header">
       <div class="container">
-        <nav class="nav" aria-label="Navegación principal">
-          <a class="brand" href="/">
-            <span class="brand-badge">
-              {logoImage ? <img src={logoImage} alt="Logo" /> : initials}
-            </span>
-            <span>{siteName}</span>
-          </a>
 
-          <!-- Desktop -->
-          <div class="navlinks">
-            <a href="/">Inicio</a>
-            <a href="/clinica/">La Clínica</a>
-            <a href="/servicios/">Servicios</a>
-            <a href="/complicaciones/">Complicaciones</a>
-            <a href="/contacto/">Contacto</a>
+        <!-- FILA 1 -->
+        <div class="nav-top" aria-label="Barra superior">
+          <div class="top-left"></div>
+
+          <div class="top-center">
+            <!-- ✅ Sin botón INICIO: el logo ya lleva a "/" -->
+            <a class="brand" href="/" aria-label={siteName}>
+              <span class="brand-badge">
+                {logoImage ? <img src={logoImage} alt="Logo" /> : initials}
+              </span>
+              <span class="brand-name">{siteName}</span>
+            </a>
           </div>
 
-          <div class="nav-cta">
+          <div class="top-right">
+            <!-- Botones en la misma posición -->
             <a class="btn" href={whatsappLink} target="_blank" rel="noreferrer">💬 WhatsApp</a>
             <a class="btn btn-primary" href={bookingUrl} target="_blank" rel="noreferrer">Pide tu cita</a>
-          </div>
 
-          <!-- Mobile -->
-          <details class="nav-mobile">
-            <summary class="burger" aria-label="Abrir menú">☰</summary>
-            <div class="mobile-panel">
-              <a href="/">Inicio</a>
-              <a href="/clinica/">La Clínica</a>
-              <a href="/servicios/">Servicios</a>
-              <a href="/complicaciones/">Complicaciones</a>
-              <a href="/contacto/">Contacto</a>
+            <!-- Burger (solo teléfono) -->
+            <details class="nav-mobile">
+              <summary class="burger" aria-label="Abrir menú">☰</summary>
+              <div class="mobile-panel">
+                <a class="m-home" href="/">Inicio</a>
 
-              <div class="mobile-cta">
-                <a class="btn" href={whatsappLink} target="_blank" rel="noreferrer">💬 WhatsApp</a>
-                <a class="btn btn-primary" href={bookingUrl} target="_blank" rel="noreferrer">Pide tu cita</a>
+                {navbarItems.map((item) => (
+                  <details class="mdd">
+                    <summary>
+                      <span>{item.label}</span>
+                      <span class="caret">▾</span>
+                    </summary>
+                    <div class="mdd-panel">
+                      <a href={item.href}>Ver sección</a>
+                      {Array.isArray(item.children) && item.children.length ? (
+                        item.children.map((c) => (
+                          <a href={c.href}>{c.label}</a>
+                        ))
+                      ) : null}
+                    </div>
+                  </details>
+                ))}
+
+                <div class="mobile-cta">
+                  <a class="btn" href={whatsappLink} target="_blank" rel="noreferrer">💬 WhatsApp</a>
+                  <a class="btn btn-primary" href={bookingUrl} target="_blank" rel="noreferrer">Pide tu cita</a>
+                </div>
               </div>
-            </div>
-          </details>
-        </nav>
+            </details>
+          </div>
+        </div>
+
+        <!-- FILA 2 (DESKTOP) -->
+        <div class="nav-bottom" aria-label="Menú principal">
+          <div class="nav-menu">
+            {navbarItems.map((item, idx) => (
+              <details class={`dd ${idx >= navbarItems.length - 2 ? "align-right" : ""}`}>
+                <summary>
+                  {item.label} <span class="caret">▾</span>
+                </summary>
+                <div class="dd-panel" role="menu">
+                  <a class="dd-main" href={item.href} role="menuitem">Ver sección</a>
+                  {Array.isArray(item.children) && item.children.length ? (
+                    item.children.map((c) => (
+                      <a class="dd-item" href={c.href} role="menuitem">{c.label}</a>
+                    ))
+                  ) : (
+                    <span class="dd-empty">Próximamente</span>
+                  )}
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
+
       </div>
     </header>
 
@@ -436,24 +514,34 @@ const footerPoliciesUrl = site.footer?.policies_url || "/politicas";
       💬 WhatsApp
     </a>
 
-    <!-- Cierra el menú móvil al tocar un link -->
     <script is:inline>
       document.addEventListener("click", (e) => {
-        const mob = document.querySelector(".nav-mobile");
-        if (!mob) return;
+        const openDD = document.querySelectorAll("details.dd[open]");
+        openDD.forEach((d) => {
+          if (!d.contains(e.target)) d.removeAttribute("open");
+        });
 
-        if (mob.hasAttribute("open")) {
+        const mob = document.querySelector(".nav-mobile");
+        if (mob && mob.hasAttribute("open")) {
           const panel = mob.querySelector(".mobile-panel");
           const burger = mob.querySelector(".burger");
           if (panel && panel.contains(e.target)) {
             if (e.target.tagName === "A") mob.removeAttribute("open");
           } else if (burger && burger.contains(e.target)) {
-            // click en burger: no hacer nada
           } else {
-            // click fuera
             mob.removeAttribute("open");
           }
         }
+      });
+
+      document.querySelectorAll("details.dd").forEach((d) => {
+        d.addEventListener("toggle", () => {
+          if (d.open) {
+            document.querySelectorAll("details.dd").forEach((other) => {
+              if (other !== d) other.removeAttribute("open");
+            });
+          }
+        });
       });
     </script>
   </body>
