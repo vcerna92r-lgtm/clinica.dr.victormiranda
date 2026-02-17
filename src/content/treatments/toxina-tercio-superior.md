@@ -1,9 +1,14 @@
 ---
-title: "Toxina botulínica – Tercio superior"
-description: "Frente, entrecejo y patas de gallo con resultados naturales."
-category: "facial"
-slug: "toxina-tercio-superior"
+title: Toxina botulínica – Tercio superior
+title_size: md
+subtitle_size: md
+category: facial
+slug: toxina-tercio-superior
+description: Frente, entrecejo y patas de gallo con resultados naturales.
 hide_from_menu: true
+price_label: El precio de este procedimiento es de 250$
+facts: []
+children: []
 ---
 
 # Tercio superior
