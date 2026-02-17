@@ -176,7 +176,6 @@ collections:
     fields:
       - { label: "Título", name: "title", widget: "string" }
 
-      # ✅ NUEVO: tamaños editables
       - label: "Tamaño del título (H1)"
         name: "title_size"
         widget: "select"
