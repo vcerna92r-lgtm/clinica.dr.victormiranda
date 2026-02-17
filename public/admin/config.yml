@@ -175,6 +175,30 @@ collections:
       preview: false
     fields:
       - { label: "Título", name: "title", widget: "string" }
+
+      # ✅ NUEVO: tamaños editables
+      - label: "Tamaño del título (H1)"
+        name: "title_size"
+        widget: "select"
+        required: false
+        default: "lg"
+        options:
+          - { label: "Pequeño", value: "sm" }
+          - { label: "Mediano", value: "md" }
+          - { label: "Grande (recomendado)", value: "lg" }
+          - { label: "Extra grande", value: "xl" }
+
+      - label: "Tamaño del subtítulo"
+        name: "subtitle_size"
+        widget: "select"
+        required: false
+        default: "lg"
+        options:
+          - { label: "Pequeño", value: "sm" }
+          - { label: "Mediano", value: "md" }
+          - { label: "Grande (recomendado)", value: "lg" }
+          - { label: "Extra grande", value: "xl" }
+
       - { label: "Texto del menú (opcional)", name: "menu_label", widget: "string", required: false }
       - label: "Categoría"
         name: "category"
