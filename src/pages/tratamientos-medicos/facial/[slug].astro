@@ -90,7 +90,7 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params;
 
-// Cargar nuevamente para render (evita depender de helpers compartidos)
+// Cargar nuevamente para render
 const modules = import.meta.glob(
   ["../../../content/treatments/**/*.{md,mdx}", "../../../content/tratamientos/**/*.{md,mdx}"],
   { eager: true }
@@ -114,7 +114,7 @@ if (!entry) throw new Error(`Treatment not found: ${slug}`);
 const fm = entry.frontmatter || {};
 const Content = entry.Content;
 
-// Layout “referencia”
+// Layout “referencia” para sub-tratamientos / páginas detalle
 const isDetail = Boolean(fm.hide_from_menu || fm.detail_page);
 
 const pageTitle = String(fm.title || fm.menu_label || slug).trim();
@@ -123,6 +123,20 @@ const pageDesc = String(fm.description || "").trim();
 const subtitle = String(fm.subtitle || "Tratamiento facial").trim();
 const priceLabel = String(fm.price_label || "Precios tratamientos").trim();
 const priceDetails = String(fm.price_details || "").trim();
+
+// Tamaños editables (Admin)
+const TITLE_SIZES = { sm: 34, md: 44, lg: 54, xl: 64 };
+const SUB_SIZES = { sm: 16, md: 20, lg: 26, xl: 32 };
+const TITLE_SIZES_M = { sm: 28, md: 34, lg: 40, xl: 46 };
+const SUB_SIZES_M = { sm: 14, md: 16, lg: 20, xl: 24 };
+
+const titleSizeKey = String(fm.title_size || "lg").toLowerCase().trim();
+const subtitleSizeKey = String(fm.subtitle_size || "lg").toLowerCase().trim();
+
+const h1Size = (TITLE_SIZES[titleSizeKey] || TITLE_SIZES.lg) + "px";
+const subSize = (SUB_SIZES[subtitleSizeKey] || SUB_SIZES.lg) + "px";
+const h1SizeM = (TITLE_SIZES_M[titleSizeKey] || TITLE_SIZES_M.lg) + "px";
+const subSizeM = (SUB_SIZES_M[subtitleSizeKey] || SUB_SIZES_M.lg) + "px";
 
 const factsRaw = Array.isArray(fm.facts) ? fm.facts : [];
 const facts =
@@ -141,31 +155,6 @@ const imageAlt = String(fm.image_alt || pageTitle).trim();
 const ctaCaption = String(fm.cta_caption || "¿Quieres saber más sobre el tratamiento?").trim();
 const ctaText = String(fm.cta_text || "PIDE TU CITA").trim();
 const ctaUrl = String(fm.cta_url || "").trim() || bookingUrl;
-
-// ✅ NUEVO: tamaños editables desde Admin
-const SIZE_MAP = {
-  title: {
-    sm: { desk: "38px", mob: "30px" },
-    md: { desk: "46px", mob: "34px" },
-    lg: { desk: "54px", mob: "40px" },
-    xl: { desk: "62px", mob: "46px" },
-  },
-  subtitle: {
-    sm: { desk: "18px", mob: "16px" },
-    md: { desk: "22px", mob: "18px" },
-    lg: { desk: "26px", mob: "20px" },
-    xl: { desk: "30px", mob: "22px" },
-  },
-};
-
-const titleSizeKey = String(fm.title_size || "lg").trim().toLowerCase();
-const subtitleSizeKey = String(fm.subtitle_size || "lg").trim().toLowerCase();
-
-const pick = (group, key, fallback = "lg") =>
-  (group[key] || group[fallback] || group.lg);
-
-const h1Sz = pick(SIZE_MAP.title, titleSizeKey, "lg");
-const subSz = pick(SIZE_MAP.subtitle, subtitleSizeKey, "lg");
 ---
 
 <BaseLayout title={pageTitle} description={pageDesc}>
@@ -180,7 +169,7 @@ const subSz = pick(SIZE_MAP.subtitle, subtitleSizeKey, "lg");
 
     .tleft h1{
       font-family: ui-serif, Georgia, "Times New Roman", serif;
-      font-size: var(--h1);
+      font-size: var(--h1-size, 54px);
       line-height: 1.02;
       margin: 4px 0 10px;
       color: rgba(15,23,42,.88);
@@ -188,7 +177,7 @@ const subSz = pick(SIZE_MAP.subtitle, subtitleSizeKey, "lg");
       text-transform: uppercase;
     }
     .tleft .sub{
-      font-size: var(--sub);
+      font-size: var(--sub-size, 26px);
       letter-spacing: .02em;
       text-transform: uppercase;
       color: rgba(15,23,42,.45);
@@ -323,15 +312,15 @@ const subSz = pick(SIZE_MAP.subtitle, subtitleSizeKey, "lg");
 
     @media (max-width: 980px){
       .tgrid{ grid-template-columns: 1fr; gap: 22px; }
-      .tleft h1{ font-size: var(--h1m); }
-      .tleft .sub{ font-size: var(--subm); }
+      .tleft h1{ font-size: var(--h1-size-m, 40px); }
+      .tleft .sub{ font-size: var(--sub-size-m, 20px); }
       .facts{ grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 
   <section
     class="twrap"
-    style={`--h1:${h1Sz.desk};--h1m:${h1Sz.mob};--sub:${subSz.desk};--subm:${subSz.mob};`}
+    style={`--h1-size:${h1Size};--sub-size:${subSize};--h1-size-m:${h1SizeM};--sub-size-m:${subSizeM};`}
   >
     {isDetail ? (
       <div class="tgrid">
@@ -380,7 +369,7 @@ const subSz = pick(SIZE_MAP.subtitle, subtitleSizeKey, "lg");
       </div>
     ) : (
       <div style="max-width: 860px; padding: 6px 0;">
-        <h1 style="font-family: ui-serif, Georgia, 'Times New Roman', serif; text-transform: uppercase; letter-spacing:.02em; color: rgba(15,23,42,.88); margin: 0 0 8px;">
+        <h1 style={`font-family: ui-serif, Georgia, 'Times New Roman', serif; text-transform: uppercase; letter-spacing:.02em; color: rgba(15,23,42,.88); margin: 0 0 8px; font-size:${h1Size};`}>
           {pageTitle}
         </h1>
         <p style="color: rgba(15,23,42,.70); margin: 0 0 18px;">{pageDesc}</p>
