@@ -1,69 +1,381 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
+import site from "../../../content/site.json";
 
-function slugFromFilepath(fp: string) {
+const bookingUrl = String(site.booking_url || "").trim() || "/contacto/";
+
+function slugFromFilepath(fp) {
   const name = String(fp).split("/").pop() || "";
   return name.replace(/\.mdx?$/i, "");
 }
 
+function escapeHtml(s = "") {
+  return String(s)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+// Markdown ultra-simple (párrafos + viñetas) para price_details (viene como string desde Admin)
+function miniMdToHtml(src = "") {
+  const text = String(src || "").trim();
+  if (!text) return "";
+
+  const lines = text.split(/\r?\n/);
+  let html = "";
+  let inList = false;
+
+  for (const raw of lines) {
+    const line = raw.trim();
+    if (!line) {
+      if (inList) {
+        html += "</ul>";
+        inList = false;
+      }
+      continue;
+    }
+
+    if (line.startsWith("- ")) {
+      if (!inList) {
+        html += "<ul>";
+        inList = true;
+      }
+      html += `<li>${escapeHtml(line.slice(2))}</li>`;
+    } else {
+      if (inList) {
+        html += "</ul>";
+        inList = false;
+      }
+      html += `<p>${escapeHtml(line)}</p>`;
+    }
+  }
+
+  if (inList) html += "</ul>";
+  return html;
+}
+
+const ICONS = {
+  result: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11a8 8 0 1 1-16 0"/><path d="M3 11V5h6"/><path d="M3 5l7 7"/></svg>`,
+  time: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l4 2"/></svg>`,
+  duration: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v3"/><path d="M16 2v3"/><path d="M3 8h18"/><rect x="4" y="5" width="16" height="17" rx="2"/><path d="M8 12h4"/><path d="M8 16h6"/></svg>`,
+  anesthesia: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 3l2 2"/><path d="M3 21l2-2"/><path d="M7 17l9-9"/><path d="M16 8l-1-1a3 3 0 0 0-4 0l-1 1a3 3 0 0 0 0 4l1 1a3 3 0 0 0 4 0l1-1a3 3 0 0 0 0-4z"/></svg>`,
+};
+
+// Carga markdowns (treatments)
+const modules = import.meta.glob(
+  ["../../../content/treatments/**/*.{md,mdx}", "../../../content/tratamientos/**/*.{md,mdx}"],
+  { eager: true }
+);
+
+const raw = Object.entries(modules).map(([filepath, mod]) => {
+  const fm = mod?.frontmatter || {};
+  const slug = String(fm.slug || "").trim() || slugFromFilepath(filepath);
+  const category = String(fm.category || "facial").toLowerCase().trim();
+
+  return {
+    slug,
+    category,
+    frontmatter: fm,
+    Content: mod?.default,
+  };
+});
+
+// dedup por slug dentro de facial
+const map = new Map();
+for (const item of raw) {
+  if (item.category !== "facial") continue;
+  if (!map.has(item.slug)) map.set(item.slug, item);
+}
+const allFacial = Array.from(map.values());
+
 export async function getStaticPaths() {
-  // Categoría fija (definida aquí adentro para que nunca “falte” en build)
-  const CATEGORY = "facial";
-
-  // Lee contenido desde src/content/treatments (y también soporta "tratamientos" por si existe)
-  const modules = import.meta.glob(
-    [
-      "../../../content/treatments/**/*.{md,mdx}",
-      "../../../content/tratamientos/**/*.{md,mdx}",
-    ],
-    { eager: true }
-  );
-
-  const items = Object.entries(modules)
-    .map(([filepath, mod]: any) => {
-      const fm = mod.frontmatter || {};
-      const category = String(fm.category || "").toLowerCase().trim();
-      const slug = String(fm.slug || slugFromFilepath(filepath)).trim();
-      return { mod, category, slug };
-    })
-    .filter((x) => x.slug && x.category === CATEGORY);
-
-  return items.map((x) => ({
-    params: { slug: x.slug },
-    props: { entry: x.mod },
+  return allFacial.map((t) => ({
+    params: { slug: t.slug },
   }));
 }
 
-const { entry } = Astro.props;
-const { Content, frontmatter } = entry;
+const { slug } = Astro.params;
 
-const title = frontmatter?.title || "Tratamiento";
-const description = frontmatter?.description || "";
+const entry = allFacial.find((x) => x.slug === slug);
+if (!entry) throw new Error(`Treatment not found: ${slug}`);
+
+const fm = entry.frontmatter || {};
+const Content = entry.Content;
+
+// ⚡️ Regla: estilo “referencia” para sub-tratamientos (ocultos del mega menú)
+const isDetail = Boolean(fm.hide_from_menu || fm.detail_page);
+
+const pageTitle = String(fm.title || fm.menu_label || slug).trim();
+const pageDesc = String(fm.description || "").trim();
+
+const subtitle = String(fm.subtitle || "Medicina estética facial").trim();
+const priceLabel = String(fm.price_label || "PRECIOS TRATAMIENTOS").trim();
+const priceDetails = String(fm.price_details || "").trim();
+
+const factsRaw = Array.isArray(fm.facts) ? fm.facts : [];
+const facts =
+  factsRaw.length === 4
+    ? factsRaw
+    : [
+        { icon: "result", label: "RESULTADO", value: "Al mes" },
+        { icon: "time", label: "APLICACIÓN", value: "15 minutos" },
+        { icon: "duration", label: "DURACIÓN", value: "4 a 6 meses" },
+        { icon: "anesthesia", label: "ANESTESIA", value: "No necesaria" },
+      ];
+
+const image = String(fm.image || "").trim();
+const imageAlt = String(fm.image_alt || pageTitle).trim();
+
+const ctaCaption = String(fm.cta_caption || "¿Quieres saber más de este tratamiento?").trim();
+const ctaText = String(fm.cta_text || "PIDE TU CITA").trim();
+const ctaUrl = String(fm.cta_url || "").trim() || bookingUrl;
 ---
 
-<BaseLayout title={title} description={description}>
-  <article class="treat-page">
-    <a class="back" href="/tratamientos-medicos/facial/">← Volver</a>
-
-    <header class="head">
-      <h1>{title}</h1>
-      {description ? <p class="desc">{description}</p> : null}
-    </header>
-
-    <div class="content">
-      <Content />
-    </div>
-  </article>
-
+<BaseLayout title={pageTitle} description={pageDesc}>
   <style>
-    .treat-page{ padding: 18px 0; max-width: 980px; margin: 0 auto; }
-    .back{ display:inline-block; margin-bottom:14px; opacity:.8; }
-    .back:hover{ text-decoration: underline; text-underline-offset: 3px; opacity:1; }
-    .head h1{ margin: 0 0 8px 0; font-size: 34px; letter-spacing:-.02em; }
-    .desc{ margin:0; color: var(--muted); }
-    .content{ margin-top: 18px; }
-    .content :global(h2){ margin-top: 22px; }
-    .content :global(p){ margin: 10px 0; }
-    .content :global(ul){ margin: 10px 0; padding-left: 18px; }
+    .twrap{ padding: 18px 0 40px; }
+    .tgrid{
+      display:grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 40px;
+      align-items:start;
+    }
+
+    /* Left */
+    .tleft h1{
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-size: 54px;
+      line-height: 1.02;
+      margin: 4px 0 10px;
+      color: rgba(15,23,42,.88);
+      letter-spacing: .02em;
+      text-transform: uppercase;
+    }
+    .tleft .sub{
+      font-size: 26px;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+      color: rgba(15,23,42,.45);
+      margin-bottom: 28px;
+      font-weight: 700;
+    }
+
+    .price{
+      border-top: 1px solid rgba(15,23,42,.10);
+      padding-top: 18px;
+      margin-top: 8px;
+      margin-bottom: 26px;
+      max-width: 520px;
+    }
+    .price summary{
+      list-style:none;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 10px 0;
+      user-select:none;
+    }
+    .price summary::-webkit-details-marker{ display:none; }
+    .price .plabel{
+      font-size: 13px;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      font-weight: 800;
+      color: rgba(15,23,42,.72);
+    }
+    .price .plus{
+      width: 34px; height: 34px;
+      border-radius: 999px;
+      border: 1px solid rgba(15,23,42,.20);
+      display:flex; align-items:center; justify-content:center;
+      font-weight: 900;
+      color: rgba(15,23,42,.70);
+      background: rgba(255,255,255,.9);
+    }
+    .price[open] .plus{ transform: rotate(45deg); transition: transform .15s ease; }
+    .pbody{
+      padding: 12px 0 0;
+      color: rgba(15,23,42,.72);
+      max-width: 520px;
+    }
+    .pbody p{ margin: 0 0 10px; }
+    .pbody ul{ margin: 8px 0 0 18px; padding: 0; }
+    .pbody li{ margin: 6px 0; }
+
+    .body{
+      max-width: 560px;
+      color: rgba(15,23,42,.78);
+      font-size: 18px;
+      line-height: 1.7;
+    }
+    .body :global(p){ margin: 0 0 14px; }
+    .body :global(h2){
+      margin: 24px 0 10px;
+      font-size: 16px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: rgba(15,23,42,.72);
+    }
+    .body :global(ul){ margin: 8px 0 16px 18px; }
+
+    /* Right */
+    .tright{ padding-top: 8px; }
+    .facts{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      align-items:start;
+      margin-bottom: 18px;
+    }
+    .fact{
+      text-align:center;
+      color: rgba(15,23,42,.55);
+    }
+    .fact .ico{
+      width: 34px; height: 34px;
+      margin: 0 auto 8px;
+      color: rgba(15,23,42,.55);
+    }
+    .fact .ico :global(svg){ width:100%; height:100%; }
+    .fact .lbl{
+      font-size: 11px;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .fact .val{
+      font-size: 14px;
+      color: rgba(15,23,42,.62);
+    }
+
+    .imgcard{
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      background: rgba(15,23,42,.04);
+      box-shadow: 0 18px 60px rgba(2,6,23,.10);
+      min-height: 340px;
+    }
+    .imgcard img{
+      width:100%;
+      height: 100%;
+      object-fit: cover;
+      display:block;
+    }
+    .imgplaceholder{
+      width:100%;
+      height: 420px;
+      background: linear-gradient(135deg, rgba(15,23,42,.06), rgba(15,23,42,.02));
+    }
+
+    .ctaBar{
+      position:absolute;
+      left:0; right:0; bottom:0;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,.92);
+      border-top: 1px solid rgba(15,23,42,.12);
+    }
+    .ctaBar span{
+      color: rgba(15,23,42,.70);
+      font-weight: 700;
+    }
+    .ctaBtn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 10px 14px;
+      border-radius: 6px;
+      background: rgba(15,23,42,.85);
+      color:#fff;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .ctaBtn:hover{ filter: brightness(.95); }
+
+    @media (max-width: 980px){
+      .tgrid{ grid-template-columns: 1fr; gap: 22px; }
+      .tleft h1{ font-size: 40px; }
+      .tleft .sub{ font-size: 20px; }
+      .facts{ grid-template-columns: repeat(2, 1fr); }
+    }
   </style>
+
+  <section class="twrap">
+    {isDetail ? (
+      <div class="tgrid">
+        <div class="tleft">
+          <h1>{pageTitle}</h1>
+          <div class="sub">{subtitle}</div>
+
+          <details class="price">
+            <summary>
+              <span class="plabel">{priceLabel}</span>
+              <span class="plus">+</span>
+            </summary>
+
+            {priceDetails ? (
+              <div class="pbody" set:html={miniMdToHtml(priceDetails)} />
+            ) : (
+              <div class="pbody">
+                <p>(Agregar precios desde Admin)</p>
+              </div>
+            )}
+          </details>
+
+          <div class="body">
+            <Content />
+          </div>
+        </div>
+
+        <div class="tright">
+          <div class="facts">
+            {facts.map((f) => (
+              <div class="fact">
+                <div class="ico" set:html={ICONS[String(f.icon || "result")] || ICONS.result} />
+                <div class="lbl">{f.label}</div>
+                <div class="val">{f.value}</div>
+              </div>
+            ))}
+          </div>
+
+          <div class="imgcard">
+            {image ? (
+              <img src={image} alt={imageAlt} loading="lazy" />
+            ) : (
+              <div class="imgplaceholder" />
+            )}
+
+            <div class="ctaBar">
+              <span>{ctaCaption}</span>
+              <a class="ctaBtn" href={ctaUrl} target="_blank" rel="noreferrer">{ctaText}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    ) : (
+      <div style="max-width: 860px; padding: 6px 0;">
+        <h1 style="font-family: ui-serif, Georgia, 'Times New Roman', serif; text-transform: uppercase; letter-spacing:.02em; color: rgba(15,23,42,.88); margin: 0 0 8px;">
+          {pageTitle}
+        </h1>
+        <p style="color: rgba(15,23,42,.70); margin: 0 0 18px;">
+          {pageDesc}
+        </p>
+        <div class="body">
+          <Content />
+        </div>
+      </div>
+    )}
+  </section>
 </BaseLayout>
