@@ -90,6 +90,7 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params;
 
+// Cargar nuevamente para render (evita depender de helpers compartidos)
 const modules = import.meta.glob(
   ["../../../content/treatments/**/*.{md,mdx}", "../../../content/tratamientos/**/*.{md,mdx}"],
   { eager: true }
@@ -113,6 +114,7 @@ if (!entry) throw new Error(`Treatment not found: ${slug}`);
 const fm = entry.frontmatter || {};
 const Content = entry.Content;
 
+// Layout “referencia” SOLO para sub-tratamientos (o detalle activado)
 const isDetail = Boolean(fm.hide_from_menu || fm.detail_page);
 
 const pageTitle = String(fm.title || fm.menu_label || slug).trim();
@@ -140,31 +142,32 @@ const ctaCaption = String(fm.cta_caption || "¿Quieres saber más sobre el trata
 const ctaText = String(fm.cta_text || "PIDE TU CITA").trim();
 const ctaUrl = String(fm.cta_url || "").trim() || bookingUrl;
 
-// ✅ tamaños desde Admin (sm/md/lg/xl)
-const SIZE_MAP_TITLE = { sm: 34, md: 44, lg: 54, xl: 64 };
-const SIZE_MAP_SUB = { sm: 16, md: 20, lg: 26, xl: 32 };
-
-function autoKeyByTitleLen(len) {
-  if (len <= 22) return "xl";
-  if (len <= 34) return "lg";
-  if (len <= 46) return "md";
-  return "sm";
+// ✅ Nuevo: estilo del PRIMER H2 del contenido (debajo de precios)
+function clamp(n, min, max) {
+  return Math.max(min, Math.min(max, n));
 }
 
-const titleSizeKeyRaw = String(fm.title_size || "").toLowerCase().trim();
-const subtitleSizeKeyRaw = String(fm.subtitle_size || "").toLowerCase().trim();
+const contentH2Size = clamp(Number(fm.content_h2_size ?? 22) || 22, 5, 25);
 
-const autoKey = autoKeyByTitleLen(pageTitle.length);
+const contentH2FontKey = String(fm.content_h2_font || "system").toLowerCase().trim();
+const CONTENT_H2_FONTS = {
+  system: `ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif`,
+  sans: `ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif`,
+  serif: `ui-serif, Georgia, "Times New Roman", serif`,
+};
+const contentH2Family = CONTENT_H2_FONTS[contentH2FontKey] || CONTENT_H2_FONTS.system;
 
-const titleKey = SIZE_MAP_TITLE[titleSizeKeyRaw] ? titleSizeKeyRaw : autoKey;
-const subKey = SIZE_MAP_SUB[subtitleSizeKeyRaw] ? subtitleSizeKeyRaw : "lg";
+const contentH2WeightKey = String(fm.content_h2_weight || "bold").toLowerCase().trim();
+const CONTENT_H2_WEIGHTS = { regular: 600, semibold: 700, bold: 800, black: 900 };
+const contentH2Weight = CONTENT_H2_WEIGHTS[contentH2WeightKey] || 800;
 
-const h1Px = SIZE_MAP_TITLE[titleKey] || 54;
-const subPx = SIZE_MAP_SUB[subKey] || 26;
-
-// móvil
-const h1MobilePx = Math.max(26, Math.round(h1Px * 0.74));
-const subMobilePx = Math.max(14, Math.round(subPx * 0.78));
+// Tamaños H1/sub (ya existentes en tu admin)
+const titleSizeKey = String(fm.title_size || "lg").toLowerCase().trim();
+const subtitleSizeKey = String(fm.subtitle_size || "lg").toLowerCase().trim();
+const TITLE_SIZES = { sm: 34, md: 42, lg: 54, xl: 64 };
+const SUBTITLE_SIZES = { sm: 18, md: 22, lg: 26, xl: 30 };
+const h1Size = TITLE_SIZES[titleSizeKey] || 54;
+const subSize = SUBTITLE_SIZES[subtitleSizeKey] || 26;
 ---
 
 <BaseLayout title={pageTitle} description={pageDesc}>
@@ -177,10 +180,9 @@ const subMobilePx = Math.max(14, Math.round(subPx * 0.78));
       align-items:start;
     }
 
-    /* ✅ AQUÍ está el fix: forzamos tamaño con !important */
     .tleft h1{
       font-family: ui-serif, Georgia, "Times New Roman", serif;
-      font-size: ${h1Px}px !important;
+      font-size: var(--h1-size) !important;
       line-height: 1.02;
       margin: 4px 0 10px;
       color: rgba(15,23,42,.88);
@@ -188,7 +190,7 @@ const subMobilePx = Math.max(14, Math.round(subPx * 0.78));
       text-transform: uppercase;
     }
     .tleft .sub{
-      font-size: ${subPx}px !important;
+      font-size: var(--sub-size) !important;
       letter-spacing: .02em;
       text-transform: uppercase;
       color: rgba(15,23,42,.45);
@@ -248,23 +250,33 @@ const subMobilePx = Math.max(14, Math.round(subPx * 0.78));
       font-size: 18px;
       line-height: 1.7;
     }
-    /* ✅ evita “segundo título gigante” si el body trae # ... */
-    .body :global(h1){
-      margin: 22px 0 10px;
-      font-size: 28px;
-      line-height: 1.15;
-      color: rgba(15,23,42,.86);
-      letter-spacing: .01em;
-    }
+    .body :global(p){ margin: 0 0 14px; }
+    .body :global(ul){ margin: 8px 0 16px 18px; }
+    .body :global(strong){ font-weight: 800; }
+
+    /* H2 “normal” (para subsecciones futuras) */
     .body :global(h2){
       margin: 24px 0 10px;
       font-size: 16px;
       letter-spacing: .08em;
       text-transform: uppercase;
       color: rgba(15,23,42,.72);
+      font-weight: 800;
     }
-    .body :global(p){ margin: 0 0 14px; }
-    .body :global(ul){ margin: 8px 0 16px 18px; }
+
+    /* ✅ PRIMER H2 del contenido: el que dice “Tercio superior” debajo del precio */
+    .body :global(h2:first-of-type){
+      margin: 10px 0 12px;
+      font-family: var(--content-h2-family) !important;
+      font-size: var(--content-h2-size) !important;
+      font-weight: var(--content-h2-weight) !important;
+      letter-spacing: -0.01em !important;
+      text-transform: none !important;
+      color: rgba(15,23,42,.90) !important;
+    }
+    .body :global(h2:first-of-type strong){
+      font-weight: 900;
+    }
 
     .tright{ padding-top: 8px; }
     .facts{
@@ -332,13 +344,13 @@ const subMobilePx = Math.max(14, Math.round(subPx * 0.78));
     @media (max-width: 980px){
       .tgrid{ grid-template-columns: 1fr; gap: 22px; }
       .facts{ grid-template-columns: repeat(2, 1fr); }
-
-      .tleft h1{ font-size: ${h1MobilePx}px !important; }
-      .tleft .sub{ font-size: ${subMobilePx}px !important; }
     }
   </style>
 
-  <section class="twrap">
+  <section
+    class="twrap"
+    style={`--h1-size:${h1Size}px; --sub-size:${subSize}px; --content-h2-size:${contentH2Size}px; --content-h2-family:${contentH2Family}; --content-h2-weight:${contentH2Weight};`}
+  >
     {isDetail ? (
       <div class="tgrid">
         <div class="tleft">
@@ -386,7 +398,7 @@ const subMobilePx = Math.max(14, Math.round(subPx * 0.78));
       </div>
     ) : (
       <div style="max-width: 860px; padding: 6px 0;">
-        <h1 style="font-family: ui-serif, Georgia, 'Times New Roman', serif; text-transform: uppercase; letter-spacing:.02em; color: rgba(15,23,42,.88); margin: 0 0 8px;">
+        <h1 style={`font-family: ui-serif, Georgia, 'Times New Roman', serif; text-transform: uppercase; letter-spacing:.02em; color: rgba(15,23,42,.88); margin: 0 0 8px; font-size:${h1Size}px;`}>
           {pageTitle}
         </h1>
         <p style="color: rgba(15,23,42,.70); margin: 0 0 18px;">{pageDesc}</p>

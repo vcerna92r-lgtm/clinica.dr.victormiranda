@@ -25,7 +25,6 @@ collections:
           - { label: "WhatsApp (solo números)", name: "whatsapp", widget: "string" }
           - { label: "Mensaje WhatsApp", name: "whatsapp_message", widget: "text" }
           - { label: "Link de reservas (Google Calendar)", name: "booking_url", widget: "string" }
-
           - { label: "Color principal (hex)", name: "accent_color", widget: "string" }
           - { label: "Color secundario (hex)", name: "accent_color_2", widget: "string" }
 
@@ -198,6 +197,38 @@ collections:
           - { label: "Grande (recomendado)", value: "lg" }
           - { label: "Extra grande", value: "xl" }
 
+      # ✅ NUEVO: controla el PRIMER H2 del contenido (debajo de precios)
+      - label: "Título dentro del contenido (H2) · Fuente"
+        name: "content_h2_font"
+        widget: "select"
+        required: false
+        default: "system"
+        options:
+          - { label: "Moderna (sans / system)", value: "system" }
+          - { label: "Serif elegante", value: "serif" }
+          - { label: "Sans (forzar)", value: "sans" }
+
+      - label: "Título dentro del contenido (H2) · Tamaño (5–25)"
+        name: "content_h2_size"
+        widget: "number"
+        value_type: "int"
+        min: 5
+        max: 25
+        step: 1
+        required: false
+        default: 22
+
+      - label: "Título dentro del contenido (H2) · Peso"
+        name: "content_h2_weight"
+        widget: "select"
+        required: false
+        default: "bold"
+        options:
+          - { label: "Regular", value: "regular" }
+          - { label: "SemiBold", value: "semibold" }
+          - { label: "Bold (recomendado)", value: "bold" }
+          - { label: "Black (muy fuerte)", value: "black" }
+
       - { label: "Texto del menú (opcional)", name: "menu_label", widget: "string", required: false }
       - label: "Categoría"
         name: "category"
@@ -223,7 +254,7 @@ collections:
         default: true
 
       - { label: "Subtítulo (ej: Tratamiento facial)", name: "subtitle", widget: "string", required: false }
-      - { label: "Etiqueta precios (ej: Precios tratamientos)", name: "price_label", widget: "string", required: false }
+      - { label: "Etiqueta precios (ej: Precio de tratamiento)", name: "price_label", widget: "string", required: false }
       - { label: "Detalles de precios (texto / viñetas)", name: "price_details", widget: "text", required: false }
 
       - { label: "Imagen derecha (subir)", name: "image", widget: "image", required: false }
