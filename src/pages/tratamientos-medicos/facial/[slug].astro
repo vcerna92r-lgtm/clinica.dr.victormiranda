@@ -90,7 +90,6 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params;
 
-// Cargar nuevamente para render
 const modules = import.meta.glob(
   ["../../../content/treatments/**/*.{md,mdx}", "../../../content/tratamientos/**/*.{md,mdx}"],
   { eager: true }
@@ -114,29 +113,14 @@ if (!entry) throw new Error(`Treatment not found: ${slug}`);
 const fm = entry.frontmatter || {};
 const Content = entry.Content;
 
-// Layout “referencia” para sub-tratamientos / páginas detalle
 const isDetail = Boolean(fm.hide_from_menu || fm.detail_page);
 
 const pageTitle = String(fm.title || fm.menu_label || slug).trim();
 const pageDesc = String(fm.description || "").trim();
 
 const subtitle = String(fm.subtitle || "Tratamiento facial").trim();
-const priceLabel = String(fm.price_label || "Precios tratamientos").trim();
+const priceLabel = String(fm.price_label || "Precio de tratamiento").trim();
 const priceDetails = String(fm.price_details || "").trim();
-
-// Tamaños editables (Admin)
-const TITLE_SIZES = { sm: 34, md: 44, lg: 54, xl: 64 };
-const SUB_SIZES = { sm: 16, md: 20, lg: 26, xl: 32 };
-const TITLE_SIZES_M = { sm: 28, md: 34, lg: 40, xl: 46 };
-const SUB_SIZES_M = { sm: 14, md: 16, lg: 20, xl: 24 };
-
-const titleSizeKey = String(fm.title_size || "lg").toLowerCase().trim();
-const subtitleSizeKey = String(fm.subtitle_size || "lg").toLowerCase().trim();
-
-const h1Size = (TITLE_SIZES[titleSizeKey] || TITLE_SIZES.lg) + "px";
-const subSize = (SUB_SIZES[subtitleSizeKey] || SUB_SIZES.lg) + "px";
-const h1SizeM = (TITLE_SIZES_M[titleSizeKey] || TITLE_SIZES_M.lg) + "px";
-const subSizeM = (SUB_SIZES_M[subtitleSizeKey] || SUB_SIZES_M.lg) + "px";
 
 const factsRaw = Array.isArray(fm.facts) ? fm.facts : [];
 const facts =
@@ -155,6 +139,32 @@ const imageAlt = String(fm.image_alt || pageTitle).trim();
 const ctaCaption = String(fm.cta_caption || "¿Quieres saber más sobre el tratamiento?").trim();
 const ctaText = String(fm.cta_text || "PIDE TU CITA").trim();
 const ctaUrl = String(fm.cta_url || "").trim() || bookingUrl;
+
+// ✅ tamaños desde Admin (sm/md/lg/xl)
+const SIZE_MAP_TITLE = { sm: 34, md: 44, lg: 54, xl: 64 };
+const SIZE_MAP_SUB = { sm: 16, md: 20, lg: 26, xl: 32 };
+
+function autoKeyByTitleLen(len) {
+  if (len <= 22) return "xl";
+  if (len <= 34) return "lg";
+  if (len <= 46) return "md";
+  return "sm";
+}
+
+const titleSizeKeyRaw = String(fm.title_size || "").toLowerCase().trim();
+const subtitleSizeKeyRaw = String(fm.subtitle_size || "").toLowerCase().trim();
+
+const autoKey = autoKeyByTitleLen(pageTitle.length);
+
+const titleKey = SIZE_MAP_TITLE[titleSizeKeyRaw] ? titleSizeKeyRaw : autoKey;
+const subKey = SIZE_MAP_SUB[subtitleSizeKeyRaw] ? subtitleSizeKeyRaw : "lg";
+
+const h1Px = SIZE_MAP_TITLE[titleKey] || 54;
+const subPx = SIZE_MAP_SUB[subKey] || 26;
+
+// móvil
+const h1MobilePx = Math.max(26, Math.round(h1Px * 0.74));
+const subMobilePx = Math.max(14, Math.round(subPx * 0.78));
 ---
 
 <BaseLayout title={pageTitle} description={pageDesc}>
@@ -167,9 +177,10 @@ const ctaUrl = String(fm.cta_url || "").trim() || bookingUrl;
       align-items:start;
     }
 
+    /* ✅ AQUÍ está el fix: forzamos tamaño con !important */
     .tleft h1{
       font-family: ui-serif, Georgia, "Times New Roman", serif;
-      font-size: var(--h1-size, 54px);
+      font-size: ${h1Px}px !important;
       line-height: 1.02;
       margin: 4px 0 10px;
       color: rgba(15,23,42,.88);
@@ -177,7 +188,7 @@ const ctaUrl = String(fm.cta_url || "").trim() || bookingUrl;
       text-transform: uppercase;
     }
     .tleft .sub{
-      font-size: var(--sub-size, 26px);
+      font-size: ${subPx}px !important;
       letter-spacing: .02em;
       text-transform: uppercase;
       color: rgba(15,23,42,.45);
@@ -237,7 +248,14 @@ const ctaUrl = String(fm.cta_url || "").trim() || bookingUrl;
       font-size: 18px;
       line-height: 1.7;
     }
-    .body :global(p){ margin: 0 0 14px; }
+    /* ✅ evita “segundo título gigante” si el body trae # ... */
+    .body :global(h1){
+      margin: 22px 0 10px;
+      font-size: 28px;
+      line-height: 1.15;
+      color: rgba(15,23,42,.86);
+      letter-spacing: .01em;
+    }
     .body :global(h2){
       margin: 24px 0 10px;
       font-size: 16px;
@@ -245,6 +263,7 @@ const ctaUrl = String(fm.cta_url || "").trim() || bookingUrl;
       text-transform: uppercase;
       color: rgba(15,23,42,.72);
     }
+    .body :global(p){ margin: 0 0 14px; }
     .body :global(ul){ margin: 8px 0 16px 18px; }
 
     .tright{ padding-top: 8px; }
@@ -312,16 +331,14 @@ const ctaUrl = String(fm.cta_url || "").trim() || bookingUrl;
 
     @media (max-width: 980px){
       .tgrid{ grid-template-columns: 1fr; gap: 22px; }
-      .tleft h1{ font-size: var(--h1-size-m, 40px); }
-      .tleft .sub{ font-size: var(--sub-size-m, 20px); }
       .facts{ grid-template-columns: repeat(2, 1fr); }
+
+      .tleft h1{ font-size: ${h1MobilePx}px !important; }
+      .tleft .sub{ font-size: ${subMobilePx}px !important; }
     }
   </style>
 
-  <section
-    class="twrap"
-    style={`--h1-size:${h1Size};--sub-size:${subSize};--h1-size-m:${h1SizeM};--sub-size-m:${subSizeM};`}
-  >
+  <section class="twrap">
     {isDetail ? (
       <div class="tgrid">
         <div class="tleft">
@@ -369,7 +386,7 @@ const ctaUrl = String(fm.cta_url || "").trim() || bookingUrl;
       </div>
     ) : (
       <div style="max-width: 860px; padding: 6px 0;">
-        <h1 style={`font-family: ui-serif, Georgia, 'Times New Roman', serif; text-transform: uppercase; letter-spacing:.02em; color: rgba(15,23,42,.88); margin: 0 0 8px; font-size:${h1Size};`}>
+        <h1 style="font-family: ui-serif, Georgia, 'Times New Roman', serif; text-transform: uppercase; letter-spacing:.02em; color: rgba(15,23,42,.88); margin: 0 0 8px;">
           {pageTitle}
         </h1>
         <p style="color: rgba(15,23,42,.70); margin: 0 0 18px;">{pageDesc}</p>
