@@ -18,7 +18,7 @@ function escapeHtml(s = "") {
     .replaceAll("'", "&#39;");
 }
 
-// Markdown ultra-simple (párrafos + viñetas) para price_details (viene como string desde Admin)
+// Markdown simple para price_details (párrafos + viñetas)
 function miniMdToHtml(src = "") {
   const text = String(src || "").trim();
   if (!text) return "";
@@ -63,55 +63,65 @@ const ICONS = {
   anesthesia: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 3l2 2"/><path d="M3 21l2-2"/><path d="M7 17l9-9"/><path d="M16 8l-1-1a3 3 0 0 0-4 0l-1 1a3 3 0 0 0 0 4l1 1a3 3 0 0 0 4 0l1-1a3 3 0 0 0 0-4z"/></svg>`,
 };
 
-// Carga markdowns (treatments)
+export async function getStaticPaths() {
+  const modules = import.meta.glob(
+    ["../../../content/treatments/**/*.{md,mdx}", "../../../content/tratamientos/**/*.{md,mdx}"],
+    { eager: true }
+  );
+
+  const seen = new Set();
+  const paths = [];
+
+  for (const [filepath, mod] of Object.entries(modules)) {
+    const fm = mod?.frontmatter || {};
+    const slug = String(fm.slug || "").trim() || slugFromFilepath(filepath);
+    const category = String(fm.category || "facial").toLowerCase().trim();
+
+    if (category !== "facial") continue;
+    if (!slug) continue;
+    if (seen.has(slug)) continue;
+
+    seen.add(slug);
+    paths.push({ params: { slug } });
+  }
+
+  return paths;
+}
+
+const { slug } = Astro.params;
+
+// Cargar nuevamente para render (evita depender de helpers compartidos)
 const modules = import.meta.glob(
   ["../../../content/treatments/**/*.{md,mdx}", "../../../content/tratamientos/**/*.{md,mdx}"],
   { eager: true }
 );
 
-const raw = Object.entries(modules).map(([filepath, mod]) => {
+let entry = null;
+
+for (const [filepath, mod] of Object.entries(modules)) {
   const fm = mod?.frontmatter || {};
-  const slug = String(fm.slug || "").trim() || slugFromFilepath(filepath);
+  const s = String(fm.slug || "").trim() || slugFromFilepath(filepath);
   const category = String(fm.category || "facial").toLowerCase().trim();
 
-  return {
-    slug,
-    category,
-    frontmatter: fm,
-    Content: mod?.default,
-  };
-});
-
-// dedup por slug dentro de facial
-const map = new Map();
-for (const item of raw) {
-  if (item.category !== "facial") continue;
-  if (!map.has(item.slug)) map.set(item.slug, item);
-}
-const allFacial = Array.from(map.values());
-
-export async function getStaticPaths() {
-  return allFacial.map((t) => ({
-    params: { slug: t.slug },
-  }));
+  if (category === "facial" && s === slug) {
+    entry = { frontmatter: fm, Content: mod?.default };
+    break;
+  }
 }
 
-const { slug } = Astro.params;
-
-const entry = allFacial.find((x) => x.slug === slug);
 if (!entry) throw new Error(`Treatment not found: ${slug}`);
 
 const fm = entry.frontmatter || {};
 const Content = entry.Content;
 
-// ⚡️ Regla: estilo “referencia” para sub-tratamientos (ocultos del mega menú)
+// Layout “referencia” SOLO para sub-tratamientos
 const isDetail = Boolean(fm.hide_from_menu || fm.detail_page);
 
 const pageTitle = String(fm.title || fm.menu_label || slug).trim();
 const pageDesc = String(fm.description || "").trim();
 
-const subtitle = String(fm.subtitle || "Medicina estética facial").trim();
-const priceLabel = String(fm.price_label || "PRECIOS TRATAMIENTOS").trim();
+const subtitle = String(fm.subtitle || "Tratamiento facial").trim();
+const priceLabel = String(fm.price_label || "Precios tratamientos").trim();
 const priceDetails = String(fm.price_details || "").trim();
 
 const factsRaw = Array.isArray(fm.facts) ? fm.facts : [];
@@ -119,16 +129,16 @@ const facts =
   factsRaw.length === 4
     ? factsRaw
     : [
-        { icon: "result", label: "RESULTADO", value: "Al mes" },
+        { icon: "result", label: "RESULTADOS", value: "Al mes" },
         { icon: "time", label: "APLICACIÓN", value: "15 minutos" },
-        { icon: "duration", label: "DURACIÓN", value: "4 a 6 meses" },
+        { icon: "duration", label: "DURACIÓN", value: "4–6 meses" },
         { icon: "anesthesia", label: "ANESTESIA", value: "No necesaria" },
       ];
 
 const image = String(fm.image || "").trim();
 const imageAlt = String(fm.image_alt || pageTitle).trim();
 
-const ctaCaption = String(fm.cta_caption || "¿Quieres saber más de este tratamiento?").trim();
+const ctaCaption = String(fm.cta_caption || "¿Quieres saber más sobre el tratamiento?").trim();
 const ctaText = String(fm.cta_text || "PIDE TU CITA").trim();
 const ctaUrl = String(fm.cta_url || "").trim() || bookingUrl;
 ---
@@ -143,7 +153,6 @@ const ctaUrl = String(fm.cta_url || "").trim() || bookingUrl;
       align-items:start;
     }
 
-    /* Left */
     .tleft h1{
       font-family: ui-serif, Georgia, "Times New Roman", serif;
       font-size: 54px;
@@ -195,8 +204,10 @@ const ctaUrl = String(fm.cta_url || "").trim() || bookingUrl;
       font-weight: 900;
       color: rgba(15,23,42,.70);
       background: rgba(255,255,255,.9);
+      transition: transform .15s ease;
     }
-    .price[open] .plus{ transform: rotate(45deg); transition: transform .15s ease; }
+    .price[open] .plus{ transform: rotate(45deg); }
+
     .pbody{
       padding: 12px 0 0;
       color: rgba(15,23,42,.72);
@@ -222,7 +233,6 @@ const ctaUrl = String(fm.cta_url || "").trim() || bookingUrl;
     }
     .body :global(ul){ margin: 8px 0 16px 18px; }
 
-    /* Right */
     .tright{ padding-top: 8px; }
     .facts{
       display:grid;
@@ -231,15 +241,8 @@ const ctaUrl = String(fm.cta_url || "").trim() || bookingUrl;
       align-items:start;
       margin-bottom: 18px;
     }
-    .fact{
-      text-align:center;
-      color: rgba(15,23,42,.55);
-    }
-    .fact .ico{
-      width: 34px; height: 34px;
-      margin: 0 auto 8px;
-      color: rgba(15,23,42,.55);
-    }
+    .fact{ text-align:center; color: rgba(15,23,42,.55); }
+    .fact .ico{ width: 34px; height: 34px; margin: 0 auto 8px; color: rgba(15,23,42,.55); }
     .fact .ico :global(svg){ width:100%; height:100%; }
     .fact .lbl{
       font-size: 11px;
@@ -248,10 +251,7 @@ const ctaUrl = String(fm.cta_url || "").trim() || bookingUrl;
       font-weight: 800;
       margin-bottom: 4px;
     }
-    .fact .val{
-      font-size: 14px;
-      color: rgba(15,23,42,.62);
-    }
+    .fact .val{ font-size: 14px; color: rgba(15,23,42,.62); }
 
     .imgcard{
       position: relative;
@@ -261,12 +261,7 @@ const ctaUrl = String(fm.cta_url || "").trim() || bookingUrl;
       box-shadow: 0 18px 60px rgba(2,6,23,.10);
       min-height: 340px;
     }
-    .imgcard img{
-      width:100%;
-      height: 100%;
-      object-fit: cover;
-      display:block;
-    }
+    .imgcard img{ width:100%; height: 100%; object-fit: cover; display:block; }
     .imgplaceholder{
       width:100%;
       height: 420px;
@@ -284,10 +279,7 @@ const ctaUrl = String(fm.cta_url || "").trim() || bookingUrl;
       background: rgba(255,255,255,.92);
       border-top: 1px solid rgba(15,23,42,.12);
     }
-    .ctaBar span{
-      color: rgba(15,23,42,.70);
-      font-weight: 700;
-    }
+    .ctaBar span{ color: rgba(15,23,42,.70); font-weight: 700; }
     .ctaBtn{
       display:inline-flex;
       align-items:center;
@@ -326,11 +318,9 @@ const ctaUrl = String(fm.cta_url || "").trim() || bookingUrl;
             </summary>
 
             {priceDetails ? (
-              <div class="pbody" set:html={miniMdToHtml(priceDetails)} />
+              <div class="pbody" set:html={miniMdToHtml(priceDetails)}></div>
             ) : (
-              <div class="pbody">
-                <p>(Agregar precios desde Admin)</p>
-              </div>
+              <div class="pbody"><p>(Agregar precios desde Admin)</p></div>
             )}
           </details>
 
@@ -343,7 +333,7 @@ const ctaUrl = String(fm.cta_url || "").trim() || bookingUrl;
           <div class="facts">
             {facts.map((f) => (
               <div class="fact">
-                <div class="ico" set:html={ICONS[String(f.icon || "result")] || ICONS.result} />
+                <div class="ico" set:html={ICONS[String(f.icon || "result")] || ICONS.result}></div>
                 <div class="lbl">{f.label}</div>
                 <div class="val">{f.value}</div>
               </div>
@@ -351,11 +341,7 @@ const ctaUrl = String(fm.cta_url || "").trim() || bookingUrl;
           </div>
 
           <div class="imgcard">
-            {image ? (
-              <img src={image} alt={imageAlt} loading="lazy" />
-            ) : (
-              <div class="imgplaceholder" />
-            )}
+            {image ? <img src={image} alt={imageAlt} loading="lazy" /> : <div class="imgplaceholder"></div>}
 
             <div class="ctaBar">
               <span>{ctaCaption}</span>
@@ -369,12 +355,8 @@ const ctaUrl = String(fm.cta_url || "").trim() || bookingUrl;
         <h1 style="font-family: ui-serif, Georgia, 'Times New Roman', serif; text-transform: uppercase; letter-spacing:.02em; color: rgba(15,23,42,.88); margin: 0 0 8px;">
           {pageTitle}
         </h1>
-        <p style="color: rgba(15,23,42,.70); margin: 0 0 18px;">
-          {pageDesc}
-        </p>
-        <div class="body">
-          <Content />
-        </div>
+        <p style="color: rgba(15,23,42,.70); margin: 0 0 18px;">{pageDesc}</p>
+        <div class="body"><Content /></div>
       </div>
     )}
   </section>
