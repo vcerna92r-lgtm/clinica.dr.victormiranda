@@ -14,8 +14,7 @@ price_details: El precio es de 250$
 facts: []
 children: []
 ---
-
-# Tercio superior
+## Tercio superior
 
 Tratamiento con toxina botulínica enfocado en **frente**, **entrecejo** y **patas de gallo**, respetando tu expresión y buscando un resultado natural.
 
