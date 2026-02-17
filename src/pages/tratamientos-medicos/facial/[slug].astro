@@ -114,7 +114,7 @@ if (!entry) throw new Error(`Treatment not found: ${slug}`);
 const fm = entry.frontmatter || {};
 const Content = entry.Content;
 
-// Layout “referencia” SOLO para sub-tratamientos
+// Layout “referencia”
 const isDetail = Boolean(fm.hide_from_menu || fm.detail_page);
 
 const pageTitle = String(fm.title || fm.menu_label || slug).trim();
@@ -141,6 +141,31 @@ const imageAlt = String(fm.image_alt || pageTitle).trim();
 const ctaCaption = String(fm.cta_caption || "¿Quieres saber más sobre el tratamiento?").trim();
 const ctaText = String(fm.cta_text || "PIDE TU CITA").trim();
 const ctaUrl = String(fm.cta_url || "").trim() || bookingUrl;
+
+// ✅ NUEVO: tamaños editables desde Admin
+const SIZE_MAP = {
+  title: {
+    sm: { desk: "38px", mob: "30px" },
+    md: { desk: "46px", mob: "34px" },
+    lg: { desk: "54px", mob: "40px" },
+    xl: { desk: "62px", mob: "46px" },
+  },
+  subtitle: {
+    sm: { desk: "18px", mob: "16px" },
+    md: { desk: "22px", mob: "18px" },
+    lg: { desk: "26px", mob: "20px" },
+    xl: { desk: "30px", mob: "22px" },
+  },
+};
+
+const titleSizeKey = String(fm.title_size || "lg").trim().toLowerCase();
+const subtitleSizeKey = String(fm.subtitle_size || "lg").trim().toLowerCase();
+
+const pick = (group, key, fallback = "lg") =>
+  (group[key] || group[fallback] || group.lg);
+
+const h1Sz = pick(SIZE_MAP.title, titleSizeKey, "lg");
+const subSz = pick(SIZE_MAP.subtitle, subtitleSizeKey, "lg");
 ---
 
 <BaseLayout title={pageTitle} description={pageDesc}>
@@ -155,7 +180,7 @@ const ctaUrl = String(fm.cta_url || "").trim() || bookingUrl;
 
     .tleft h1{
       font-family: ui-serif, Georgia, "Times New Roman", serif;
-      font-size: 54px;
+      font-size: var(--h1);
       line-height: 1.02;
       margin: 4px 0 10px;
       color: rgba(15,23,42,.88);
@@ -163,7 +188,7 @@ const ctaUrl = String(fm.cta_url || "").trim() || bookingUrl;
       text-transform: uppercase;
     }
     .tleft .sub{
-      font-size: 26px;
+      font-size: var(--sub);
       letter-spacing: .02em;
       text-transform: uppercase;
       color: rgba(15,23,42,.45);
@@ -298,13 +323,16 @@ const ctaUrl = String(fm.cta_url || "").trim() || bookingUrl;
 
     @media (max-width: 980px){
       .tgrid{ grid-template-columns: 1fr; gap: 22px; }
-      .tleft h1{ font-size: 40px; }
-      .tleft .sub{ font-size: 20px; }
+      .tleft h1{ font-size: var(--h1m); }
+      .tleft .sub{ font-size: var(--subm); }
       .facts{ grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 
-  <section class="twrap">
+  <section
+    class="twrap"
+    style={`--h1:${h1Sz.desk};--h1m:${h1Sz.mob};--sub:${subSz.desk};--subm:${subSz.mob};`}
+  >
     {isDetail ? (
       <div class="tgrid">
         <div class="tleft">
