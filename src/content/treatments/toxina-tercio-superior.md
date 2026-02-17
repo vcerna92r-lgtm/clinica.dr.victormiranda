@@ -1,6 +1,6 @@
 ---
 title: Toxina botulínica – Tercio superior
-title_size: sm
+title_size: md
 subtitle_size: sm
 menu_label: Toxina botulínica – Tercio superior
 category: facial
